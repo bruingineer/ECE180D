@@ -13,7 +13,7 @@ brew install mosquitto
 ```
 brew services start mosquitto
 ```
-and then use `brew services list` to see if mosquitto is running.
+   and then use `brew services list` to see if mosquitto is running.
 If it is running, skip to step 3.
 
 2. b. If it does not work try, run the following command to start the server (fill in the \*.plist with the actual file name, don’t leave it as an \*)
@@ -25,15 +25,15 @@ launchctl load /usr/local/opt/mosquitto/*.plist
 ```
 mosquitto_sub -t topic/state
 ```
-In another *Terminal* window, send a message to the same topic with
+   In another *Terminal* window, send a message to the same topic with
 ```
 mosquitto_pub -t topic/state -m "Hello World"
 ```
-The message of “Hello World” should appear in the terminal window running the mosquitto_sub process.
+   The message of “Hello World” should appear in the terminal window running the mosquitto_sub process.
 
 ## Adjusting configs
-The default mosquitto binary command file is `/usr/local/sbin/mosquitto`. It may be symlinked.
-The default `mosquitto.conf` server configuration file used by the mosquitto brew service is `/usr/local/etc/mosquitto/mosquitto.conf`
+The default mosquitto binary command file is `/usr/local/sbin/mosquitto`. It may be symlinked.  
+The default `mosquitto.conf` server configuration file used by the mosquitto brew service is `/usr/local/etc/mosquitto/mosquitto.conf`  
 
 The conifg file for this project is `ECE180D/mosquitto/mosquitto.conf`. See that file for descriptions of the options used.
 
@@ -90,8 +90,8 @@ sudo python setup.py install
 # MQTT Unity Client Setup
 1. Download the github repo https://github.com/vovacooper/Unity3d_MQTT .
 2. Unzip the .zip
-3. Load the package into Unity Project
-  a. From the menu bar, choose `Assets -> Import Package -> Custom Package…`
+3. Load the package into Unity Project  
+  a. From the menu bar, choose `Assets -> Import Package -> Custom Package…`  
   b. Navigate to Unity3d_MQTT-master/Packages/unity3d_mqtt.unitypackage
 4. Import All
 5. Open mqttTest.cs
@@ -104,7 +104,7 @@ In this case, the loopback IP of 127.0.0.1 and the [localport#] were used becaus
 ```
 client.Subscribe(new string[] { "topic" }, new byte[] {MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE }); 
 ```
-And 
+   And 
 ```
 client.Publish("topic", System.Text.Encoding.UTF8.GetBytes("Sending from Unity3D!!!"),MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE, true);
 ```
