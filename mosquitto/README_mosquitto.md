@@ -32,10 +32,9 @@ mosquitto_pub -t topic/state -m "Hello World"
    The message of “Hello World” should appear in the terminal window running the mosquitto_sub process.
 
 ## Adjusting configs
-The default mosquitto binary command file is `/usr/local/sbin/mosquitto`. It may be symlinked.  
-The default `mosquitto.conf` server configuration file used by the mosquitto brew service is `/usr/local/etc/mosquitto/mosquitto.conf`  
-
-The conifg file for this project is `ECE180D/mosquitto/mosquitto.conf`. See that file for descriptions of the options used.
+* The default mosquitto binary command file is `/usr/local/sbin/mosquitto`. It may be symlinked.
+* The default `mosquitto.conf` server configuration file used by the mosquitto brew service is `/usr/local/etc/mosquitto/mosquitto.conf`
+* The conifg file for this project is `ECE180D/mosquitto/mosquitto.conf`. See that file for descriptions of the options used.
 
 ## PC to PC connections on the same LAN
 1. Add the following line to the .conf, where `[port#]` is the arbitrary port where the server will listen for incoming connections.
@@ -51,7 +50,7 @@ port [localport#]
 ```
 brew services start mosquitto
 ```
-    OR
+OR
 ```
 [/path/to/mosquitto/executable] -c [/path/to/mosquito.conf]
 ```
@@ -73,19 +72,6 @@ where` [IP_of_server_machine]` is the IP of the computer running the mosquitto s
 ```
 mosquitto_pub -h [IP_of_server_machine] -p [port#] -t topic -m "Message send from remote machine"
 ```
-
-**_begin not tested_**
-## This section has NOT been tested yet
-###Installing the Python Libraries
-To create the link between Python and MQTT we need to install the Python Eclipse MQTT library.  Visit here for the latest downloads and follow the link to download the required version.  Specifically, I downloaded these Python Libraries.
-
-Once downloaded, unpack the tar file and install the library
-```
-tar -xvf org.eclipse.pho.mqtt.python-1.1.tar
-cd org.eclipse.pho.mqtt.python-1.1
-sudo python setup.py install
-```
-**_end not tested_**
 
 # MQTT Unity Client Setup
 1. Download the github repo https://github.com/vovacooper/Unity3d_MQTT .
@@ -146,6 +132,21 @@ A. https://mosquitto.org/man/mosquitto-conf-5.html
 ### Q. `brew services …` does not work. What do I do?
 A. If you don’t have “brew services” installed, run `brew services` in *Terminal*.
 Additional `brew services` info: https://github.com/Homebrew/homebrew-services
+
+
+**_begin not tested_**
+## This section has NOT been tested yet
+###Installing the Python Libraries
+To create the link between Python and MQTT we need to install the Python Eclipse MQTT library.  Visit here for the latest downloads and follow the link to download the required version.  Specifically, I downloaded these Python Libraries.
+
+Once downloaded, unpack the tar file and install the library
+```
+tar -xvf org.eclipse.pho.mqtt.python-1.1.tar
+cd org.eclipse.pho.mqtt.python-1.1
+sudo python setup.py install
+```
+**_end not tested_**
+
 
 #### mosquitto on macOS sources used to make this readme:
 * https://simplifiedthinking.co.uk/2015/10/03/install-mqtt-server/
