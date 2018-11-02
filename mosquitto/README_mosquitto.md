@@ -35,7 +35,7 @@ The message of “Hello World” should appear in the terminal window running th
 The default mosquitto binary command file is `/usr/local/sbin/mosquitto`. It may be symlinked.
 The default `mosquitto.conf` server configuration file used by the mosquitto brew service is `/usr/local/etc/mosquitto/mosquitto.conf`
 
-The conifg file for this project is in `ECE180D/mosquitto/`. See that file for descriptions of the options used.
+The conifg file for this project is `ECE180D/mosquitto/mosquitto.conf`. See that file for descriptions of the options used.
 
 ## PC to PC connections on the same LAN
 1. Add the following line to the .conf, where `[port#]` is the arbitrary port where the server will listen for incoming connections.
