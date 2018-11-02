@@ -153,4 +153,5 @@ sudo python setup.py install
 * https://mosquitto.org/download/
 * https://mosquitto.org/man/mosquitto-conf-5.html
 * http://blog.argot-sdk.org/2013/06/dummies-guide-to-installing-mosquitto.html
+* https://www.survivingwithandroid.com/2016/10/mqtt-protocol-tutorial.html
 
