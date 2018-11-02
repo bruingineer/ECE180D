@@ -88,11 +88,11 @@ sudo python setup.py install
 **_end not tested_**
 
 # MQTT Unity Client Setup
-1. Download the github repo Unity3d_MQTT
+1. Download the github repo https://github.com/vovacooper/Unity3d_MQTT .
 2. Unzip the .zip
 3. Load the package into Unity Project
-   a. From the menu bar, choose `Assets -> Import Package -> Custom Package…`
-   b. Navigate to Unity3d_MQTT-master/Packages/unity3d_mqtt.unitypackage
+  a. From the menu bar, choose `Assets -> Import Package -> Custom Package…`
+  b. Navigate to Unity3d_MQTT-master/Packages/unity3d_mqtt.unitypackage
 4. Import All
 5. Open mqttTest.cs
 6. Edit the following line to match the mosquitto server network info
@@ -117,13 +117,13 @@ brew services start mosquitto
 mosquitto_sub -h localhost -p port# -t topic 
 ```
 2. In unity
-   a. **Skip this step unless unity throws an error about an object being undeclared, assigned, or referenced, or something** Run mqttTest.Start()
-   b. Play the mqtt_test/MQTT scene
-   c. Click over to the unity console to see console messages
-   d. Click the button “level 1”
-   e. Unity console should say it sent and received a message
+  a. **Skip this step unless unity throws an error about an object being undeclared, assigned, or referenced, or something** Run mqttTest.Start()
+  b. Play the mqtt_test/MQTT scene
+  c. Click over to the unity console to see console messages
+  d. Click the button “level 1”
+  e. Unity console should say it sent and received a message
 3. In Terminal
-   a. `Sending from Unity3D!!!` should have appeared in the window that was running mosquitto_sub
+  a. `Sending from Unity3D!!!` should have appeared in the window that was running mosquitto_sub
 
 mqtt Unity sources
 * http://blog.jorand.io/2017/08/02/MQTT-on-Unity/
