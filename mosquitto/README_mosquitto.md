@@ -12,7 +12,7 @@ brew install mosquitto
 2. a. To start the server with the default config, first try
 ```
 brew services start mosquitto
-```
+```  
    and then use `brew services list` to see if mosquitto is running.
 If it is running, skip to step 3.
 
@@ -24,11 +24,11 @@ launchctl load /usr/local/opt/mosquitto/*.plist
 3. Now, test the installation and ensure the server is running successfully.  Open a new *Terminal* window, and subscribe to a topic with
 ```
 mosquitto_sub -t topic/state
-```
+```  
    In another *Terminal* window, send a message to the same topic with
 ```
 mosquitto_pub -t topic/state -m "Hello World"
-```
+```  
    The message of “Hello World” should appear in the terminal window running the mosquitto_sub process.
 
 ## Adjusting configs
@@ -50,8 +50,8 @@ port [localport#]
 2. Start the server on one computer.
 ```
 brew services start mosquitto
-```
-OR
+```  
+    OR
 ```
 [/path/to/mosquitto/executable] -c [/path/to/mosquito.conf]
 ```
