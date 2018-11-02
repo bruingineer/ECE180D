@@ -50,7 +50,7 @@ port [localport#]
 2. Start the server on one computer.
 ```
 brew services start mosquitto
-```  
+```
     OR
 ```
 [/path/to/mosquitto/executable] -c [/path/to/mosquito.conf]
