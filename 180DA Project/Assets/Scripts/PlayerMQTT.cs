@@ -8,12 +8,12 @@ using uPLibrary.Networking.M2Mqtt.Exceptions;
 
 using System;
 
-public class mqttTest : MonoBehaviour {
+public class PlayerMQTT : MonoBehaviour {
 
-    private const string str_IP = "192.168.10.201";
-    private const int int_Port = 1337;
+    private const string str_IP = "127.0.0.1";
+    private const int int_Port = 1600;
     private const string topic = "topic";
-
+	public static Globals.lane lane_state = Globals.lane.Middle;
 
     private MqttClient client;
 	// Use this for initialization
@@ -33,21 +33,32 @@ public class mqttTest : MonoBehaviour {
 	}
 	void client_MqttMsgPublishReceived(object sender, MqttMsgPublishEventArgs e) 
 	{ 
+		string lane_str = System.Text.Encoding.UTF8.GetString(e.Message);
+		Globals.lane lane_enum;
+		switch (lane_str) 
+		{
+			case "Top":
+				lane_enum = Globals.lane.Top;
+				break;
+			case "Middle":
+				lane_enum = Globals.lane.Middle;
+				break;
+			case "Bottom":
+				lane_enum = Globals.lane.Bottom;
+				break;
+			default:
+				return;
 
-		Debug.Log("Received: " + System.Text.Encoding.UTF8.GetString(e.Message)  );
+		}
+		Debug.Log("New Enum:" + lane_enum);
+
+		if (lane_enum != lane_state) {
+			Debug.Log("change!");
+			lane_state = lane_enum;
+		}
+		else {
+			Debug.Log("No change!");
+		}
 	} 
 
-	void OnGUI(){
-		if ( GUI.Button (new Rect (20,40,80,20), "Level 1")) {
-			Debug.Log("sending...");
-			client.Publish(topic, System.Text.Encoding.UTF8.GetBytes("Sending from Unity3D!!!"), MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE, true);
-			Debug.Log("sent");
-		}
-	}
-	// Update is called once per frame
-	void Update () {
-
-
-
-	}
 }
