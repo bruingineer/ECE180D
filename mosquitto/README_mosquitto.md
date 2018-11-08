@@ -1,4 +1,15 @@
-# Mosquitto on MacOS
+# Contents
+* mosquitto on macOS
+  * Installing mosquitto through homebrew
+  * Adjusting Configs
+  * PC to PC connections on the same LAN
+* mosquitto on Windows 10
+* MQTT Unity Client Setup
+  * Test on macOS
+* mosquitto FAQ
+* **untested** python packages
+
+# mosquitto on macOS
 This guide assumes homebrew is already installed. If not, please install it before proceeding.
 
 ## Installing mosquitto through homebrew
@@ -68,10 +79,24 @@ mosquitto_pub -h localhost -p [localport#] -t topic -m "Sending from localhost..
 ```
 mosquitto_sub -h [IP_of_server_machine] -p [port#] -t topic
 ```
-where` [IP_of_server_machine]` is the IP of the computer running the mosquitto server process and `[port#]` is the same port used in step 1. To send a message to the same topic, use
+where `[IP_of_server_machine]` is the IP of the computer running the mosquitto server process and `[port#]` is the same port used in step 1. To send a message to the same topic, use
 ```
 mosquitto_pub -h [IP_of_server_machine] -p [port#] -t topic -m "Message send from remote machine"
 ```
+
+# Installing mosquitto on Windows 10
+1. Download `mosquitto-1.5.4-install-windows-x64.exe` from https://mosquitto.org/download/
+2. Run the installer.
+   a. It will throw an error about need to install openSSL (and possibly other) dependencies.
+   b. Download the openSSL lite client from the link in the mosquitto installer.
+   c. Run the openSSL installer
+   d. When prompted to choose which folder the openSSL .dll files are installed, choose the openSSL /bin folder
+   e. Finish the installer and follow the instructions
+3. Continue the mosquitto installer
+4. Copy `libcrypto-1_1-x64.dll` and `libssl-1_1-x64.dll` from the openSSL/bin folder into the mosquitto folder in Program Files.
+5. Double click on `mosquitto.exe` or run the .exe from the command prompt.
+6. From a second command prompt run `mosquitto_sub.exe -t topic` to subscribe to the topic "topic"
+7. From a third command prompt run `mosquitto_pub.exe -t topic -m "this is a message"` to publish a message to the topic.
 
 # MQTT Unity Client Setup
 1. Download the github repo https://github.com/vovacooper/Unity3d_MQTT .
@@ -96,7 +121,7 @@ client.Publish("topic", System.Text.Encoding.UTF8.GetBytes("Sending from Unity3D
 ```
 The unity console may print out the sent and received messages.
 
-## To test on macOS
+## Test on macOS
 1. In Terminal
 ```
 brew services start mosquitto
@@ -136,7 +161,7 @@ Additional `brew services` info: https://github.com/Homebrew/homebrew-services
 
 **_begin not tested_**
 ## This section has NOT been tested yet
-###Installing the Python Libraries
+### Installing the Python Libraries
 To create the link between Python and MQTT we need to install the Python Eclipse MQTT library.  Visit here for the latest downloads and follow the link to download the required version.  Specifically, I downloaded these Python Libraries.
 
 Once downloaded, unpack the tar file and install the library
@@ -154,4 +179,5 @@ sudo python setup.py install
 * https://mosquitto.org/man/mosquitto-conf-5.html
 * http://blog.argot-sdk.org/2013/06/dummies-guide-to-installing-mosquitto.html
 * https://www.survivingwithandroid.com/2016/10/mqtt-protocol-tutorial.html
+* https://sivatechworld.wordpress.com/2015/06/11/step-by-step-installing-and-configuring-mosquitto-with-windows-7/
 
