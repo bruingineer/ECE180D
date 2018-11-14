@@ -11,8 +11,8 @@ using System;
 public class PlayerMQTT : MonoBehaviour {
 
     private const string str_IP = "127.0.0.1";
-    private const int int_Port = 1600;
-    private const string topic = "topic";
+    private const int int_Port = 1883;
+    private const string topic = "localization";
 	public static Globals.lane lane_state = Globals.lane.Middle;
 
     private MqttClient client;
