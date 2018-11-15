@@ -3,7 +3,11 @@ import argparse
 import cv2
 import paho.mqtt.client as mqtt
 
-connected = False
+
+
+CONNECTED = False
+client = None
+topic = 'localization'
 
 # The callback for when the client receives a CONNACK response from the server.
 def on_connect(client, userdata, flags, rc):
@@ -17,8 +21,8 @@ def on_connect(client, userdata, flags, rc):
 def on_message(client, userdata, msg):
     print(msg.topic+" "+str(msg.payload))
 
-def connect_to_server(ip):    
-    topic = 'localization'
+def connect_to_server(ip): 
+    global client
 
     client = mqtt.Client(client_id = 'localization.py')
     client.on_connect = on_connect
@@ -27,7 +31,7 @@ def connect_to_server(ip):
     client.connect(ip, 1883, 60)
     
 
-def localize():
+def localize(nregions):
     #load Haar Classifier for face recognition
     faceCascade = cv2.CascadeClassifier('.\\data\\haarcascade_frontalface_default.xml')
 
@@ -36,22 +40,23 @@ def localize():
     #cap.set(4,480)  #set height of frame
 
     sF = 1.05
-
-    track = ''
-    cur_track = ''
-    just_changed = False
+    region = None
+    lines = []
+    
     while True:
         ret, frame = cap.read() # Capture frame-by-frame
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         
-        height, width = frame.shape[:2]
-        
-        line1_x = width/3
-        line2_x = 2*line1_x
+        #only compute once
+        if not lines:
+            height, width = frame.shape[:2]
+            sep = width/nregions
+            lines = [sep*i for i in range(1,nregions)]
+            
         
         #Draw lines for player to see which region he is in
-        frame = cv2.line(frame,(line1_x,0),(line1_x, height),(255,0,0),5)
-        frame = cv2.line(frame,(line2_x,0),(line2_x, height),(255,0,0),5)
+        for line in lines:
+            frame = cv2.line(frame,(line,0),(line, height),(255,0,0),2)
         
         faces = faceCascade.detectMultiScale(
             gray,
@@ -67,37 +72,30 @@ def localize():
             cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 0, 255), 2)
             roi_color = frame[y:y+h, x:x+w]
             
-            #Determine current track
-            if x + w/2 <= line1_x:
-                track = 'Top'
-            elif x + w/2 <= line2_x:
-                track = 'Middle'
-            else:
-                track = 'Bottom'
-                
-            #Attempt to add some stability by preventing changes in subsequent frames
-            #TODO: currently waits for one frame, should we wait more ?
-            if track != cur_track and not just_changed:
-                cur_track = track
-                
-                #TODO: Integrate MQTT to trigger track change in Unity here
-                print('Moved to ' + track + ' Track')
-                
-                if connected:
-                    rc = client.publish(topic, payload= (track), qos =0, retain=False)
-                    print rc
-                    
-                just_changed = True
-     
-            else:
-                just_changed = False 
-                
-                
-        #cv2.cv.Flip(frame, None, 1)
+            region = nregions - (x + w/2)/sep
+            
+            ##################### ADAPT to 3 tracks ################
+            # if region-1 < float(nregions)/3:
+                # region = 'Top'
+            # elif region-1 < 2*float(nregions)/3:
+                # region = 'Middle'
+            # else:
+                # region = 'Bottom'
+            #########################################################
+            
+            if CONNECTED:
+                rc = client.publish(topic, payload= (region), qos =0, retain=False)
+                print rc
+               
+            break 
+            
+            #TODO: May need some stability control to account for random false positive
+            #      face detection 
+            
         
         frame = cv2.flip(frame,1) #vertical flip to create mirror image
-        if track:
-            cv2.putText(frame, track, (10, 30), cv2.FONT_HERSHEY_SIMPLEX,
+        if region is not None:
+            cv2.putText(frame, str(region), (10, 30), cv2.FONT_HERSHEY_SIMPLEX,
                         0.65, (0, 0, 255), 3)
                     
         cv2.imshow('Localization', frame)
@@ -112,11 +110,12 @@ def main():
     
     parser = argparse.ArgumentParser(description='Localization Script for Synchro')
     parser.add_argument('--ip', type=str, action = 'store', default = None, help='IP address of machine running Unity')
-    parser.add_argument('--standalone', '-s', action = 'store_true', help='Run Script without MQTT publishing') 
+    parser.add_argument('--nregions', type=int, action = 'store', default = 10, help='Number of regions to split frame with')
+    parser.add_argument('--standalone', '-s', action = 'store_true', help='Run script without MQTT publishing') 
     args = parser.parse_args()
     
     if args.standalone:
-        localize()
+        localize(args.nregions)
         return
         
     elif args.ip:
@@ -124,8 +123,11 @@ def main():
     else:
         connect_to_server('localhost')
     
-    connected = True
-    localize()
+    print "CONNECTING"
+    
+    global CONNECTED
+    CONNECTED = True
+    localize(args.nregions)
     
 if __name__ == '__main__':
     main()
