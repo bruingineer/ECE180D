@@ -4,64 +4,56 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour {
 	private Rigidbody2D rb;
-	const int platform_y_distance = 4;
-	const string jump_trigger = "Jump";
-	const double end_tile_position_x = 7.5f;
-	const float top_position_y = 4.15f;
-	const float bottom_position_y = -3.85f;
 	private float movementTimeX = .2f;
 	private float movementTimeY = .5f;
 	private bool isMoving = false;
-	private Globals.lane cur_lane;
+	private float playerLaneNum = PlayerMQTT.cur_lane_num;
+	private float secondsToMove = 0.1f;
 	Animator m_Animator;
 	void Start () {
-		cur_lane = PlayerMQTT.lane_state;
 		rb = GetComponent<Rigidbody2D>();
 		m_Animator = GetComponent<Animator>();
+		// change x position to be more dynamic
+		transform.position = new Vector3(-7.5f, 0.5f);
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		if(!isMoving && PlayerMQTT.lane_state != cur_lane && validMove()) MovePlayer();
+		if(!isMoving) MovePlayer();
     }
-	private IEnumerator MoveToPosition(Vector3 end_position, float timeToMove, bool didJump=false)
+	private IEnumerator MoveToPosition(int changedLaneNum)
    	{
 		isMoving = true;
-		var currentPos = transform.position;
+		Vector3 end_position = new Vector3(transform.position.x, 0.5f + (GameState.middle_lane - changedLaneNum));
+		var initialPos = transform.position;
 		var t = 0f;
+		float timeToMove = secondsToMove * Mathf.Abs(playerLaneNum - changedLaneNum);
 		while(t < 1)
 		{
 				t += Time.deltaTime / timeToMove;
-				transform.position = Vector3.Lerp(currentPos, end_position, t);
+				transform.position = Vector3.Lerp(initialPos, end_position, t);
 				yield return null;
 		}
-		if (didJump)
-			m_Animator.ResetTrigger(jump_trigger);
+		playerLaneNum = PlayerMQTT.cur_lane_num;
 		isMoving = false;
     }
-	private bool validMove() {
-		return Mathf.Abs((int)PlayerMQTT.lane_state - (int)cur_lane) == 1;
-	}
-	private void movePlayerY(int distance) {
-		m_Animator.SetTrigger(jump_trigger);
-		StartCoroutine(MoveToPosition(new Vector3(transform.position.x, 
-			transform.position.y + distance), movementTimeY, true));
-	}
 	private void MovePlayer() {
-		Globals.lane changed_lane = PlayerMQTT.lane_state;
-		int cur_lane_num = (int)cur_lane;
-		int changed_lane_num = (int)changed_lane;
-		if (Input.GetKeyDown(KeyCode.RightArrow)) {
-			if (transform.position.x != end_tile_position_x){
-				StartCoroutine(MoveToPosition(new Vector3(transform.position.x + 1, transform.position.y), movementTimeX));
-			}
-        } else if (Input.GetKeyDown(KeyCode.LeftArrow)) {
-			if (transform.position.x != -end_tile_position_x)
-            	StartCoroutine(MoveToPosition(new Vector3(transform.position.x - 1, transform.position.y), movementTimeX));
-		} else if (changed_lane_num < cur_lane_num && transform.position.y != top_position_y)
-			movePlayerY(platform_y_distance);
-		else if (changed_lane_num > cur_lane_num && transform.position.y != bottom_position_y)
-			movePlayerY(-platform_y_distance);
-		cur_lane = changed_lane;
+		if (playerLaneNum != PlayerMQTT.cur_lane_num) {
+			StartCoroutine(MoveToPosition(PlayerMQTT.cur_lane_num));	
+		}
 	}
 }
+
+//  if (changed_lane_num < cur_lane_num && transform.position.y != top_position_y)
+		// 	movePlayerY(platform_y_distance);
+		// else if (changed_lane_num > cur_lane_num && transform.position.y != bottom_position_y)
+		// 	movePlayerY(-platform_y_distance);
+		// cur_lane = changed_lane;
+// if (Input.GetKeyDown(KeyCode.RightArrow)) {
+		// 	if (transform.position.x != end_tile_position_x){
+		// 		StartCoroutine(MoveToPosition(new Vector3(transform.position.x + 1, transform.position.y), movementTimeX));
+		// 	}
+        // } else if (Input.GetKeyDown(KeyCode.LeftArrow)) {
+		// 	if (transform.position.x != -end_tile_position_x)
+        //     	StartCoroutine(MoveToPosition(new Vector3(transform.position.x - 1, transform.position.y), movementTimeX));
+		// }

@@ -9,11 +9,11 @@ using uPLibrary.Networking.M2Mqtt.Exceptions;
 using System;
 
 public class PlayerMQTT : MonoBehaviour {
+    private const string str_IP = "localhost";
+    private const int int_Port = 1883;
+    private const string topic = "localization";
+	public static int cur_lane_num = GameState.middle_lane;
 
-    private const string str_IP = "127.0.0.1";
-    private const int int_Port = 1600;
-    private const string topic = "topic";
-	public static Globals.lane lane_state = Globals.lane.Middle;
 
     private MqttClient client;
 	// Use this for initialization
@@ -33,31 +33,13 @@ public class PlayerMQTT : MonoBehaviour {
 	}
 	void client_MqttMsgPublishReceived(object sender, MqttMsgPublishEventArgs e) 
 	{ 
-		string lane_str = System.Text.Encoding.UTF8.GetString(e.Message);
-		Globals.lane lane_enum;
-		switch (lane_str) 
-		{
-			case "Top":
-				lane_enum = Globals.lane.Top;
-				break;
-			case "Middle":
-				lane_enum = Globals.lane.Middle;
-				break;
-			case "Bottom":
-				lane_enum = Globals.lane.Bottom;
-				break;
-			default:
-				return;
-
-		}
-		Debug.Log("New Enum:" + lane_enum);
-
-		if (lane_enum != lane_state) {
-			Debug.Log("change!");
-			lane_state = lane_enum;
-		}
-		else {
-			Debug.Log("No change!");
+		int lane_num;
+		if (Int32.TryParse(System.Text.Encoding.UTF8.GetString(e.Message), out lane_num)) {
+			if (lane_num != cur_lane_num) {
+				cur_lane_num = lane_num;
+			}
+		} else {
+			// Figure out how to handle this
 		}
 	} 
 
