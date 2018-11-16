@@ -14,7 +14,6 @@ public class PlayerMQTT : MonoBehaviour {
     private const string topic = "localization";
 	public static int cur_lane_num = GameState.middle_lane;
 
-
     private MqttClient client;
 	// Use this for initialization
 	void Start () {
