@@ -9,7 +9,7 @@ using uPLibrary.Networking.M2Mqtt.Exceptions;
 using System;
 
 public class PlayerMQTT : MonoBehaviour {
-    private const string str_IP = "localhost";
+    private const string str_IP = "127.0.0.1";
     private const int int_Port = 1883;
     private const string topic = "localization";
 	public static int cur_lane_num = GameState.middle_lane;

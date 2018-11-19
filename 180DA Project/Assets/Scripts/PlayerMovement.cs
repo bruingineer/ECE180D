@@ -23,6 +23,7 @@ public class PlayerMovement : MonoBehaviour {
     }
 	private IEnumerator MoveToPosition(int changedLaneNum)
    	{
+		Debug.Log(changedLaneNum);
 		isMoving = true;
 		Vector3 end_position = new Vector3(transform.position.x, 0.5f + (GameState.middle_lane - changedLaneNum));
 		var initialPos = transform.position;
@@ -34,7 +35,7 @@ public class PlayerMovement : MonoBehaviour {
 				transform.position = Vector3.Lerp(initialPos, end_position, t);
 				yield return null;
 		}
-		playerLaneNum = PlayerMQTT.cur_lane_num;
+		playerLaneNum = changedLaneNum;
 		isMoving = false;
     }
 	private void MovePlayer() {
