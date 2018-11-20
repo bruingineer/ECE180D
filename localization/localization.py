@@ -84,8 +84,8 @@ def localize(nregions):
             #########################################################
             
             if CONNECTED:
-                rc = client.publish(topic, payload= (region), qos =0, retain=False)
-                print rc
+                rc = client.publish(topic, payload= (int(region)), qos =0, retain=False)
+                print(rc)
                
             break 
             
@@ -123,7 +123,7 @@ def main():
     else:
         connect_to_server('localhost')
     
-    print "CONNECTING"
+    print("CONNECTING")
     
     global CONNECTED
     CONNECTED = True
