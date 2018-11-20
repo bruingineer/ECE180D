@@ -14,7 +14,7 @@ public class PlayerMovement_X : MonoBehaviour {
 			Vector3 end_position = new Vector3(transform.position.x + 1, transform.position.y);
 			GameState.PlayClip(x_movement);
 			PlayerMQTT_X.playerMoved = false;
-			StartCoroutine(Player.MoveToPosition(Player.rb.transform, 
+			StartCoroutine(Player.MoveToPosition(transform, 
 				new Vector3(transform.position.x + 1, transform.position.y), Player.movementTimeX));
 		}
     } 
