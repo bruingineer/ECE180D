@@ -6,7 +6,7 @@ public class PlayerMovement_X : MonoBehaviour {
 
 	public AudioClip x_movement;
 	void Update () {
-		if(!Player.isPlayerMoving) MovePlayerX();
+       if(!Player.isPlayerMoving) MovePlayerX();
 	}
 
 	private void MovePlayerX() {

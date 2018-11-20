@@ -7,7 +7,7 @@ public class PlayerMovement_Y : MonoBehaviour {
 	public AudioClip y_movement;
 
 	void Update () {
-		if(!Player.isPlayerMoving) MovePlayerY();
+       if(!Player.isPlayerMoving) MovePlayerY();
     }
 	private void MovePlayerY() {
 		if (Player.playerLaneNum != PlayerMQTT_Y.cur_lane_num) {
