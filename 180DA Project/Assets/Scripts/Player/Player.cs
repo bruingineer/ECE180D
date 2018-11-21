@@ -14,7 +14,7 @@ public class Player : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		// change x position to be more dynamic
-		transform.position = new Vector3(-7.5f, 0.5f);
+		transform.position = new Vector3(0.5f, GameState.middle_lane + 0.5f);
 		// create audio source
 		m_audio_source = GetComponent<AudioSource>();
 		// bool to see if player is moving

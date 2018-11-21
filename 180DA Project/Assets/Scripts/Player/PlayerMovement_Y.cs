@@ -11,7 +11,7 @@ public class PlayerMovement_Y : MonoBehaviour {
     }
 	private void MovePlayerY() {
 		if (Player.playerLaneNum != PlayerMQTT_Y.cur_lane_num) {
-			Vector3 end_position = new Vector3(transform.position.x, 0.5f + (GameState.middle_lane - PlayerMQTT_Y.cur_lane_num));
+			Vector3 end_position = new Vector3(transform.position.x, 0.5f + PlayerMQTT_Y.cur_lane_num);
 			float timeToMove = Player.secondsToMoveY * Mathf.Abs(Player.playerLaneNum - PlayerMQTT_Y.cur_lane_num);
 			GameState.PlayClip(y_movement);
 			Player.playerLaneNum = PlayerMQTT_Y.cur_lane_num;

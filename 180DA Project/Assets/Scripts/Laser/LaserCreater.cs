@@ -6,6 +6,7 @@ public class LaserCreater : MonoBehaviour {
 	public AudioClip laserCountdown;
 	public AudioClip laserFire;
 	public Transform laserPrefab;
+	// public Transform particlePrefab;
 	private List<int> laneNums;
 	private bool isFiring;
 	private int minLasers = 6;
@@ -26,13 +27,17 @@ public class LaserCreater : MonoBehaviour {
 		List<int> lanesToFireLasers = GetRandomLanes();
 		int list_count = lanesToFireLasers.Count;
 		GameState.PlayClip(laserCountdown);
+		// for(int i = 0; i < list_count; i++)
+		// {
+		// 	Instantiate(particlePrefab, new Vector3(16f, (lanesToFireLasers[i] + 0.5f)), Quaternion.identity);
+		// }
 		yield return new WaitForSeconds(laserCountdown.length);
 		GameState.PlayClip(laserFire);
 		for(int i = 0; i < list_count; i++)
 		{
-			Instantiate(laserPrefab, new Vector3(8.5f, (lanesToFireLasers[i] - (GameState.middle_lane + 1) + 0.5f)), Quaternion.identity);
+			Instantiate(laserPrefab, new Vector3(16.5f, (lanesToFireLasers[i] + 0.5f)), Quaternion.identity);
 		}
-		yield return new WaitForSeconds(3f);
+		yield return new WaitForSeconds(1f);
 		isFiring = false;
 	}
 
