@@ -6,7 +6,7 @@ public class Laser : MonoBehaviour {
 	public AudioClip playerHitByLaser;
 	private LineRenderer lineRenderer;
 	Vector3 endPosition;
-	public const float laserTime = 0.2f;
+	public const float laserTime = 0.01f;
 	private bool playerHit;
 	void Start () {
 		playerHit = false;
@@ -17,7 +17,7 @@ public class Laser : MonoBehaviour {
 	}
 	
 	void Update () {
-        if (Physics.Raycast(transform.position, Vector2.left) && !playerHit)
+        if (Physics.Raycast(transform.position, Vector3.left) && !playerHit)
         {
 			playerHit = true;
             Debug.Log("HIT");
