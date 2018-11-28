@@ -8,13 +8,14 @@ public class LaserCreater : MonoBehaviour {
 	public Transform laserPrefab;
 	// public Transform particlePrefab;
 	private List<int> laneNums;
-	private bool isFiring;
+	private bool isFiring = false;
 	private int minLasers = 6;
 	private int maxLasers = 9;
 
+	private float waitToFire = 1f;
+
 	void Start () {
 		InitializeLaneList();
-		isFiring = false;
 	}
 	
 	void Update () {
@@ -35,7 +36,7 @@ public class LaserCreater : MonoBehaviour {
 		GameState.PlayClip(laserFire);
 		for(int i = 0; i < list_count; i++)
 		{
-			Instantiate(laserPrefab, new Vector3(16.5f, (lanesToFireLasers[i] + 0.5f)), Quaternion.identity);
+			Instantiate(laserPrefab, new Vector3(GameState.end_column, (lanesToFireLasers[i] + 0.5f)), Quaternion.identity);
 		}
 		yield return new WaitForSeconds(1f);
 		isFiring = false;

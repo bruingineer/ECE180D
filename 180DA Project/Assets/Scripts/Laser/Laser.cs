@@ -12,7 +12,7 @@ public class Laser : MonoBehaviour {
 		playerHit = false;
 		lineRenderer = transform.Find("Beam").GetComponent<LineRenderer>();
 		lineRenderer.SetPosition(0, transform.position);
-		endPosition = new Vector3(-8f, transform.position.y);
+		endPosition = new Vector3(0, transform.position.y);
 		StartCoroutine(MoveLaser(endPosition, laserTime));
 	}
 	

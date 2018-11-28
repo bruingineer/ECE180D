@@ -33,7 +33,7 @@ def connect_to_server(ip):
 
 def localize(nregions):
     #load Haar Classifier for face recognition
-    faceCascade = cv2.CascadeClassifier('.\\data\\haarcascade_frontalface_default.xml')
+    faceCascade = cv2.CascadeClassifier('./data/haarcascade_frontalface_default.xml')
 
     cap = cv2.VideoCapture(0)
     #cap.set(3,640)  #set width of frame
