@@ -5,17 +5,18 @@ using UnityEngine;
 public class LaserCreater : MonoBehaviour {
 	public AudioClip laserCountdown;
 	public AudioClip laserFire;
-	public Transform laserPrefab;
-	// public Transform particlePrefab;
+	public GameObject laserPrefab;
 	private List<int> laneNums;
 	private bool isFiring = false;
 	private int minLasers = 6;
 	private int maxLasers = 9;
-
 	private float waitToFire = 1f;
+	public GameObject laserWarning;
+	private List<GameObject> laserWarnings;
 
 	void Start () {
 		InitializeLaneList();
+		laserWarnings = new List<GameObject>();
 	}
 	
 	void Update () {
@@ -28,15 +29,25 @@ public class LaserCreater : MonoBehaviour {
 		List<int> lanesToFireLasers = GetRandomLanes();
 		int list_count = lanesToFireLasers.Count;
 		GameState.PlayClip(laserCountdown);
-		// for(int i = 0; i < list_count; i++)
-		// {
-		// 	Instantiate(particlePrefab, new Vector3(16f, (lanesToFireLasers[i] + 0.5f)), Quaternion.identity);
-		// }
+		float laserWarmUpTime = laserCountdown.length;
+		for(int i = 0; i < list_count; i++)
+		{
+			GameObject laserParticle = Instantiate(laserWarning, new Vector3(GameState.end_column, (lanesToFireLasers[i] + 0.5f)), Quaternion.identity);
+			ParticleSystem ps = laserParticle.GetComponent<ParticleSystem>();
+			var main = ps.main;
+			main.duration = laserWarmUpTime;
+			ps.Play();
+			laserWarnings.Add(laserParticle);
+		}
 		yield return new WaitForSeconds(laserCountdown.length);
 		GameState.PlayClip(laserFire);
 		for(int i = 0; i < list_count; i++)
 		{
 			Instantiate(laserPrefab, new Vector3(GameState.end_column, (lanesToFireLasers[i] + 0.5f)), Quaternion.identity);
+		}
+		while(laserWarnings.Count > 0) {
+			Destroy(laserWarnings[0]);
+			laserWarnings.RemoveAt(0);
 		}
 		yield return new WaitForSeconds(1f);
 		isFiring = false;
