@@ -14,13 +14,15 @@ public class LaserCreater : MonoBehaviour {
 	public GameObject laserWarning;
 	private List<GameObject> laserWarnings;
 
+	void Awake()
+	{
+		Obstacles.obstacleOn = true;
+	}
+
 	void Start () {
 		InitializeLaneList();
 		laserWarnings = new List<GameObject>();
-	}
-	
-	void Update () {
-		if (!isFiring) StartCoroutine(ShootLasers());
+		StartCoroutine(ShootLasers());
 	}
 
 	private IEnumerator ShootLasers() 
@@ -49,8 +51,10 @@ public class LaserCreater : MonoBehaviour {
 			Destroy(laserWarnings[0]);
 			laserWarnings.RemoveAt(0);
 		}
-		yield return new WaitForSeconds(1f);
-		isFiring = false;
+		
+		yield return new WaitForSeconds(Obstacles.obstacleWaitTime);
+		Obstacles.obstacleOn = false;
+		Destroy(gameObject);
 	}
 
 	private List<int> GetRandomLanes() 
