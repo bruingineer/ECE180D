@@ -52,9 +52,10 @@ public class SpeechRecognitionEngine : MonoBehaviour
 
     private void Recognizer_OnPhraseRecognized(PhraseRecognizedEventArgs args)
     {
-        word = args.text;
+        gameObject.transform.Find("UnscrambleText").GetComponent<Text>().text = "Correct!";
+        PlayerMQTT_X.playerMoved = true;
         StartCoroutine(Reset());
-        results.text = "You said: <b>" + word + "</b>";
+
     }
 
     IEnumerator Reset()
@@ -72,6 +73,9 @@ public class SpeechRecognitionEngine : MonoBehaviour
             recognizer.Stop();
             print("Recognizer Stopped");
         }
+        
+        Destroy(gameObject);
+        
     }
 
     private void OnApplicationQuit()
