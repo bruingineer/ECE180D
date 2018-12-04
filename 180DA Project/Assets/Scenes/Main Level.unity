@@ -4748,7 +4748,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0128de6d87c5f4d47a362fa4c9b25513, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerHitByLaser: {fileID: 8300000, guid: 9c10e21f75df04244b6a38dd3a8a6184, type: 3}
+  playerHitByLaser: {fileID: 8300000, guid: 7122131531d0b407093f4258f64dc2d8, type: 3}
   playerRecovered: {fileID: 8300000, guid: d151c132aa71d40869e60efaccb61d8a, type: 3}
 --- !u!114 &2093824674
 MonoBehaviour:
