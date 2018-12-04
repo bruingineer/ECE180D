@@ -11,10 +11,9 @@ public class SpeechRecognitionEngine : MonoBehaviour
     public ConfidenceLevel confidence = ConfidenceLevel.High;
     protected PhraseRecognizer recognizer;
 
+    public Text scramble;
     protected string word = "";
     public string[] keywords = { "" };
-
-    public Text results;
 
     //This will update the keywords that the speech recognizer will recognize
     //For the list of avaiable words see WordList.cs
@@ -52,7 +51,9 @@ public class SpeechRecognitionEngine : MonoBehaviour
 
     private void Recognizer_OnPhraseRecognized(PhraseRecognizedEventArgs args)
     {
-        Debug.Log(gameObject.transform.Find("UnscrambleText"));
+
+        scramble.text = "Correct!";
+
         PlayerMQTT_X.playerMoved = true;
         StartCoroutine(Reset());
 
@@ -73,7 +74,7 @@ public class SpeechRecognitionEngine : MonoBehaviour
             recognizer.Stop();
             print("Recognizer Stopped");
         }
-        
+
         Destroy(gameObject);
         
     }
