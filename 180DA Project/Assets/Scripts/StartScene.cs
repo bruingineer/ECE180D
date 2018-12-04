@@ -37,6 +37,7 @@ public class StartScene : MonoBehaviour {
     private const string topic = "database/result";
     private byte[] playersQuery = Encoding.ASCII.GetBytes("SELECT * FROM players");
     private bool populated = false;
+    public double timer = 0;
     PlayerData pd;
     Item selectedPlayer;
 
@@ -59,9 +60,10 @@ public class StartScene : MonoBehaviour {
         client.Subscribe(new string[] { topic }, new byte[] { MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE });
         client.Publish("database", playersQuery);
 
-
-        while (true)
+        //prevent infinite loop by setting a makeshift timer
+        while (timer < 13033801)
         {
+            timer += 1;
             if (populated)
             {
                 ////Fetch the Dropdown GameObject the script is attached to
@@ -74,11 +76,16 @@ public class StartScene : MonoBehaviour {
             }
         }
 
+        Debug.Log(timer);
+        //if (!populated)
+        //{
+        //    Debug.Log("FAILED TO FETCH PLAYERS FROM DATABASE");
+        //}
     }
 	
 	// Update is called once per frame
 	void Update () {
-        if (pd.count != 0)
+        if (pd != null && pd.count != 0)
         {
             selectedPlayer = pd.items[m_Dropdown.value];
             if (selectedPlayer.name != SelectedPlayer.name)
@@ -86,11 +93,17 @@ public class StartScene : MonoBehaviour {
                 SelectedPlayer.name = selectedPlayer.name;
                 SelectedPlayer.id = selectedPlayer.id;
                 SelectedPlayer.games_played = selectedPlayer.games_played;
+                SelectedPlayer.current_hits = 0;
+                SelectedPlayer.current_gesture_fail = 0;
+                SelectedPlayer.current_gesture_pass = 0;
+                SelectedPlayer.current_speech_pass = 0;
+                SelectedPlayer.current_speech_pass = 0;
             }
         }
         else
         {
             Debug.Log("No Profiles found!");
+            Debug.Break();
         }
 	}
 

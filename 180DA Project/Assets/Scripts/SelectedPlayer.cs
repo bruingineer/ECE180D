@@ -44,4 +44,10 @@ public static class SelectedPlayer{
             games_played = value;
         }
     }
+
+    public static int current_hits = 0;
+    public static int current_gesture_pass = 0;
+    public static int current_gesture_fail = 0;
+    public static int current_speech_pass = 0;
+    public static int current_speech_fail = 0;
 }

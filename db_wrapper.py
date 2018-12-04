@@ -42,12 +42,13 @@ def on_message(client, userdata, msg):
             result_dict = [dict(zip([key[0] for key in mycursor.description], row)) for row in result]
             json_str = json.dumps({'count': len(result_dict), 'items': result_dict})  
             
-            print json_str
+            print(json_str)
             
             rc = client.publish(topic + '/result', payload= (json_str), qos =0, retain=False)
-            print rc
+            print(rc)
         else:
-            db.commit()
+            print("Committing to db w/ " + cmd_type + " command")
+            mydb.commit()
     except Exception as e:
         print(e)
 

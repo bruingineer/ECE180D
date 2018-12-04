@@ -4,7 +4,7 @@ USE Synchro;
 
 CREATE TABLE IF NOT EXISTS players (
     id INT unsigned NOT NULL AUTO_INCREMENT,
-    name varchar(20) NOT NULL,
+    name varchar(20) UNIQUE NOT NULL,
     games_played INT DEFAULT 0,
     PRIMARY KEY(id)
 );

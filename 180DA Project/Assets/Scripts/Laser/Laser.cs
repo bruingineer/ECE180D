@@ -20,6 +20,7 @@ public class Laser : MonoBehaviour {
 	void Update () {
         if (Physics.Raycast(transform.position, Vector3.left) && !Player.isHit)
 			Player.isHit = true;
+            SelectedPlayer.current_hits += 1;
 	}
 
 	private IEnumerator MoveLaser(Vector3 end_position, float timeToMove)

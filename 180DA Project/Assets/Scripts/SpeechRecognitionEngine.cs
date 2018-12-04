@@ -52,7 +52,7 @@ public class SpeechRecognitionEngine : MonoBehaviour
 
     private void Recognizer_OnPhraseRecognized(PhraseRecognizedEventArgs args)
     {
-        gameObject.transform.Find("UnscrambleText").GetComponent<Text>().text = "Correct!";
+        Debug.Log(gameObject.transform.Find("UnscrambleText"));
         PlayerMQTT_X.playerMoved = true;
         StartCoroutine(Reset());
 
