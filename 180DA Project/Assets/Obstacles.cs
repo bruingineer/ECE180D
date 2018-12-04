@@ -12,7 +12,7 @@ public class Obstacles : MonoBehaviour {
 
 	void Awake()
 	{
-		obstacleWaitTime = 5f;
+		obstacleWaitTime = 3f;
 		obstacles = new List<GameObject> {bigLasers};
 		obstacleCount = obstacles.Count;
 	}
@@ -21,6 +21,7 @@ public class Obstacles : MonoBehaviour {
 	void Update () {
 		if(!obstacleOn) {
 			int index = Random.Range(0, obstacleCount);
+			obstacleOn = true;
 			Instantiate(obstacles[index]);
 		}
 	}

@@ -82,7 +82,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerHitByLaser: {fileID: 8300000, guid: d4ad8c13e9846451c9a4af22e05d1c65, type: 3}
-  particleWarning: {fileID: 0}
 --- !u!120 &120702932566219208
 LineRenderer:
   m_ObjectHideFlags: 1

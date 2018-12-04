@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Laser : MonoBehaviour {
-	public AudioClip playerHitByLaser;
 	private LineRenderer lineRenderer;
 	Vector3 endPosition;
-	public const float laserTime = 0.01f;
-	private bool playerHit;
+	public const float laserTime = 0.005f;
+	
+	private float destroyLaserDelay = 0.75f;
+
+
 	void Start () {
-		playerHit = false;
 		lineRenderer = transform.Find("Beam").GetComponent<LineRenderer>();
 		lineRenderer.SetPosition(0, transform.position);
 		endPosition = new Vector3(0, transform.position.y);
@@ -17,13 +18,8 @@ public class Laser : MonoBehaviour {
 	}
 	
 	void Update () {
-        if (Physics.Raycast(transform.position, Vector3.left) && !playerHit)
-        {
-			playerHit = true;
-            Debug.Log("HIT");
-			GameState.PlayClip(playerHitByLaser);
-			// take away life here
-		}
+        if (Physics.Raycast(transform.position, Vector3.left) && !Player.isHit)
+			Player.isHit = true;
 	}
 
 	private IEnumerator MoveLaser(Vector3 end_position, float timeToMove)
@@ -36,6 +32,7 @@ public class Laser : MonoBehaviour {
 				lineRenderer.SetPosition(1, Vector3.Lerp(initialPos, end_position, t));
 				yield return null;
 		}
-		Destroy(gameObject, 0.4f);
+
+		Destroy(gameObject, destroyLaserDelay);
     }
 }

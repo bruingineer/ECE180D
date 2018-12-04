@@ -14,20 +14,13 @@ public class LaserCreater : MonoBehaviour {
 	public GameObject laserWarning;
 	private List<GameObject> laserWarnings;
 
-	void Awake()
-	{
-		Obstacles.obstacleOn = true;
-	}
-
 	void Start () {
 		InitializeLaneList();
 		laserWarnings = new List<GameObject>();
 		StartCoroutine(ShootLasers());
 	}
-
 	private IEnumerator ShootLasers() 
 	{
-		isFiring = true;
 		List<int> lanesToFireLasers = GetRandomLanes();
 		int list_count = lanesToFireLasers.Count;
 		GameState.PlayClip(laserCountdown);
@@ -56,7 +49,6 @@ public class LaserCreater : MonoBehaviour {
 		Obstacles.obstacleOn = false;
 		Destroy(gameObject);
 	}
-
 	private List<int> GetRandomLanes() 
 	{
 		List<int> laneNumsCopy = new List<int>(laneNums);
