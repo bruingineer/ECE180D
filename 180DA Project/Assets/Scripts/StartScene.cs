@@ -78,12 +78,19 @@ public class StartScene : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        selectedPlayer = pd.items[m_Dropdown.value];
-        if (selectedPlayer.name != SelectedPlayer.name)
+        if (pd.count != 0)
         {
-            SelectedPlayer.name = selectedPlayer.name;
-            SelectedPlayer.id = selectedPlayer.id;
-            SelectedPlayer.games_played = selectedPlayer.games_played;
+            selectedPlayer = pd.items[m_Dropdown.value];
+            if (selectedPlayer.name != SelectedPlayer.name)
+            {
+                SelectedPlayer.name = selectedPlayer.name;
+                SelectedPlayer.id = selectedPlayer.id;
+                SelectedPlayer.games_played = selectedPlayer.games_played;
+            }
+        }
+        else
+        {
+            Debug.Log("No Profiles found!");
         }
 	}
 
