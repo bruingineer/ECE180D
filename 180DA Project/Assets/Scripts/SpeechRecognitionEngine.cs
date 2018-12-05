@@ -45,6 +45,7 @@ public class SpeechRecognitionEngine : MonoBehaviour
             recognizer = new KeywordRecognizer(keywords, confidence);
             recognizer.OnPhraseRecognized += Recognizer_OnPhraseRecognized;
             recognizer.Start();
+            StartCoroutine(GameState.Timer(gameObject));
             print("Recognizer Started");
         }
     }
