@@ -81,7 +81,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cca443debf5bf43a9ab5f7d84def615f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerHitByLaser: {fileID: 8300000, guid: d4ad8c13e9846451c9a4af22e05d1c65, type: 3}
 --- !u!120 &120702932566219208
 LineRenderer:
   m_ObjectHideFlags: 1
