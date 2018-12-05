@@ -25,7 +25,7 @@ def on_connect(client, userdata, flags, rc):
 # First word MUST be UPDATE, SELECT, or INSERT
 def on_message(client, userdata, msg):
     content = str(msg.payload)
-    print(msg.topic+" "+str(content))
+    print("\n"+str(content))
     
     cmd_type = content.upper().split()[0]
     

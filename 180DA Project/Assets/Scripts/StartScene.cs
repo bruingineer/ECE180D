@@ -14,7 +14,7 @@ using System.Text;
 public class PlayerData
 {
     public int count;
-    public Item[] items;
+    public PlayerItem[] items;
 
     public static PlayerData CreateFromJSON(string jsonString)
     {
@@ -23,7 +23,7 @@ public class PlayerData
 }
 
 [Serializable]
-public class Item
+public class PlayerItem
 {
     public string name;
     public int id;
@@ -39,7 +39,7 @@ public class StartScene : MonoBehaviour {
     private bool populated = false;
     public double timer = 0;
     PlayerData pd;
-    Item selectedPlayer;
+    PlayerItem selectedPlayer;
 
     //Create a List of new Dropdown options and attach to object
     List<string> m_DropOptions = new List<string>();
