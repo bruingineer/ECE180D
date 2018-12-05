@@ -10,7 +10,7 @@ using uPLibrary.Networking.M2Mqtt.Exceptions;
 using System;
 using System.Text;
 
-public class StatsProcess : MonoBehaviour {
+public class StatsProcessOld : MonoBehaviour {
 
     private MqttClient client;
     private const string str_IP = "127.0.0.1";
