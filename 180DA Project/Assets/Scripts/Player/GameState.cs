@@ -11,7 +11,6 @@ public class GameState : MonoBehaviour {
 	private static AudioSource m_audio_source;
 	
 	void Awake () {
-		// change to make it dynamic
 		numLanes = 10;
 		middle_lane = numLanes/2;
 		end_column = 20;
@@ -20,6 +19,21 @@ public class GameState : MonoBehaviour {
 
 	public static void PlayClip(AudioClip clip) {
 		m_audio_source.PlayOneShot(clip);
+	}
+
+	public static IEnumerator Timer(GameObject gameObject) 
+	{
+		float duration = 3f; // 3 seconds you can change this to
+      	//to whatever you want
+      	float totalTime = 0;
+      	while(totalTime <= duration)
+      	{
+          totalTime += Time.deltaTime;
+          var integer = (int)totalTime; /* choose how to quantize this */
+          /* convert integer to string and assign to text */
+          yield return null;
+      	}
+		Destroy(gameObject);
 	}
 
 }
