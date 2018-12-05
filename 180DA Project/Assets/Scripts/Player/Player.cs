@@ -20,6 +20,7 @@ public class Player : MonoBehaviour {
 	public List<GameObject> playerLifeIcons;
 	private int playerLives;
 	public GameObject playerExplosion;
+	public static bool gameOver;
 	void Start () {
 		// change x position to be more dynamic
 		isRecovering = false;
@@ -29,11 +30,12 @@ public class Player : MonoBehaviour {
 		isPlayerMoving = false;
 		isHit = false;
 		playerLives = 3;
+		gameOver = false;
 	}
 
 	void Update()
 	{
-		if (isHit && !isRecovering) {
+		if (isHit && !isRecovering && !gameOver) {
 			StartCoroutine(PlayerHit());
 		}
 	}
@@ -76,10 +78,16 @@ public class Player : MonoBehaviour {
 			yield return null;
 		}
 		else {
-			isRecovering = true;
-			Time.timeScale = 0;
+			gameOver = true;
+			GameObject explosion = Instantiate(playerExplosion, transform.position, Quaternion.identity);
+			ParticleSystem ps = explosion.GetComponent<ParticleSystem>();
 			GameState.PlayClip(playerLost);
-			yield return new WaitForSeconds(playerLost.length);
+			float explosionDuration = playerLost.length;
+			var main = ps.main;
+			main.duration = explosionDuration;
+			ps.Play();
+			yield return new WaitForSeconds(explosionDuration);
+			SceneManager.LoadScene(2);
 		}
 	}
 }

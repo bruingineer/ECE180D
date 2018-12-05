@@ -19,7 +19,7 @@ public class Obstacles : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if(!obstacleOn) {
+		if(!obstacleOn && !Player.gameOver) {
 			int index = Random.Range(0, obstacleCount);
 			obstacleOn = true;
 			Instantiate(obstacles[index]);
