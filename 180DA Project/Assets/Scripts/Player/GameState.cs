@@ -11,6 +11,8 @@ public class GameState : MonoBehaviour {
 	public static int end_column;
 	private static AudioSource m_audio_source;
 	public static Text gameOver;
+
+	public AudioSource gameMusic;
 	
 	void Awake () {
 		numLanes = 10;
@@ -19,6 +21,15 @@ public class GameState : MonoBehaviour {
 		m_audio_source = GetComponent<AudioSource>();
 		gameOver = GameObject.Find("GameOver").GetComponent<Text>();
 		gameOver.enabled = false;
+	}
+
+	void Update()
+	{
+		if (Player.playerLives == 1) {
+			gameMusic.pitch = 1.25f;
+		} else {
+			gameMusic.pitch = 1;
+		} 
 	}
 
 	public static void PlayClip(AudioClip clip) {

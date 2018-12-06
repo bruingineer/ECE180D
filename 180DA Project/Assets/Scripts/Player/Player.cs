@@ -18,7 +18,7 @@ public class Player : MonoBehaviour {
 	public AudioClip playerLost;
 	public static float playerRecoveryTime;
 	public List<GameObject> playerLifeIcons;
-	private int playerLives;
+	public static int playerLives;
 	public GameObject playerExplosion;
 	public static bool gameOver;
 	void Start () {
@@ -80,6 +80,7 @@ public class Player : MonoBehaviour {
 		else {
 			gameOver = true;
 			GameState.gameOver.enabled = true;
+			this.enabled = false;
 			GameObject explosion = Instantiate(playerExplosion, transform.position, Quaternion.identity);
 			ParticleSystem ps = explosion.GetComponent<ParticleSystem>();
 			GameState.PlayClip(playerLost);
