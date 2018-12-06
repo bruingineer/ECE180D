@@ -11,8 +11,10 @@ public class GameState : MonoBehaviour {
 	public static int end_column;
 	private static AudioSource m_audio_source;
 	public static Text gameOver;
+	public GameObject countdown;
 
 	public AudioSource gameMusic;
+	public static bool gameStarted;
 	
 	void Awake () {
 		numLanes = 10;
@@ -21,6 +23,8 @@ public class GameState : MonoBehaviour {
 		m_audio_source = GetComponent<AudioSource>();
 		gameOver = GameObject.Find("GameOver").GetComponent<Text>();
 		gameOver.enabled = false;
+		gameStarted = false;
+		StartCoroutine(Timer());
 	}
 
 	void Update()
@@ -36,19 +40,25 @@ public class GameState : MonoBehaviour {
 		m_audio_source.PlayOneShot(clip);
 	}
 
-	public static IEnumerator Timer(GameObject gameObject) 
+	public IEnumerator Timer() 
 	{
-		float duration = 3f; // 3 seconds you can change this to
-      	//to whatever you want
-      	float totalTime = 0;
-      	while(totalTime <= duration)
+		Text countdownText = countdown.GetComponent<Text>();
+		float duration = 4f;
+      	while(duration >= 0)
       	{
-          totalTime += Time.deltaTime;
-          var integer = (int)totalTime; /* choose how to quantize this */
-          /* convert integer to string and assign to text */
-          yield return null;
+			duration -= Time.deltaTime;
+			int integer = (int)duration;
+			if (integer >= 1)
+				countdownText.text = integer.ToString();
+			else
+				countdownText.text = "Start!";
+          	yield return null;
       	}
-		Destroy(gameObject);
+		Destroy(countdown);
+		gameStarted = true;
+		gameMusic.Play();
 	}
+
+
 
 }

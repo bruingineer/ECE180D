@@ -15,7 +15,7 @@ public class PlayerEvents : MonoBehaviour {
 	}
 	
 	void Update () {
-		if(!eventOn && !Player.isDead) {
+		if(!eventOn && !Player.isDead && GameState.gameStarted) {
 			eventOn = true;
 			Instantiate(playerEvents[Random.Range(0, playerEvents.Count)]);
 		}
