@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameState : MonoBehaviour {
 
@@ -9,12 +10,15 @@ public class GameState : MonoBehaviour {
 
 	public static int end_column;
 	private static AudioSource m_audio_source;
+	public static Text gameOver;
 	
 	void Awake () {
 		numLanes = 10;
 		middle_lane = numLanes/2;
 		end_column = 20;
 		m_audio_source = GetComponent<AudioSource>();
+		gameOver = GameObject.Find("GameOver").GetComponent<Text>();
+		gameOver.enabled = false;
 	}
 
 	public static void PlayClip(AudioClip clip) {

@@ -79,6 +79,7 @@ public class Player : MonoBehaviour {
 		}
 		else {
 			gameOver = true;
+			GameState.gameOver.enabled = true;
 			GameObject explosion = Instantiate(playerExplosion, transform.position, Quaternion.identity);
 			ParticleSystem ps = explosion.GetComponent<ParticleSystem>();
 			GameState.PlayClip(playerLost);
