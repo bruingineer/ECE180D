@@ -58,7 +58,4 @@ public class GameState : MonoBehaviour {
 		gameStarted = true;
 		gameMusic.Play();
 	}
-
-
-
 }
