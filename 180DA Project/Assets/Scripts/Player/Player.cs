@@ -4,22 +4,17 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour {
-	public static Rigidbody2D rb;
 	public static float movementTimeX = .2f;
-	public static float movementTimeY = .5f;
 	public static float playerLaneNum = PlayerMQTT_Y.cur_lane_num;
 	public static float secondsToMoveY = 0.1f;
-	public static float secondsToMoveX = 0.2f;
 	public static bool isPlayerMoving;
 	public static bool isHit;
 	private bool isRecovering;
 	public AudioClip playerHitByLaser;
 	public AudioClip playerRecovered;
-	public AudioClip playerLost;
 	public static float playerRecoveryTime;
 	public List<GameObject> playerLifeIcons;
 	public static int playerLives;
-	public GameObject playerExplosion;
 	public static bool isDead;
 	SpriteRenderer sr;
 	void Start () {
@@ -80,17 +75,6 @@ public class Player : MonoBehaviour {
 		}
 		else {
 			isDead = true;
-			GameState.gameOver.enabled = true;
-			sr.color = new Color(255f, 255f, 255f, 0);
-			GameObject explosion = Instantiate(playerExplosion, transform.position, Quaternion.identity);
-			ParticleSystem ps = explosion.GetComponent<ParticleSystem>();
-			GameState.PlayClip(playerLost);
-			float explosionDuration = playerLost.length;
-			var main = ps.main;
-			main.duration = explosionDuration;
-			ps.Play();
-			yield return new WaitForSeconds(explosionDuration);
-			SceneManager.LoadScene(2);
 		}
 	}
 }
