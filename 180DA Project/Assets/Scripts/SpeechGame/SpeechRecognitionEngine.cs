@@ -50,6 +50,12 @@ public class SpeechRecognitionEngine : MonoBehaviour
         }
     }
 
+    void Update()
+    {
+        if (Player.isDead)
+            Destroy(gameObject);
+    }
+
     private void Recognizer_OnPhraseRecognized(PhraseRecognizedEventArgs args)
     {
 

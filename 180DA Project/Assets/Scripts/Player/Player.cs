@@ -20,7 +20,8 @@ public class Player : MonoBehaviour {
 	public List<GameObject> playerLifeIcons;
 	public static int playerLives;
 	public GameObject playerExplosion;
-	public static bool gameOver;
+	public static bool isDead;
+	SpriteRenderer sr;
 	void Start () {
 		// change x position to be more dynamic
 		isRecovering = false;
@@ -30,12 +31,13 @@ public class Player : MonoBehaviour {
 		isPlayerMoving = false;
 		isHit = false;
 		playerLives = 3;
-		gameOver = false;
+		isDead = false;
+		sr = gameObject.GetComponent<SpriteRenderer>();
 	}
 
 	void Update()
 	{
-		if (isHit && !isRecovering && !gameOver) {
+		if (isHit && !isRecovering && !isDead) {
 			StartCoroutine(PlayerHit());
 		}
 	}
@@ -61,7 +63,6 @@ public class Player : MonoBehaviour {
 			isRecovering = true;
 			bool playerNormal = false;
 			GameState.PlayClip(playerHitByLaser);
-			SpriteRenderer sr = gameObject.GetComponent<SpriteRenderer>();
 			for (int i = 0; i < playerRecoveryTime * 2; i++) {
 				if (playerNormal) {
 					sr.color = new Color(1f, 1f, 1f, 1f);
@@ -78,9 +79,9 @@ public class Player : MonoBehaviour {
 			yield return null;
 		}
 		else {
-			gameOver = true;
+			isDead = true;
 			GameState.gameOver.enabled = true;
-			this.enabled = false;
+			sr.color = new Color(255f, 255f, 255f, 0);
 			GameObject explosion = Instantiate(playerExplosion, transform.position, Quaternion.identity);
 			ParticleSystem ps = explosion.GetComponent<ParticleSystem>();
 			GameState.PlayClip(playerLost);
