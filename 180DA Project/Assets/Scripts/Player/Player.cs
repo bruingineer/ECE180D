@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour {
 	public static float movementTimeX = .2f;
@@ -14,7 +13,7 @@ public class Player : MonoBehaviour {
 	public AudioClip playerRecovered;
 	public static float playerRecoveryTime;
 	public List<GameObject> playerLifeIcons;
-	public static int playerLives;
+	public int playerLives;
 	public static bool isDead;
 	SpriteRenderer sr;
 	void Start () {

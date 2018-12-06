@@ -8,48 +8,89 @@ public class GameState : MonoBehaviour {
 
 	public static int numLanes;
 	public static int middle_lane;
-	public GameObject player;
+	public GameObject playerObject;
+	private Player player;
 	public Canvas canvas;
 	public static int end_column;
 	private static AudioSource m_audio_source;
 	public GameObject gameOver;
 	public GameObject countdown;
 	public AudioSource gameMusic;
-	public static bool gameStarted;
-	public bool handledPlayerDied;
+	public static bool gamePlaying;
+	public bool handledPlayer;
 	public GameObject playerExplosion;
 	public AudioClip playerLost;
+	public AudioClip playerWon;
+	public static bool stopPlaying;
+	public static bool gameWon;
 	
 	void Awake () {
 		numLanes = 10;
 		middle_lane = numLanes/2;
 		end_column = 20;
 		m_audio_source = GetComponent<AudioSource>();
-		gameStarted = false;
-		handledPlayerDied = false;
+		gamePlaying = false;
+		handledPlayer = false;
+		gameWon = false;
+		player = playerObject.GetComponent<Player>();
 		StartCoroutine(Timer());
 	}
 
 	void Update()
 	{
-		// if (Player.playerLives == 1) {
-		// 	gameMusic.pitch = 1.25f;
-		// } else {
-		// 	gameMusic.pitch = 1;
-		// } 
-		if (Player.isDead && !handledPlayerDied) {
-			StartCoroutine(HandlePlayerDied());
+		HandlePitchChange();
+		if (!handledPlayer)
+		{
+			HandlePlayerWin();
+			HandlePlayerDied();
+		}
+		
+	}
+
+	private void HandlePlayerWin() 
+	{
+		if (playerObject.transform.position.x == (end_column - 0.5f))
+		{
+			handledPlayer = true;
+			gamePlaying = false;
+			StartCoroutine(PlayerWonCoroutine());
 		}
 	}
 
-	IEnumerator HandlePlayerDied () 
+	private void HandlePitchChange()
 	{
-		handledPlayerDied = true;
+		if (player.playerLives == 1) {
+			gameMusic.pitch = 1.25f;
+		} else {
+			gameMusic.pitch = 1;
+		} 
+	}
+
+	private void HandlePlayerDied() 
+	{
+		if (Player.isDead) {
+			handledPlayer = true;
+			gamePlaying = false;
+			StartCoroutine(PlayerDiedCoroutine());
+		}
+	}
+
+	IEnumerator PlayerWonCoroutine()
+	{
+		gameOver.GetComponent<Text>().text = "You Win!";
 		GameObject gameoverText = Instantiate(gameOver, canvas.transform);
-		GameObject explosion = Instantiate(playerExplosion, player.transform.position, Quaternion.identity);
-		Destroy(player);
+		PlayClip(playerWon);
+		yield return new WaitForSeconds(playerWon.length);
+		SceneManager.LoadScene(2);
+	}
+
+	IEnumerator PlayerDiedCoroutine() 
+	{
+		GameObject gameoverText = Instantiate(gameOver, canvas.transform);
+		GameObject explosion = Instantiate(playerExplosion, playerObject.transform.position, Quaternion.identity);
+		Destroy(playerObject);
 		ParticleSystem ps = explosion.GetComponent<ParticleSystem>();
-		GameState.PlayClip(playerLost);
+		PlayClip(playerLost);
 		float explosionDuration = playerLost.length;
 		var main = ps.main;
 		main.duration = explosionDuration;
@@ -77,7 +118,7 @@ public class GameState : MonoBehaviour {
           	yield return null;
       	}
 		Destroy(countdown);
-		gameStarted = true;
+		gamePlaying = true;
 		gameMusic.Play();
 	}
 }

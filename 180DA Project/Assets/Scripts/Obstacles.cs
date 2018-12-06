@@ -17,9 +17,11 @@ public class Obstacles : MonoBehaviour {
 	}
 	
 	void Update () {
-		if(!obstacleOn && !Player.isDead && GameState.gameStarted) {
+		if(!obstacleOn && !Player.isDead && GameState.gamePlaying) {
 			obstacleOn = true;
 			Instantiate(obstacles[Random.Range(0, obstacles.Count)]);
 		}
+		if (GameState.gameWon) 
+			Destroy(gameObject);
 	}
 }
