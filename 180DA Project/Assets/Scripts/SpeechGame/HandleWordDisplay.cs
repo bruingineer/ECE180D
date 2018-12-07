@@ -9,10 +9,11 @@ public class HandleWordDisplay : MonoBehaviour {
 
 
     public DisplayWord DisplayWord;
+    public static int x;
 
     public void WhichWord(string w)
     {
-        print(w);
+        //print(w);
         DisplayWord.SetWord(w);
     }
 
