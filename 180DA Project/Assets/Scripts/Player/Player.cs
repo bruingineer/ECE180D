@@ -3,18 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Player : MonoBehaviour {
-	public static Rigidbody2D rb;
 	public static float movementTimeX = .2f;
-	public static float movementTimeY = .5f;
 	public static float playerLaneNum = PlayerMQTT_Y.cur_lane_num;
 	public static float secondsToMoveY = 0.1f;
-	public static float secondsToMoveX = 0.2f;
 	public static bool isPlayerMoving;
 	public static bool isHit;
 	private bool isRecovering;
 	public AudioClip playerHitByLaser;
 	public AudioClip playerRecovered;
 	public static float playerRecoveryTime;
+	public List<GameObject> playerLifeIcons;
+	public int playerLives;
+	public static bool isDead;
+	SpriteRenderer sr;
 	void Start () {
 		// change x position to be more dynamic
 		isRecovering = false;
@@ -23,11 +24,14 @@ public class Player : MonoBehaviour {
 		// bool to see if player is moving
 		isPlayerMoving = false;
 		isHit = false;
+		playerLives = 3;
+		isDead = false;
+		sr = gameObject.GetComponent<SpriteRenderer>();
 	}
 
 	void Update()
 	{
-		if (isHit && !isRecovering) {
+		if (isHit && !isRecovering && !isDead) {
 			StartCoroutine(PlayerHit());
 		}
 	}
@@ -47,24 +51,30 @@ public class Player : MonoBehaviour {
 
 	public IEnumerator PlayerHit() 
 	{
-		isRecovering = true;
-		GameState.PlayClip(playerHitByLaser);
-		bool playerNormal = false;
-		SpriteRenderer sr = gameObject.GetComponent<SpriteRenderer>();
-		for (int i = 0; i < playerRecoveryTime * 2; i++) {
-			if (playerNormal) {
-				sr.color = new Color(1f, 1f, 1f, 1f);
-			} else {
-				sr.color = new Color(1f, 1f, 1f, .4f);
+		if (playerLives > 1) {
+			playerLifeIcons[playerLives - 2].SetActive(false);
+			playerLives--;
+			isRecovering = true;
+			bool playerNormal = false;
+			GameState.PlayClip(playerHitByLaser);
+			for (int i = 0; i < playerRecoveryTime * 2; i++) {
+				if (playerNormal) {
+					sr.color = new Color(1f, 1f, 1f, 1f);
+				} else {
+					sr.color = new Color(1f, 1f, 1f, .4f);
+				}
+				playerNormal = !playerNormal;
+				yield return new WaitForSeconds(.5f);
 			}
-			playerNormal = !playerNormal;
-			yield return new WaitForSeconds(.5f);
+			sr.color = new Color(255f, 255f, 255f, 222f);
+			GameState.PlayClip(playerRecovered);
+			isRecovering = false;
+			isHit = false;
+			yield return null;
 		}
-		sr.color = new Color(255f, 255f, 255f, 222f);
-		GameState.PlayClip(playerRecovered);
-		isRecovering = false;
-		isHit = false;
-		yield return null;
+		else {
+			isDead = true;
+		}
 	}
 }
 
