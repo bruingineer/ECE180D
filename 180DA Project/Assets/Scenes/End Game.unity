@@ -976,6 +976,7 @@ GameObject:
   - component: {fileID: 1701787097}
   - component: {fileID: 1701787096}
   - component: {fileID: 1701787095}
+  - component: {fileID: 1701787098}
   m_Layer: 0
   m_Name: Training Button
   m_TagString: Untagged
@@ -1077,6 +1078,19 @@ CanvasRenderer:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1701787093}
   m_CullTransparentMesh: 1
+--- !u!114 &1701787098
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1701787093}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18aefef72f9e6b40a4a7d4c7dc5e3d3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  training_suggestion: {fileID: 56304145}
+  trainingButton: {fileID: 0}
 --- !u!1 &1719439623
 GameObject:
   m_ObjectHideFlags: 0

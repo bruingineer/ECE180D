@@ -72,7 +72,7 @@ public class StatsProcess : MonoBehaviour
         byte[] command = Encoding.ASCII.GetBytes(str_command);
         client.Publish("database", command);
 
-
+        //Update player's games_played field
         SelectedPlayer.games_played++;
         str_command = string.Format("UPDATE players SET games_played = {0} WHERE id = {1}",
                                     SelectedPlayer.games_played, SelectedPlayer.id);
@@ -114,7 +114,15 @@ public class StatsProcess : MonoBehaviour
                 Debug.Log("avg_speech_acc" + avg_speech_acc);
                 Debug.Log("avg_hits" + avg_hits);
 
-                if (avg_gesture_acc <= avg_speech_acc && avg_gesture_acc <= avg_hits)
+                if(avg_gesture_acc >= 0.8 &&  avg_speech_acc >= 0.8 && avg_hits >= 0.8)
+                {
+                    suggestion = "Suggestion: Great Work! Consider increasing the difficulty for a challenge!";
+                }
+                else if (avg_gesture_acc <= 0.3 && avg_speech_acc <= 0.3 && avg_hits <= 0.3)
+                {
+                    suggestion = "Suggestion: Looks like you're struggling. Consider redoing the tutorial.";
+                }
+                else if (avg_gesture_acc <= avg_speech_acc && avg_gesture_acc <= avg_hits)
                 {
                     suggestion = "Suggestion: Practice your gestures by playing the gestures mini-game!";
                 }
@@ -144,13 +152,16 @@ public class StatsProcess : MonoBehaviour
         client.Connect(clientId);
         client.Subscribe(new string[] { topic }, new byte[] { MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE });
 
-        UpdateDatabase();
+        if (SelectedPlayer.name != null)
+        {
+            UpdateDatabase();
 
-        //Perform the query for selected player's last three game data
-        string str_command = string.Format("SELECT * FROM (SELECT * FROM games WHERE player={0}) sub ", SelectedPlayer.id) +
-                                         "ORDER BY game_id DESC LIMIT 3";
-        byte[] command = Encoding.ASCII.GetBytes(str_command);
-        client.Publish("database", command);
+            //Perform the query for selected player's last three game data
+            string str_command = string.Format("SELECT * FROM (SELECT * FROM games WHERE player={0}) sub ", SelectedPlayer.id) +
+                                             "ORDER BY game_id DESC LIMIT 3";
+            byte[] command = Encoding.ASCII.GetBytes(str_command);
+            client.Publish("database", command);
+        }
     }
 
     // Update is called once per frame
@@ -168,6 +179,8 @@ public class StatsProcess : MonoBehaviour
         Debug.Log(gamesResult);
         gd = GameData.CreateFromJSON(gamesResult);
 
+        //Give Smart suggestion and reset game stats for new game
         PredictTraining();
+        SelectedPlayer.resetGameStats();
     }
 }
