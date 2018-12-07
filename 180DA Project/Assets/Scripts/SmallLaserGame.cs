@@ -11,7 +11,7 @@ public class SmallLaserGame : MonoBehaviour {
 	
 	void Start () {
 		lasersToFire = 25;
-		waitForNextLaser = 0.1f;
+		waitForNextLaser = 0.4f;
 		StartCoroutine(FireLasers());
 	}
 
@@ -24,8 +24,8 @@ public class SmallLaserGame : MonoBehaviour {
 					Quaternion.identity);
 			yield return new WaitForSeconds(waitForNextLaser);
 		}
-		Obstacles.obstacleOn = false;
 		yield return new WaitForSeconds(Obstacles.obstacleWaitTime);
+		Obstacles.obstacleOn = false;
 		Destroy(gameObject);
 	}
 }
