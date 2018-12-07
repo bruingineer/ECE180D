@@ -38,6 +38,8 @@ public class SpeechRecognitionEngine : MonoBehaviour
     //Can maybe use enable/disable
     private void Start()
     {
+        HandleWordDisplay.InitPosition = scramble.transform.position - new Vector3(35,20,0);
+
         isCorrect = false;
         ChooseRandWord();
         HandleWordDisplay.Display();

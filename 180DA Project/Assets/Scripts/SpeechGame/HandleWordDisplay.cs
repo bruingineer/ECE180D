@@ -1,11 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
-
-//This is wrapper class to the DisplayWord class
-//to hide the details and make it easier to use
 public class HandleWordDisplay : MonoBehaviour {
+
+    public Vector3 InitPosition;
+    public static int Offset = 25;
 
     public void WhichWord(string w)
     {
@@ -33,7 +34,6 @@ public class HandleWordDisplay : MonoBehaviour {
     private List<GameObjectStruct> wordList = new List<GameObjectStruct>();
     private List<Vector3> initPositions = new List<Vector3>();
     
-    public GameObject initPosition;
 
     public void SetWord(string w)
     {
@@ -49,16 +49,16 @@ public class HandleWordDisplay : MonoBehaviour {
     private void Set_wordDict()
     {
         print(word);
-        int offset = 0;
+        print(Offset);
+        int letter = 0;
         foreach (char c in this.word)
         {
             GameObjectStruct myGameObjectStruct = new GameObjectStruct { myGameObject = LoadLetter.GetLetter(c) };
-            myGameObjectStruct.myGameObject.transform.localScale -= new Vector3(0.5f, 0.5f, 0);
+            myGameObjectStruct.myGameObject.transform.localScale -= new Vector3(0.75f, 0.75f, 0);
             myGameObjectStruct.myGameObject.transform.SetParent(this.transform);
-            //GameObjectStruct obj = new GameObjectStruct { myGameObject =  gobj};
-            Vector3 pos = initPosition.transform.position;
-            pos[0] = pos[0] + 42 * offset;
-            offset++;
+            Vector3 pos = InitPosition;
+            pos[0] = pos[0] + Offset * letter;
+            letter++;
             myGameObjectStruct.myGameObject.transform.position = pos;
             myGameObjectStruct.initPos = pos;
             initPositions.Add(pos);
