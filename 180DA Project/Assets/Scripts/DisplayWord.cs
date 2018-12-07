@@ -8,7 +8,7 @@ public class DisplayWord : MonoBehaviour
     private string word;
     private List<GameObjectStruct> wordList = new List<GameObjectStruct>();
     private List<Vector3> initPositions = new List<Vector3>();
-
+    
     public GameObject initPosition;
 
     public void SetWord(string w)

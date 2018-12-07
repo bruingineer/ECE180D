@@ -30,7 +30,7 @@ public class SpeechRecognitionEngine : MonoBehaviour
     {
         System.Random rnd = new System.Random();
         keywords[0] = WordList.WordList_[rnd.Next(WordList.WordList_.Length)];
-        print(keywords[0]);
+        //print(keywords[0]);
         HandleWordDisplay.WhichWord(keywords[0]);
     }
 
