@@ -24,4 +24,8 @@ public class Small_Laser : MonoBehaviour {
 		Destroy(gameObject);
 		yield return null;
     }
+	private void OnTriggerEnter(Collider other)
+	{
+		Player.isHit = true;
+	}
 }
