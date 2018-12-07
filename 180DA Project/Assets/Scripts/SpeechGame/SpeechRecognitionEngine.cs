@@ -10,6 +10,7 @@ public class SpeechRecognitionEngine : MonoBehaviour
     public HandleWordDisplay HandleWordDisplay;
     public ConfidenceLevel confidence = ConfidenceLevel.High;
     protected PhraseRecognizer recognizer;
+    private bool isCorrect;
 
     public Text scramble;
     protected string word = "";
@@ -37,7 +38,7 @@ public class SpeechRecognitionEngine : MonoBehaviour
     //Can maybe use enable/disable
     private void Start()
     {
-        //WhichWord(2);
+        isCorrect = false;
         ChooseRandWord();
         HandleWordDisplay.Display();
         if (keywords != null)
@@ -57,12 +58,12 @@ public class SpeechRecognitionEngine : MonoBehaviour
 
     private void Recognizer_OnPhraseRecognized(PhraseRecognizedEventArgs args)
     {
-
-        scramble.text = "Correct!";
-
-        PlayerMQTT_X.playerMoved = true;
-        StartCoroutine(Reset());
-
+        if(!isCorrect) {
+            isCorrect = true;
+            scramble.text = "Correct!";
+            PlayerMQTT_X.playerMoved = true;
+            StartCoroutine(Reset());
+        }
     }
 
     IEnumerator Reset()

@@ -31,7 +31,7 @@ public class Player : MonoBehaviour {
 
 	void Update()
 	{
-		if (isHit && !isRecovering && !isDead) {
+		if (isHit && !isRecovering && !isDead && !GameState.gameWon) {
 			StartCoroutine(PlayerHit());
 		}
 	}

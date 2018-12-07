@@ -5,6 +5,7 @@ using UnityEngine;
 public class Obstacles : MonoBehaviour {
 
 	public GameObject bigLasers;
+	public GameObject smallLasers;
 	private List<GameObject> obstacles;
 	public static bool obstacleOn;
 	public static float obstacleWaitTime;
@@ -13,7 +14,7 @@ public class Obstacles : MonoBehaviour {
 	{
 		obstacleOn = false;
 		obstacleWaitTime = 3f;
-		obstacles = new List<GameObject> {bigLasers};
+		obstacles = new List<GameObject> {bigLasers, smallLasers};
 	}
 	
 	void Update () {

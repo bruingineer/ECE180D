@@ -23,6 +23,7 @@ public class GameState : MonoBehaviour {
 	public AudioClip playerWon;
 	public static bool stopPlaying;
 	public static bool gameWon;
+	public static List<int> laneNums;
 	
 	void Awake () {
 		numLanes = 10;
@@ -33,6 +34,7 @@ public class GameState : MonoBehaviour {
 		handledPlayer = false;
 		gameWon = false;
 		player = playerObject.GetComponent<Player>();
+		InitializeLaneList();
 		StartCoroutine(Timer());
 	}
 
@@ -101,6 +103,12 @@ public class GameState : MonoBehaviour {
 
 	public static void PlayClip(AudioClip clip) {
 		m_audio_source.PlayOneShot(clip);
+	}
+
+	private void InitializeLaneList() {
+		laneNums = new List<int>();
+		for (int i = 1; i <= GameState.numLanes; i++)
+			laneNums.Add(i);
 	}
 
 	public IEnumerator Timer() 

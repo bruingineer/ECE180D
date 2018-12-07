@@ -6,16 +6,12 @@ public class LaserCreater : MonoBehaviour {
 	public AudioClip laserCountdown;
 	public AudioClip laserFire;
 	public GameObject laserPrefab;
-	private List<int> laneNums;
-	private bool isFiring = false;
 	private int minLasers = 6;
 	private int maxLasers = 9;
-	private float waitToFire = 1f;
 	public GameObject laserWarning;
 	private List<GameObject> laserWarnings;
 
 	void Start () {
-		InitializeLaneList();
 		laserWarnings = new List<GameObject>();
 		StartCoroutine(ShootLasers());
 	}
@@ -51,7 +47,7 @@ public class LaserCreater : MonoBehaviour {
 	}
 	private List<int> GetRandomLanes() 
 	{
-		List<int> laneNumsCopy = new List<int>(laneNums);
+		List<int> laneNumsCopy = new List<int>(GameState.laneNums);
 		List<int> lanesToFireLasers = new List<int>();
 		int numLasersToFire = Random.Range(minLasers, maxLasers);
 		for (int i = 0; i < numLasersToFire; i++)
@@ -61,10 +57,5 @@ public class LaserCreater : MonoBehaviour {
 			laneNumsCopy.RemoveAt(index);
 		}
 		return lanesToFireLasers;
-	}
-	private void InitializeLaneList() {
-		laneNums = new List<int>();
-		for (int i = 1; i <= GameState.numLanes; i++)
-			laneNums.Add(i);
 	}
 }
