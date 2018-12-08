@@ -81,7 +81,7 @@ public class SpeechRecognitionEngine : MonoBehaviour
             recognizer.Stop();
             print("Recognizer Stopped");
         }
-
+        PlayerEvents.eventOn = false;
         Destroy(gameObject);
         
     }
