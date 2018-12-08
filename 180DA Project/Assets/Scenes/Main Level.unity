@@ -155,13 +155,17 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4072535850112516, guid: d78defd6cd2f245f8bf556e9fc610325, type: 2}
       propertyPath: m_RootOrder
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 114526253432077830, guid: d78defd6cd2f245f8bf556e9fc610325,
         type: 2}
       propertyPath: playerObject
       value: 
+<<<<<<< HEAD
       objectReference: {fileID: 1409065542}
+=======
+      objectReference: {fileID: 1049940925}
+>>>>>>> 19ab94d720ade758f555e72a862ad399bd3fe9de
     - target: {fileID: 114526253432077830, guid: d78defd6cd2f245f8bf556e9fc610325,
         type: 2}
       propertyPath: canvas
@@ -172,11 +176,14 @@ Prefab:
       propertyPath: countdown
       value: 
       objectReference: {fileID: 1782858401}
+<<<<<<< HEAD
     - target: {fileID: 82077767198627182, guid: d78defd6cd2f245f8bf556e9fc610325,
         type: 2}
       propertyPath: m_audioClip
       value: 
       objectReference: {fileID: 8300000, guid: f7e124e3116ea4280b02288bdbcaba45, type: 3}
+=======
+>>>>>>> 19ab94d720ade758f555e72a862ad399bd3fe9de
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d78defd6cd2f245f8bf556e9fc610325, type: 2}
   m_IsPrefabAsset: 0
@@ -297,7 +304,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &541674777 stripped
 GameObject:
@@ -353,9 +360,36 @@ Prefab:
       propertyPath: playerLifeIcons.Array.data[1]
       value: 
       objectReference: {fileID: 1259685911}
+<<<<<<< HEAD
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d210543711156406490a7ec8c57924c3, type: 2}
   m_IsPrefabAsset: 0
+=======
+    - target: {fileID: 114834412139598810, guid: d210543711156406490a7ec8c57924c3,
+        type: 2}
+      propertyPath: playerExplosion
+      value: 
+      objectReference: {fileID: 1930362069647888, guid: 0fc2a53664375441a9bac3adc653c04d,
+        type: 2}
+    - target: {fileID: 114668686060887338, guid: d210543711156406490a7ec8c57924c3,
+        type: 2}
+      propertyPath: playerLifeIcons.Array.data[0]
+      value: 
+      objectReference: {fileID: 541674777}
+    - target: {fileID: 114668686060887338, guid: d210543711156406490a7ec8c57924c3,
+        type: 2}
+      propertyPath: playerLifeIcons.Array.data[1]
+      value: 
+      objectReference: {fileID: 1259685911}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: d210543711156406490a7ec8c57924c3, type: 2}
+  m_IsPrefabAsset: 0
+--- !u!1 &1049940925 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1164852439685396, guid: d210543711156406490a7ec8c57924c3,
+    type: 2}
+  m_PrefabInternal: {fileID: 598279127}
+>>>>>>> 19ab94d720ade758f555e72a862ad399bd3fe9de
 --- !u!1001 &1187612530
 Prefab:
   m_ObjectHideFlags: 0
