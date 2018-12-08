@@ -7,10 +7,19 @@ using UnityEngine.Windows.Speech;
 
 public class SpeechRecognitionEngine : MonoBehaviour
 {
+    public static int numSuccess;
+    public static int numFails;
+        //0 = no change      //1 = success      //2 = fail
+    public static int status; // will be checked per frame
+
+    public Text TimeLeft;
+
     public HandleWordDisplay HandleWordDisplay;
     public ConfidenceLevel confidence = ConfidenceLevel.Medium;
-    protected PhraseRecognizer recognizer;
+    protected static PhraseRecognizer recognizer;
     private bool isCorrect;
+
+    public static Vector3 SeaRef;
 
     public Text scramble;
     protected string word = "";
@@ -38,6 +47,10 @@ public class SpeechRecognitionEngine : MonoBehaviour
     //Can maybe use enable/disable
     private void Start()
     {
+        print(numFails);
+        GameObject sea = GameObject.FindWithTag("SeaRef");
+        scramble.transform.position = sea.transform.position + new Vector3(60, 300, 0);
+        TimeLeft.transform.position = scramble.transform.position + new Vector3(300,0,0);
         HandleWordDisplay.InitPosition = scramble.transform.position - new Vector3(35,20,0);
 
         isCorrect = false;
@@ -50,6 +63,7 @@ public class SpeechRecognitionEngine : MonoBehaviour
             recognizer.Start();
             print("Recognizer Started");
         }
+        StartCoroutine("Timer");
     }
 
     void Update()
@@ -61,10 +75,12 @@ public class SpeechRecognitionEngine : MonoBehaviour
     private void Recognizer_OnPhraseRecognized(PhraseRecognizedEventArgs args)
     {
         if(!isCorrect) {
+            StopCoroutine("Timer");
             isCorrect = true;
             scramble.text = "Correct!";
             PlayerMQTT_X.playerMoved = true;
             StartCoroutine(Reset());
+            numSuccess++;
         }
     }
 
@@ -77,24 +93,55 @@ public class SpeechRecognitionEngine : MonoBehaviour
         HandleWordDisplay.RemoveDisplay();
 
         //to stop the PhraseRecognizer
-        if (recognizer != null && recognizer.IsRunning)
-        {
-            recognizer.OnPhraseRecognized -= Recognizer_OnPhraseRecognized;
-            recognizer.Stop();
-            print("Recognizer Stopped");
-        }
+        StopRecognizer();
         PlayerEvents.eventOn = false;
         Destroy(gameObject);
         
     }
 
+    public IEnumerator Timer() 
+	{
+            float duration = 8f;
+            while(duration >= 0)
+            {   
+                duration -= Time.deltaTime;
+                int integer = (int)duration;
+                if (integer >= 1)
+                    TimeLeft.text = integer.ToString();
+                else
+                {
+                    StopRecognizer();
+                    numFails++;
+                    TimeLeft.text = "Time's Up";
+                }
+                yield return null;
+            }
+            
+            yield return new WaitForSeconds(1);
+            PlayerEvents.eventOn = false;
+            
+            if (!isCorrect) { 
+                Destroy(TimeLeft);
+                Destroy(gameObject);
+            }
+
+	}
+
+
     private void OnApplicationQuit()
+    {
+        StopRecognizer();
+    }
+
+    private void StopRecognizer()
     {
         if (recognizer != null && recognizer.IsRunning)
         {
             recognizer.OnPhraseRecognized -= Recognizer_OnPhraseRecognized;
             recognizer.Stop();
+            recognizer.Dispose();
             print("Recognizer Stopped");
         }
+        
     }
 }
