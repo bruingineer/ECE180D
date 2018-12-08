@@ -35,7 +35,6 @@ public class GameItem
 
 public class StatsProcess : MonoBehaviour
 {
-
     private MqttClient client;
     GameData gd;
     private const string str_IP = "127.0.0.1";
@@ -164,7 +163,7 @@ public class StatsProcess : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
+    //Update is called once per frame
     void Update()
     {
         if (suggestion != null)
