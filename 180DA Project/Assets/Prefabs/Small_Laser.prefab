@@ -81,7 +81,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a63f4ad43d6846b28d0c79d1f313790, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  smallLaserSound: {fileID: 0}
+  smallLaserSound: {fileID: 8300000, guid: e4ec287790bb146758ace8784fe02dc7, type: 3}
 --- !u!212 &212733020319873384
 SpriteRenderer:
   m_ObjectHideFlags: 1
