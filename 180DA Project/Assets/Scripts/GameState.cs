@@ -31,6 +31,7 @@ public class GameState : MonoBehaviour {
 	public static MqttClient client;
 	public static string str_IP = "127.0.0.1";
     public static int int_Port = 1883;
+	public List<GameObject> playerLifeIcons;
 	
 	void Awake () {
 		numLanes = 10;
