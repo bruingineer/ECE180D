@@ -250,10 +250,11 @@ MonoBehaviour:
   gameOver: {fileID: 1836165312166520, guid: d9b56d0f39dde4cf9a0762c3d895985a, type: 2}
   countdown: {fileID: 0}
   gameMusic: {fileID: 82077767198627182}
-  handledPlayerDied: 0
+  handledPlayer: 0
   playerExplosion: {fileID: 1930362069647888, guid: 0fc2a53664375441a9bac3adc653c04d,
     type: 2}
   playerLost: {fileID: 8300000, guid: 708d967d34b8d49d2b4fac803280dd1e, type: 3}
+  playerWon: {fileID: 8300000, guid: ccf604c26e4384f7e8cd2da160dad26b, type: 3}
 --- !u!114 &114595677538691816
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -267,6 +268,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speechScrambler: {fileID: 1187200269543398, guid: f81bd40f7db304aa8ad6e2e802e9ddb5,
     type: 2}
+  gestureGame: {fileID: 1924286189540920, guid: 3d5d9fd8e4f3d46d697125acef0fba2c,
+    type: 2}
 --- !u!114 &114900271279713418
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -279,3 +282,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bigLasers: {fileID: 1414992446262796, guid: f187d190f74c348338bdcb53ebea92b2, type: 2}
+  smallLasers: {fileID: 1694344550229690, guid: 933b15eb48d084908b379a6f35756ef8,
+    type: 2}

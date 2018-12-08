@@ -5,13 +5,14 @@ using UnityEngine;
 public class PlayerEvents : MonoBehaviour {
 
 	public GameObject speechScrambler;
+	public GameObject gestureGame;
 	private List<GameObject> playerEvents;
 	public static bool eventOn;
 
 	void Awake()
 	{
 		eventOn = false;
-		playerEvents = new List<GameObject> {speechScrambler};
+		playerEvents = new List<GameObject> {speechScrambler, gestureGame};
 	}
 	
 	void Update () {
