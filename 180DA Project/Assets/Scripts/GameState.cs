@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using uPLibrary.Networking.M2Mqtt;
+using uPLibrary.Networking.M2Mqtt.Messages;
+using uPLibrary.Networking.M2Mqtt.Utility;
+using uPLibrary.Networking.M2Mqtt.Exceptions;
 
 public class GameState : MonoBehaviour {
 
@@ -24,6 +28,9 @@ public class GameState : MonoBehaviour {
 	public static bool stopPlaying;
 	public static bool gameWon;
 	public static List<int> laneNums;
+	public static MqttClient client;
+	public static string str_IP = "127.0.0.1";
+    public static int int_Port = 1883;
 	
 	void Awake () {
 		numLanes = 10;

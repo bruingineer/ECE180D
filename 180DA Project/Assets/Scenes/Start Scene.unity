@@ -291,7 +291,7 @@ GameObject:
   - component: {fileID: 251554480}
   - component: {fileID: 251554483}
   m_Layer: 5
-  m_Name: Button
+  m_Name: Create Profile Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -437,7 +437,7 @@ GameObject:
   - component: {fileID: 261818601}
   - component: {fileID: 261818600}
   m_Layer: 5
-  m_Name: Button
+  m_Name: Start Game Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

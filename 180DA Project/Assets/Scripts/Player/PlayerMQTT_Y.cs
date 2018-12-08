@@ -10,15 +10,14 @@ using System;
 
 public class PlayerMQTT_Y : MonoBehaviour {
     private const string str_IP = "127.0.0.1";
-    private const int int_Port = 1883;
-    private const string topic = "localization";
 	public static int cur_lane_num = GameState.middle_lane;
+	private string topic = "localization";
 
     private MqttClient client;
 	// Use this for initialization
 	void Start () {
 		// create client instance 
-		client = new MqttClient(IPAddress.Parse(str_IP), int_Port , false , null ); 
+		client = new MqttClient(IPAddress.Parse(str_IP), GameState.int_Port , false , null ); 
 		
 		// register to message received 
 		client.MqttMsgPublishReceived += client_MqttMsgPublishReceived; 

@@ -28,19 +28,19 @@ public class selectTrainingScene : MonoBehaviour {
             if (txt.Contains("gesture"))
             {
                 Debug.Log("Changing to gesture training");
-                SceneManager.LoadScene("gestureTraining");
+                SceneManager.LoadScene("Gesture Training");
             }
 
             else if (txt.Contains("speech"))
             {
                 Debug.Log("Changing to speech training");
-                SceneManager.LoadScene("speechTraining");
+                SceneManager.LoadScene("Speech Training");
             }
 
             else if (txt.Contains("dodging"))
             {
                 Debug.Log("Changing to laser training");
-                SceneManager.LoadScene("laserTraining");
+                SceneManager.LoadScene("Laser Training");
             }
         }
     }

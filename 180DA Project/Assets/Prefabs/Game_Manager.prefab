@@ -31,6 +31,22 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &1197898492909288
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4349262994232256}
+  - component: {fileID: 114301387025268096}
+  m_Layer: 0
+  m_Name: GestureClient
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!4 &4072535850112516
 Transform:
   m_ObjectHideFlags: 1
@@ -40,8 +56,22 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 4349262994232256}
   m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4349262994232256
+Transform:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1197898492909288}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 674.24304, y: 850.6563, z: -83.53619}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4072535850112516}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!82 &82032330296052340
@@ -234,6 +264,17 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &114301387025268096
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1197898492909288}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 770c318a1b10f4eee846f712e1f9483b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114526253432077830
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -250,10 +291,11 @@ MonoBehaviour:
   gameOver: {fileID: 1836165312166520, guid: d9b56d0f39dde4cf9a0762c3d895985a, type: 2}
   countdown: {fileID: 0}
   gameMusic: {fileID: 82077767198627182}
-  handledPlayerDied: 0
+  handledPlayer: 0
   playerExplosion: {fileID: 1930362069647888, guid: 0fc2a53664375441a9bac3adc653c04d,
     type: 2}
   playerLost: {fileID: 8300000, guid: 708d967d34b8d49d2b4fac803280dd1e, type: 3}
+  playerWon: {fileID: 8300000, guid: ccf604c26e4384f7e8cd2da160dad26b, type: 3}
 --- !u!114 &114595677538691816
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -265,7 +307,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1d93b898ac534f109c59b4dff2b6203, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speechScrambler: {fileID: 1187200269543398, guid: f81bd40f7db304aa8ad6e2e802e9ddb5,
+  speechScrambler: {fileID: 1222587866265668, guid: f153678fd018fe44b8c565de2eca451f,
+    type: 2}
+  gestureGame: {fileID: 1924286189540920, guid: 3d5d9fd8e4f3d46d697125acef0fba2c,
     type: 2}
 --- !u!114 &114900271279713418
 MonoBehaviour:
@@ -279,3 +323,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bigLasers: {fileID: 1414992446262796, guid: f187d190f74c348338bdcb53ebea92b2, type: 2}
+  smallLasers: {fileID: 1694344550229690, guid: 933b15eb48d084908b379a6f35756ef8,
+    type: 2}
