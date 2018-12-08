@@ -8,32 +8,29 @@ using uPLibrary.Networking.M2Mqtt.Exceptions;
 using System.Net;
 
 public class GestureGame : MonoBehaviour {
-	private List<string> gestrures;
-    private const string topic = "gesture";
-    private MqttClient client;
+	private List<string> gestures;
+	public static bool correctGestureReceived;
 	// Use this for initialization
-	void Start () {
-		// create client instance 
-		client = new MqttClient(IPAddress.Parse(GameState.str_IP), GameState.int_Port , false , null ); 
-		
-		// register to message received 
-		client.MqttMsgPublishReceived += client_MqttMsgPublishReceived; 
-		
-		string clientId = System.Guid.NewGuid().ToString(); 
-		client.Connect(clientId); 
-		
-		// subscribe to the topic "/home/temperature" with QoS 2 
-		client.Subscribe(new string[] { topic }, new byte[] { MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE }); 
-		gestrures = new List<string>(){"tpose"};
-		client.Publish(topic, System.Text.Encoding.UTF8.GetBytes(gestrures[Random.Range(0, gestrures.Count)]), MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE, true);
+	void Awake () {
+		correctGestureReceived = false;
+		gestures = new List<string>(){"tpose"};
+		GestureClient.gestureClient.Publish(GestureClient.topicGestureSent, System.Text.Encoding.UTF8.GetBytes(gestures[Random.Range(0, gestures.Count)]), MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE, false);
 	}
 
-	void client_MqttMsgPublishReceived(object sender, MqttMsgPublishEventArgs e) 
-	{ 
-		Debug.Log(System.Text.Encoding.UTF8.GetString(e.Message));
-	} 
+	void Update()
+	{
+		if (correctGestureReceived)
+		{
+			StartCoroutine(HandleCorrectGesture());
+		}
+	}
 
-	void Update () {
-		
+	private IEnumerator HandleCorrectGesture()
+	{
+		correctGestureReceived = false;
+		PlayerMQTT_X.playerMoved = true;
+		yield return new WaitForSeconds(Obstacles.obstacleWaitTime);
+		PlayerEvents.eventOn = false;
+		Destroy(gameObject);
 	}
 }

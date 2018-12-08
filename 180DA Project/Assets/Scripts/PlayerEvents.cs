@@ -12,7 +12,7 @@ public class PlayerEvents : MonoBehaviour {
 	void Awake()
 	{
 		eventOn = false;
-        playerEvents = new List<GameObject> { speechScrambler };// gestureGame};
+        playerEvents = new List<GameObject> { gestureGame};
 	}
 	
 	void Update () {
