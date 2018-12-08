@@ -155,13 +155,13 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4072535850112516, guid: d78defd6cd2f245f8bf556e9fc610325, type: 2}
       propertyPath: m_RootOrder
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 114526253432077830, guid: d78defd6cd2f245f8bf556e9fc610325,
         type: 2}
       propertyPath: playerObject
       value: 
-      objectReference: {fileID: 1001909908}
+      objectReference: {fileID: 1049940925}
     - target: {fileID: 114526253432077830, guid: d78defd6cd2f245f8bf556e9fc610325,
         type: 2}
       propertyPath: canvas
@@ -172,11 +172,6 @@ Prefab:
       propertyPath: countdown
       value: 
       objectReference: {fileID: 1782858401}
-    - target: {fileID: 114526253432077830, guid: d78defd6cd2f245f8bf556e9fc610325,
-        type: 2}
-      propertyPath: playerWon
-      value: 
-      objectReference: {fileID: 8300000, guid: ccf604c26e4384f7e8cd2da160dad26b, type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d78defd6cd2f245f8bf556e9fc610325, type: 2}
   m_IsPrefabAsset: 0
@@ -297,7 +292,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &541674777 stripped
 GameObject:
@@ -359,12 +354,22 @@ Prefab:
       value: 
       objectReference: {fileID: 1930362069647888, guid: 0fc2a53664375441a9bac3adc653c04d,
         type: 2}
+    - target: {fileID: 114668686060887338, guid: d210543711156406490a7ec8c57924c3,
+        type: 2}
+      propertyPath: playerLifeIcons.Array.data[0]
+      value: 
+      objectReference: {fileID: 541674777}
+    - target: {fileID: 114668686060887338, guid: d210543711156406490a7ec8c57924c3,
+        type: 2}
+      propertyPath: playerLifeIcons.Array.data[1]
+      value: 
+      objectReference: {fileID: 1259685911}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d210543711156406490a7ec8c57924c3, type: 2}
   m_IsPrefabAsset: 0
---- !u!1 &1001909908 stripped
+--- !u!1 &1049940925 stripped
 GameObject:
-  m_CorrespondingSourceObject: {fileID: 1820670341475312, guid: d210543711156406490a7ec8c57924c3,
+  m_CorrespondingSourceObject: {fileID: 1164852439685396, guid: d210543711156406490a7ec8c57924c3,
     type: 2}
   m_PrefabInternal: {fileID: 598279127}
 --- !u!1001 &1187612530
