@@ -21,13 +21,8 @@ GameObject:
   - component: {fileID: 4925078081520462}
   - component: {fileID: 212733020319873384}
   - component: {fileID: 114437400025990692}
-<<<<<<< HEAD
   - component: {fileID: 65217772363067092}
   - component: {fileID: 54970730454949824}
-=======
-  - component: {fileID: 65731186180440482}
-  - component: {fileID: 54741945186145838}
->>>>>>> 19ab94d720ade758f555e72a862ad399bd3fe9de
   m_Layer: 0
   m_Name: Small_Laser
   m_TagString: Untagged
@@ -48,11 +43,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-<<<<<<< HEAD
 --- !u!54 &54970730454949824
-=======
---- !u!54 &54741945186145838
->>>>>>> 19ab94d720ade758f555e72a862ad399bd3fe9de
 Rigidbody:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
@@ -67,11 +58,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
-<<<<<<< HEAD
 --- !u!65 &65217772363067092
-=======
---- !u!65 &65731186180440482
->>>>>>> 19ab94d720ade758f555e72a862ad399bd3fe9de
 BoxCollider:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
@@ -81,11 +68,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-<<<<<<< HEAD
   m_Size: {x: 1, y: 0.7, z: 0.2}
-=======
-  m_Size: {x: 1, y: 1, z: 0.2}
->>>>>>> 19ab94d720ade758f555e72a862ad399bd3fe9de
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &114437400025990692
 MonoBehaviour:

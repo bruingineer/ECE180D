@@ -8,7 +8,7 @@ using UnityEngine.Windows.Speech;
 public class SpeechRecognitionEngine : MonoBehaviour
 {
     public HandleWordDisplay HandleWordDisplay;
-    public ConfidenceLevel confidence = ConfidenceLevel.Medium;
+    public ConfidenceLevel confidence = ConfidenceLevel.High;
     protected PhraseRecognizer recognizer;
     private bool isCorrect;
 
@@ -38,8 +38,6 @@ public class SpeechRecognitionEngine : MonoBehaviour
     //Can maybe use enable/disable
     private void Start()
     {
-        HandleWordDisplay.InitPosition = scramble.transform.position - new Vector3(35,20,0);
-
         isCorrect = false;
         ChooseRandWord();
         HandleWordDisplay.Display();
@@ -83,7 +81,7 @@ public class SpeechRecognitionEngine : MonoBehaviour
             recognizer.Stop();
             print("Recognizer Stopped");
         }
-        PlayerEvents.eventOn = false;
+
         Destroy(gameObject);
         
     }

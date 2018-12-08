@@ -266,7 +266,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1d93b898ac534f109c59b4dff2b6203, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speechScrambler: {fileID: 1222587866265668, guid: f153678fd018fe44b8c565de2eca451f,
+  speechScrambler: {fileID: 1187200269543398, guid: f81bd40f7db304aa8ad6e2e802e9ddb5,
     type: 2}
   gestureGame: {fileID: 1924286189540920, guid: 3d5d9fd8e4f3d46d697125acef0fba2c,
     type: 2}
