@@ -35,11 +35,13 @@ def connect_to_server(ip):
 def localize(nregions, method):
     # define the lower and upper boundaries of the "green"
     # ball in the HSV color space
-    greenLower = (29, 86, 6)
-    greenUpper = (64, 255, 255)
-    
+    greenLower =  (29, 86, 6)
+    greenUpper =  (64, 255, 255)    
+    orangeLower = (10, 100, 20)
+    orangeUpper = (25, 255, 255)
     yellowLower = (20, 100, 100)
     yellowUpper = (30, 255, 255)
+    
     #load Haar Classifier for face recognition
     faceCascade = cv2.CascadeClassifier('.\\data\\haarcascade_frontalface_default.xml')
 
@@ -51,23 +53,23 @@ def localize(nregions, method):
     region = None
     lines = []
     
-    if method == 'face-recognition':
-        while True:
-            ret, frame = cap.read() # Capture frame-by-frame
-            gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    
+    while True:
+        ret, frame = cap.read() # Capture frame-by-frame
+        
+        #only compute once
+        if not lines:
+            height, width = frame.shape[:2]
+            sep = width/nregions
+            lines = [sep*i for i in range(1,nregions)]
             
-            #For color-tracking
+        #Draw lines for player to see which region he is in
+        for line in lines:
+            frame = cv2.line(frame,(line,0),(line, height),(255,0,0),2)
             
-            #only compute once
-            if not lines:
-                height, width = frame.shape[:2]
-                sep = width/nregions
-                lines = [sep*i for i in range(1,nregions)]
-                
-            
-            #Draw lines for player to see which region he is in
-            for line in lines:
-                frame = cv2.line(frame,(line,0),(line, height),(255,0,0),2)
+        
+        if method == 'face-recognition':
+            gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)     
             
             faces = faceCascade.detectMultiScale(
                 gray,
@@ -84,15 +86,6 @@ def localize(nregions, method):
                 
                 region = nregions - (x + w/2)/sep
                 
-                ##################### ADAPT to 3 tracks ################
-                # if region-1 < float(nregions)/3:
-                    # region = 'Top'
-                # elif region-1 < 2*float(nregions)/3:
-                    # region = 'Middle'
-                # else:
-                    # region = 'Bottom'
-                #########################################################
-                
                 if CONNECTED:
                     rc = client.publish(topic, payload= (int(region)), qos =0, retain=False)
                     print(rc)
@@ -101,31 +94,21 @@ def localize(nregions, method):
                 
                 #TODO: May need some stability control to account for random false positive
                 #      face detection 
-                
-            
-            frame = cv2.flip(frame,1) #vertical flip to create mirror image
-            if region is not None:
-                cv2.putText(frame, str(region), (10, 30), cv2.FONT_HERSHEY_SIMPLEX,
-                            0.65, (0, 0, 255), 3)
-                        
-            cv2.imshow('Localization', frame)
-            c = cv2.waitKey(7) % 0x100
-            if c == 27:
-                break
-                
-                
-    elif method == 'color':
-        while True:
-            ret, frame = cap.read() # Capture frame-by-frame
+        
+        elif method == 'color':
             blurred = cv2.GaussianBlur(frame, (11, 11), 0)
             hsv = cv2.cvtColor(blurred, cv2.COLOR_BGR2HSV)
             
             # construct a mask for the color "green", then perform
             # a series of dilations and erosions to remove any small
             # blobs left in the mask
-            mask = cv2.inRange(hsv, yellowLower, yellowUpper)
+            mask = cv2.inRange(hsv, orangeLower, orangeUpper)
+            bitmask = cv2.bitwise_and(frame, frame, mask=mask)           
             mask = cv2.erode(mask, None, iterations=2)
             mask = cv2.dilate(mask, None, iterations=2)
+            
+            cv2.imshow('image', bitmask)
+            cv2.imshow('mask', mask)
             
             # find contours in the mask and initialize the current
             # (x, y) center of the ball
@@ -133,16 +116,7 @@ def localize(nregions, method):
                 cv2.CHAIN_APPROX_SIMPLE)
             cnts = cnts[0] if imutils.is_cv2() else cnts[1]
             center = None
-            
-            #only compute once
-            if not lines:
-                height, width = frame.shape[:2]
-                sep = width/nregions
-                lines = [sep*i for i in range(1,nregions)]
-            
-            #Draw lines for player to see which region he is in
-            for line in lines:
-                frame = cv2.line(frame,(line,0),(line, height),(255,0,0),2)
+
                 
             # only proceed if at least one contour was found
             if len(cnts) > 0:
@@ -155,7 +129,7 @@ def localize(nregions, method):
                 center = (int(M["m10"] / M["m00"]), int(M["m01"] / M["m00"]))
 
                 # only proceed if the radius meets a minimum size
-                if radius > 1:
+                if radius > 5 :
                     # draw the circle and centroid on the frame,
                     # then update the list of tracked points
                     cv2.circle(frame, (int(x), int(y)), int(radius),
@@ -163,30 +137,20 @@ def localize(nregions, method):
                     cv2.circle(frame, center, 5, (0, 0, 255), -1)
                     
                     region = nregions - (center[0])/sep
-                
-                    ##################### ADAPT to 3 tracks ################
-                    # if region-1 < float(nregions)/3:
-                        # region = 'Top'
-                    # elif region-1 < 2*float(nregions)/3:
-                        # region = 'Middle'
-                    # else:
-                        # region = 'Bottom'
-                    #########################################################
                     
                     if CONNECTED:
                         rc = client.publish(topic, payload= (int(region)), qos =0, retain=False)
                         print(rc)
+        
+        frame = cv2.flip(frame,1) #vertical flip to create mirror image
+        if region is not None:
+            cv2.putText(frame, str(region), (10, 30), cv2.FONT_HERSHEY_SIMPLEX,
+                        0.65, (0, 0, 255), 3)
                     
-            frame = cv2.flip(frame,1) #vertical flip to create mirror image
-            if region is not None:
-                cv2.putText(frame, str(region), (10, 30), cv2.FONT_HERSHEY_SIMPLEX,
-                            0.65, (0, 0, 255), 3)
-                        
-            cv2.imshow('Localization', frame)
-            c = cv2.waitKey(7) % 0x100
-            if c == 27:
-                break
-            
+        cv2.imshow('Localization', frame)
+        c = cv2.waitKey(7) % 0x100
+        if c == 27:
+            break           
             
     cap.release()
     cv2.destroyAllWindows()
@@ -196,19 +160,15 @@ def main():
     parser = argparse.ArgumentParser(description='Localization Script for Synchro')
     parser.add_argument('--ip', type=str, action = 'store', default = 'localhost', help='IP address of machine running Unity')
     parser.add_argument('--nregions', type=int, action = 'store', default = 10, help='Number of regions to split frame with')
-    parser.add_argument('--method' , type = str, action = 'store', default = 'color', help = 'color or face-recognition as method for localization')
-    parser.add_argument('--standalone', '-s', action = 'store_true', help='Run script without MQTT publishing')
-    
+    parser.add_argument('--method' , type = str, action = 'store', default = 'color', help = 'color or face-recognition as method for localization')   
     args = parser.parse_args()
-    
-    if args.standalone:
-        localize(args.nregions, args.method)
-        return
-    
+   
     try:
         connect_to_server(args.ip)
     except:
-        print("Unable to connect to MQTT server, exiting ...")
+        print("Unable to connect to MQTT server ... defaulting to Standalone Mode")
+        localize(args.nregions, args.method)
+        return
     
     global CONNECTED
     CONNECTED = True
