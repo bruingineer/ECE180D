@@ -6,6 +6,7 @@ using uPLibrary.Networking.M2Mqtt.Messages;
 using uPLibrary.Networking.M2Mqtt.Utility;
 using uPLibrary.Networking.M2Mqtt.Exceptions;
 using System.Net;
+using System;
 
 using UnityEngine.UI;
 
@@ -13,17 +14,20 @@ public class GestureGame : MonoBehaviour {
 	private List<string> gestures;
 	private bool handlingCorrectGesture;
 	public static bool correctGestureReceived;
-
+	private Text gestureText;
 	public static int numSucess;
 	public static int numFails;
 	private Text timeLeft;
 
 	// Use this for initialization
 	void Awake () {
+		gestureText = GameObject.FindGameObjectWithTag("Gesture_Text").GetComponent<Text>();
 		handlingCorrectGesture = false;
 		correctGestureReceived = false;
 		gestures = new List<string>(){"tpose"};
-		GestureClient.gestureClient.Publish(GestureClient.topicGestureSent, System.Text.Encoding.UTF8.GetBytes(gestures[Random.Range(0, gestures.Count)]), MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE, false);
+		string chosenGesture = gestures[UnityEngine.Random.Range(0, gestures.Count)];
+		gestureText.text = chosenGesture.ToUpper();
+		GestureClient.gestureClient.Publish(GestureClient.topicGestureSent, System.Text.Encoding.UTF8.GetBytes(chosenGesture), MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE, false);
 		StartCoroutine("Timer");
 	}
 
@@ -59,6 +63,7 @@ public class GestureGame : MonoBehaviour {
             yield return new WaitForSeconds(1);
 			PlayerEvents.eventOn = false;
 			timeLeft.text = "";
+			gestureText.text = "";
             Destroy(gameObject);
 	}
 
@@ -69,6 +74,7 @@ public class GestureGame : MonoBehaviour {
 		yield return new WaitForSeconds(Obstacles.obstacleWaitTime);
 		PlayerEvents.eventOn = false;
 		correctGestureReceived = false;
+		gestureText.text = "";
 		Destroy(gameObject);
 	}
 }
