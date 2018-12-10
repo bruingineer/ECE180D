@@ -4,13 +4,41 @@ using UnityEngine;
 
 public class Laser_MiniGame : MonoBehaviour {
 
-	// Use this for initialization
-	void Start () {
-		
+	public GameObject bigLasers;
+	public GameObject smallLasers;
+	private List<GameObject> obstacles;
+	public static bool obstacleOn;
+	public static float obstacleWaitTime;
+	public static bool playerWasHit;
+
+	void Awake()
+	{
+		obstacleOn = false;
+		obstacleWaitTime = 5f;
+		obstacles = new List<GameObject> {bigLasers, smallLasers};
+		playerWasHit = false;
 	}
 	
-	// Update is called once per frame
 	void Update () {
+		if(!obstacleOn && !Player.isDead && GameState.gamePlaying) {
+			obstacleOn = true;
+			GameObject laser_game = Instantiate(obstacles[Random.Range(0, obstacles.Count)]);
+			StartCoroutine(HandlePlayerMove(laser_game));
+		}
+		if (GameState.gameWon || Player.isDead) 
+			Destroy(gameObject);
 		
+	}
+
+	IEnumerator HandlePlayerMove(GameObject laser) 
+	{
+		while (laser != null) yield return null;
+		Debug.Log("hi");
+		if (!playerWasHit)
+			PlayerMQTT_X.playerMoved = true;
+		else 
+			playerWasHit = false;
+
+		yield return null;
 	}
 }

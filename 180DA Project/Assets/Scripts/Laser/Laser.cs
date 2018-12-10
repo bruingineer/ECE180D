@@ -7,7 +7,7 @@ public class Laser : MonoBehaviour {
 	Vector3 endPosition;
 	public const float laserTime = 0.005f;
 	
-	private float destroyLaserDelay = 0.75f;
+	public static float destroyLaserDelay = 0.75f;
 
 
 	void Start () {
@@ -19,8 +19,11 @@ public class Laser : MonoBehaviour {
 	
 	void Update () {
         if (Physics.Raycast(transform.position, Vector3.left) && !Player.isHit)
+		{
 			Player.isHit = true;
             SelectedPlayer.current_hits += 1;
+			Laser_MiniGame.playerWasHit = true;
+		}
 	}
 
 	private IEnumerator MoveLaser(Vector3 end_position, float timeToMove)

@@ -16,7 +16,6 @@ public class GestureGame : MonoBehaviour {
 
 	public static int numSucess;
 	public static int numFails;
-
 	private Text timeLeft;
 
 	// Use this for initialization
@@ -24,7 +23,7 @@ public class GestureGame : MonoBehaviour {
 		handlingCorrectGesture = false;
 		correctGestureReceived = false;
 		gestures = new List<string>(){"tpose"};
-		GestureClient.gestureClient.Pulish(GestureClient.topicGestureSent, System.Text.Encoding.UTF8.GetBytes(gestures[Random.Range(0, gestures.Count)]), MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE, false);
+		GestureClient.gestureClient.Publish(GestureClient.topicGestureSent, System.Text.Encoding.UTF8.GetBytes(gestures[Random.Range(0, gestures.Count)]), MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE, false);
 		StartCoroutine("Timer");
 	}
 
@@ -57,7 +56,6 @@ public class GestureGame : MonoBehaviour {
             
             yield return new WaitForSeconds(1);
 			PlayerEvents.eventOn = false;
-
 			timeLeft.text = "";
             Destroy(gameObject);
 	}

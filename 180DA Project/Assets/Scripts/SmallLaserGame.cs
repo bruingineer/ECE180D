@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class SmallLaserGame : MonoBehaviour {
 
@@ -24,8 +25,9 @@ public class SmallLaserGame : MonoBehaviour {
 					Quaternion.identity);
 			yield return new WaitForSeconds(waitForNextLaser);
 		}
-		yield return new WaitForSeconds(Obstacles.obstacleWaitTime);
+		yield return new WaitForSeconds(Small_Laser.laserTime + Obstacles.obstacleWaitTime);
 		Obstacles.obstacleOn = false;
+		Laser_MiniGame.obstacleOn = false;
 		Destroy(gameObject);
 	}
 }

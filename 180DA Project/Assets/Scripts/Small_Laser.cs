@@ -5,7 +5,7 @@ using UnityEngine;
 public class Small_Laser : MonoBehaviour {
 
 	public AudioClip smallLaserSound;
-	private float laserTime = 4f;
+	public static float laserTime = 4f;
 	void Start () {
 		GameState.PlayClip(smallLaserSound);
 		StartCoroutine(MoveToPosition(new Vector3(0, transform.position.y), laserTime));
@@ -27,6 +27,7 @@ public class Small_Laser : MonoBehaviour {
 	private void OnTriggerEnter(Collider other)
 	{
 		Player.isHit = true;
+		Laser_MiniGame.playerWasHit = true;
 		Destroy(gameObject);
 	}
 }

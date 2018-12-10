@@ -41,8 +41,9 @@ public class LaserCreater : MonoBehaviour {
 			laserWarnings.RemoveAt(0);
 		}
 		
-		yield return new WaitForSeconds(Obstacles.obstacleWaitTime);
+		yield return new WaitForSeconds(Obstacles.obstacleWaitTime + Laser.destroyLaserDelay);
 		Obstacles.obstacleOn = false;
+		Laser_MiniGame.obstacleOn = false;
 		Destroy(gameObject);
 	}
 	private List<int> GetRandomLanes() 
