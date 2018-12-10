@@ -50,9 +50,9 @@ public class SpeechRecognitionEngine : MonoBehaviour
     private void Start()
     {
         GameObject time = GameObject.FindWithTag("timer");
-        scramble.transform.position = time.transform.position + new Vector3(-500, 0, 0);
+        scramble.transform.position = time.transform.position + new Vector3(-450, 0, 0);
         //TimeLeft.transform.position = scramble.transform.position + new Vector3(300,0,0);
-        HandleWordDisplay.InitPosition = scramble.transform.position - new Vector3(35,20,0);
+        HandleWordDisplay.InitPosition = scramble.transform.position - new Vector3(80,35,0);
 
         isCorrect = false;
         ChooseRandWord();
