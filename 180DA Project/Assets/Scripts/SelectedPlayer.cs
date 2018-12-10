@@ -51,6 +51,7 @@ public static class SelectedPlayer{
     public static int current_speech_pass = 0;
     public static int current_speech_fail = 0;
     public static int bigLaserctr = 0;
+    public static bool died = false;
 
     public static void resetGameStats()
     {
@@ -60,5 +61,6 @@ public static class SelectedPlayer{
         current_speech_pass = 0;
         current_speech_fail = 0;
         bigLaserctr = 0;
+        died = false;
     }
 }
