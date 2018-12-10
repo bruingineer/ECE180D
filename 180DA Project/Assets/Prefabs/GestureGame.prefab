@@ -51,4 +51,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bef8bb66b38134f7bbefdbc1cf2b8aab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gestureText: {fileID: 0}

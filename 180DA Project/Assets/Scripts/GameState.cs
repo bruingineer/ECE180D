@@ -31,7 +31,8 @@ public class GameState : MonoBehaviour {
 	public static MqttClient client;
 	public static string str_IP = "127.0.0.1";
     public static int int_Port = 1883;
-	public List<GameObject> playerLifeIcons;
+	GameObject retry;
+	GameObject gameMenu;
 	
 	void Awake () {
 		numLanes = 10;
@@ -42,6 +43,10 @@ public class GameState : MonoBehaviour {
 		handledPlayer = false;
 		gameWon = false;
 		player = playerObject.GetComponent<Player>();
+		retry = GameObject.FindGameObjectWithTag("Retry");
+		gameMenu = GameObject.FindGameObjectWithTag("Menu");
+		retry.SetActive(false);
+		gameMenu.SetActive(false);
 		InitializeLaneList();
 		StartCoroutine(Timer());
 	}
@@ -54,13 +59,13 @@ public class GameState : MonoBehaviour {
 			HandlePlayerWin();
 			HandlePlayerDied();
 		}
-		
 	}
 
 	private void HandlePlayerWin() 
 	{
 		if (playerObject.transform.position.x == (end_column - 0.5f))
 		{
+			GameState.gamePlaying = false;
 			handledPlayer = true;
 			gamePlaying = false;
 			StartCoroutine(PlayerWonCoroutine());
@@ -79,6 +84,7 @@ public class GameState : MonoBehaviour {
 	private void HandlePlayerDied() 
 	{
 		if (Player.isDead) {
+			GameState.gamePlaying = false;
 			handledPlayer = true;
 			gamePlaying = false;
 			StartCoroutine(PlayerDiedCoroutine());
@@ -91,7 +97,13 @@ public class GameState : MonoBehaviour {
 		GameObject gameoverText = Instantiate(gameOver, canvas.transform);
 		PlayClip(playerWon);
 		yield return new WaitForSeconds(playerWon.length);
-		SceneManager.LoadScene(2);
+		if (SceneManager.GetActiveScene().buildIndex == 0)
+			SceneManager.LoadScene(2);
+		else 
+		{
+			retry.SetActive(true);
+			gameMenu.SetActive(true);
+		}
 	}
 
 	IEnumerator PlayerDiedCoroutine() 
@@ -106,7 +118,13 @@ public class GameState : MonoBehaviour {
 		main.duration = explosionDuration;
 		ps.Play();
 		yield return new WaitForSeconds(explosionDuration);
-		SceneManager.LoadScene(2);
+		if (SceneManager.GetActiveScene().buildIndex == 0)
+			SceneManager.LoadScene(2);
+		else 
+		{
+			retry.SetActive(true);
+			gameMenu.SetActive(true);
+		}
 	}
 
 	public static void PlayClip(AudioClip clip) {
@@ -136,5 +154,15 @@ public class GameState : MonoBehaviour {
 		Destroy(countdown);
 		gamePlaying = true;
 		gameMusic.Play();
+	}
+
+	public void RetryLevel()
+	{
+		SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+	}
+
+	public void LoadGameMenu()
+	{
+		SceneManager.LoadScene(6);
 	}
 }

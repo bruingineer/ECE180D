@@ -25,20 +25,15 @@ public class Laser_MiniGame : MonoBehaviour {
 			GameObject laser_game = Instantiate(obstacles[Random.Range(0, obstacles.Count)]);
 			StartCoroutine(HandlePlayerMove(laser_game));
 		}
-		if (GameState.gameWon || Player.isDead) 
-			Destroy(gameObject);
-		
 	}
 
 	IEnumerator HandlePlayerMove(GameObject laser) 
 	{
 		while (laser != null) yield return null;
-		Debug.Log("hi");
 		if (!playerWasHit)
 			PlayerMQTT_X.playerMoved = true;
 		else 
 			playerWasHit = false;
-
 		yield return null;
 	}
 }

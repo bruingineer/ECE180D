@@ -6,6 +6,9 @@ TagManager:
   tags:
   - SeaRef
   - timer
+  - Gesture_Text
+  - Retry
+  - Menu
   layers:
   - Default
   - TransparentFX
