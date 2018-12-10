@@ -48,8 +48,7 @@ public class HandleWordDisplay : MonoBehaviour {
 
     private void Set_wordDict()
     {
-        print(word);
-        print(Offset);
+        Debug.Log("Word is: " + word);
         int letter = 0;
         foreach (char c in this.word)
         {

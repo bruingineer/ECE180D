@@ -47,7 +47,6 @@ public class SpeechRecognitionEngine : MonoBehaviour
     //Can maybe use enable/disable
     private void Start()
     {
-        print(numFails);
         GameObject sea = GameObject.FindWithTag("SeaRef");
         scramble.transform.position = sea.transform.position + new Vector3(60, 300, 0);
         TimeLeft.transform.position = scramble.transform.position + new Vector3(300,0,0);
@@ -61,7 +60,7 @@ public class SpeechRecognitionEngine : MonoBehaviour
             recognizer = new KeywordRecognizer(keywords, confidence);
             recognizer.OnPhraseRecognized += Recognizer_OnPhraseRecognized;
             recognizer.Start();
-            print("Recognizer Started");
+            //print("Recognizer Started");  //for debugging
         }
         StartCoroutine("Timer");
     }
@@ -111,7 +110,6 @@ public class SpeechRecognitionEngine : MonoBehaviour
                 else
                 {
                     StopRecognizer();
-                    numFails++;
                     TimeLeft.text = "Time's Up";
                 }
                 yield return null;
@@ -121,6 +119,7 @@ public class SpeechRecognitionEngine : MonoBehaviour
             PlayerEvents.eventOn = false;
             
             if (!isCorrect) { 
+                numFails++;
                 Destroy(TimeLeft);
                 Destroy(gameObject);
             }
@@ -140,7 +139,7 @@ public class SpeechRecognitionEngine : MonoBehaviour
             recognizer.OnPhraseRecognized -= Recognizer_OnPhraseRecognized;
             recognizer.Stop();
             recognizer.Dispose();
-            print("Recognizer Stopped");
+            //print("Recognizer Stopped"); //for debugging
         }
         
     }
