@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS games (
     player_game_idx INT unsigned DEFAULT 0,
     gestures_acc FLOAT(4,3) unsigned DEFAULT 0,
     speech_acc FLOAT(4,3) unsigned DEFAULT 0,
-    n_hits INT unsigned DEFAULT 0,
+    died BOOLEAN DEFAULT False,
     PRIMARY KEY(game_id),
     FOREIGN KEY (player) REFERENCES players(id)
 );
