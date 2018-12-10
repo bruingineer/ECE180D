@@ -85,6 +85,7 @@ public class GameState : MonoBehaviour {
 	{
 		if (Player.isDead) {
 			GameState.gamePlaying = false;
+			SelectedPlayer.died = true;
 			handledPlayer = true;
 			gamePlaying = false;
 			StartCoroutine(PlayerDiedCoroutine());

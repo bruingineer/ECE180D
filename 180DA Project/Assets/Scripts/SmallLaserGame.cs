@@ -12,7 +12,7 @@ public class SmallLaserGame : MonoBehaviour {
 	
 	void Start () {
 		lasersToFire = 15;
-		waitForNextLaser = 0.3f;
+		waitForNextLaser = .5f;
 		StartCoroutine(FireLasers());
 	}
 
