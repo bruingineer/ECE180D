@@ -35,7 +35,7 @@ public class GestureGame : MonoBehaviour {
 	{
 		if (correctGestureReceived && !handlingCorrectGesture)
 		{
-			timeLeft.text = "";
+			timeLeft.text = "Correct!";
 			handlingCorrectGesture = true;
 			numSucess++;
 			StopCoroutine("Timer");
@@ -46,7 +46,7 @@ public class GestureGame : MonoBehaviour {
 	public IEnumerator Timer() 
 	{	
 			timeLeft = GameObject.FindWithTag("timer").GetComponent<Text>();
-            float duration = 8f;
+            float duration = 11f;
             while(duration >= 0)
             {   
                 duration -= Time.deltaTime;
