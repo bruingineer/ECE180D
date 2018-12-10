@@ -31,6 +31,7 @@ public class GestureGame : MonoBehaviour {
 	{
 		if (correctGestureReceived && !handlingCorrectGesture)
 		{
+			handlingCorrectGesture = true;
 			numSucess++;
 			StopCoroutine("Timer");
 			StartCoroutine(HandleCorrectGesture());
