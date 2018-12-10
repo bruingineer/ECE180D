@@ -93,11 +93,7 @@ public class StartScene : MonoBehaviour {
                 SelectedPlayer.name = selectedPlayer.name;
                 SelectedPlayer.id = selectedPlayer.id;
                 SelectedPlayer.games_played = selectedPlayer.games_played;
-                SelectedPlayer.current_hits = 0;
-                SelectedPlayer.current_gesture_fail = 0;
-                SelectedPlayer.current_gesture_pass = 0;
-                SelectedPlayer.current_speech_pass = 0;
-                SelectedPlayer.current_speech_pass = 0;
+                SelectedPlayer.resetGameStats();
             }
         }
         else

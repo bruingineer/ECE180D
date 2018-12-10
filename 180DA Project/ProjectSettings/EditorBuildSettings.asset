@@ -14,4 +14,16 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/End Game.unity
     guid: d5caef2cadd43b04ab98c483523427b4
+  - enabled: 1
+    path: Assets/Scenes/Gesture Training.unity
+    guid: f0694a2e5c67cba4182693fe12aaec1a
+  - enabled: 1
+    path: Assets/Scenes/Laser Training.unity
+    guid: 0b00d702129e1f64f9e875ef506941cb
+  - enabled: 1
+    path: Assets/Scenes/Speech Training.unity
+    guid: af32f80d5b2710243a8f2014eea273f2
+  - enabled: 1
+    path: Assets/Scenes/Game Menu.unity
+    guid: f3b177772c10b624994513b83d2e7efb
   m_configObjects: {}
