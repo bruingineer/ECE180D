@@ -5,7 +5,7 @@ using UnityEngine;
 public class Small_Laser : MonoBehaviour {
 
 	public AudioClip smallLaserSound;
-	public static float laserTime = 4f;
+	public static float laserTime = 2f;
 	void Start () {
 		GameState.PlayClip(smallLaserSound);
 		StartCoroutine(MoveToPosition(new Vector3(0, transform.position.y), laserTime));
