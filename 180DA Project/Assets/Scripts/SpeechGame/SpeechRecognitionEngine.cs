@@ -14,6 +14,8 @@ public class SpeechRecognitionEngine : MonoBehaviour
 
     public Text TimeLeft;
 
+    public Text timeLeft;
+
     public HandleWordDisplay HandleWordDisplay;
     public ConfidenceLevel confidence = ConfidenceLevel.Medium;
     protected static PhraseRecognizer recognizer;
@@ -49,7 +51,7 @@ public class SpeechRecognitionEngine : MonoBehaviour
     {
         GameObject sea = GameObject.FindWithTag("SeaRef");
         scramble.transform.position = sea.transform.position + new Vector3(60, 300, 0);
-        TimeLeft.transform.position = scramble.transform.position + new Vector3(300,0,0);
+        //TimeLeft.transform.position = scramble.transform.position + new Vector3(300,0,0);
         HandleWordDisplay.InitPosition = scramble.transform.position - new Vector3(35,20,0);
 
         isCorrect = false;
@@ -94,30 +96,32 @@ public class SpeechRecognitionEngine : MonoBehaviour
         //to stop the PhraseRecognizer
         StopRecognizer();
         PlayerEvents.eventOn = false;
+        timeLeft.text = "";
         Destroy(gameObject);
         
     }
 
     public IEnumerator Timer() 
 	{
+            timeLeft = GameObject.FindWithTag("timer").GetComponent<Text>();
             float duration = 8f;
             while(duration >= 0)
             {   
                 duration -= Time.deltaTime;
                 int integer = (int)duration;
                 if (integer >= 1)
-                    TimeLeft.text = integer.ToString();
+                    timeLeft.text = integer.ToString();
                 else
                 {
                     StopRecognizer();
-                    TimeLeft.text = "Time's Up";
+                    timeLeft.text = "Time's Up";
                 }
                 yield return null;
             }
             
             yield return new WaitForSeconds(1);
             PlayerEvents.eventOn = false;
-            
+            timeLeft.text = "";
             if (!isCorrect) { 
                 numFails++;
                 Destroy(TimeLeft);

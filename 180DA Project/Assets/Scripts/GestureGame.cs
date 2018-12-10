@@ -64,6 +64,7 @@ public class GestureGame : MonoBehaviour {
 
 	private IEnumerator HandleCorrectGesture()
 	{
+		
 		PlayerMQTT_X.playerMoved = true;
 		yield return new WaitForSeconds(Obstacles.obstacleWaitTime);
 		PlayerEvents.eventOn = false;
