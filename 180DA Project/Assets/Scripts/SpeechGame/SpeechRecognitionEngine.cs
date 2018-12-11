@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Windows.Speech;
 
-
 public class SpeechRecognitionEngine : MonoBehaviour
 {
     public static int numSuccess;
@@ -98,13 +97,12 @@ public class SpeechRecognitionEngine : MonoBehaviour
         PlayerEvents.eventOn = false;
         timeLeft.text = "";
         Destroy(gameObject);
-        
     }
 
     public IEnumerator Timer() 
 	{
             timeLeft = GameObject.FindWithTag("timer").GetComponent<Text>();
-            float duration = 8f;
+            float duration = 11f;
             while(duration >= 0)
             {   
                 duration -= Time.deltaTime;
@@ -145,6 +143,5 @@ public class SpeechRecognitionEngine : MonoBehaviour
             recognizer.Dispose();
             //print("Recognizer Stopped"); //for debugging
         }
-        
     }
 }
