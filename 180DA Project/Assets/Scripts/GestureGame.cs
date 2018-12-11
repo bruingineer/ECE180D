@@ -36,6 +36,7 @@ public class GestureGame : MonoBehaviour {
 		if (correctGestureReceived && !handlingCorrectGesture)
 		{
 			timeLeft.text = "Correct!";
+			GestureClient.gestureClient.Publish(GestureClient.topicGestureSent, System.Text.Encoding.UTF8.GetBytes("stop"), MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE, false);
 			handlingCorrectGesture = true;
             //numSucess++;
             SelectedPlayer.current_gesture_pass++;
