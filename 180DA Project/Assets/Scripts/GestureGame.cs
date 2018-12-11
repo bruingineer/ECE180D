@@ -24,7 +24,7 @@ public class GestureGame : MonoBehaviour {
 		gestureText = GameObject.FindGameObjectWithTag("Gesture_Text").GetComponent<Text>();
 		handlingCorrectGesture = false;
 		correctGestureReceived = false;
-		gestures = new List<string>(){"tpose"};
+		gestures = new List<string>(){"tpose", "fieldgoal"};
 		string chosenGesture = gestures[UnityEngine.Random.Range(0, gestures.Count)];
 		gestureText.text = chosenGesture.ToUpper();
 		GestureClient.gestureClient.Publish(GestureClient.topicGestureSent, System.Text.Encoding.UTF8.GetBytes(chosenGesture), MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE, false);
