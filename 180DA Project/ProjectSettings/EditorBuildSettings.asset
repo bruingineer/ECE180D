@@ -20,8 +20,8 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Laser Training.unity
     guid: 0b00d702129e1f64f9e875ef506941cb
-  - enabled: 1
-    path: Assets/Scenes/Speech Training.unity
+  - enabled: 0
+    path: Assets/__DELETED_GUID_Trash/af32f80d5b2710243a8f2014eea273f2
     guid: af32f80d5b2710243a8f2014eea273f2
   - enabled: 1
     path: Assets/Scenes/Game Menu.unity
