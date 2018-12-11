@@ -30,7 +30,7 @@ public class GameItem
     public int player_game_idx;
     public float gestures_acc;
     public float speech_acc;
-    public int n_hits;
+    public bool died;
 }
 
 public class StatsProcess : MonoBehaviour
@@ -58,7 +58,7 @@ public class StatsProcess : MonoBehaviour
         //n = SelectedPlayer.current_hits; 
         g = 0.6f;
         s = 0.88f;
-        n = 10f;
+        n = 1;
 
         gesture_acc.text += ("  " + g);
         speech_acc.text += ("  " + s);
@@ -68,7 +68,7 @@ public class StatsProcess : MonoBehaviour
         //Insert game data into db
         string values = string.Format("({0}, {1}, {2}, {3}, {4})",
                                     SelectedPlayer.id, SelectedPlayer.games_played, g, s, n);
-        string str_command = "INSERT INTO games (player, player_game_idx, gestures_acc, speech_acc, n_hits) VALUES  " + values;
+        string str_command = "INSERT INTO games (player, player_game_idx, gestures_acc, speech_acc, died) VALUES  " + values;
         byte[] command = Encoding.ASCII.GetBytes(str_command);
         client.Publish("database", command);
 
@@ -90,7 +90,7 @@ public class StatsProcess : MonoBehaviour
         {
             float avg_gesture_acc = 0;
             float avg_speech_acc = 0;
-            float avg_hits = 0;
+            int n_deaths = 0;
 
             //Predict which training the player requires most
             if (gd != null && gd.count != 0)
@@ -99,41 +99,59 @@ public class StatsProcess : MonoBehaviour
                 {
                     avg_gesture_acc += game.gestures_acc;
                     avg_speech_acc += game.speech_acc;
-                    avg_hits += game.n_hits;
+                    if(game.died)
+                    {
+                        n_deaths++;
+                    }
                 }
 
                 avg_gesture_acc = avg_gesture_acc/gd.count;
                 avg_speech_acc = avg_speech_acc/gd.count;
-                avg_hits = avg_hits/gd.count;
 
                 //TODO: Find way to normalize hits accuracy
                 //For now, asumming total of 20 lasers shot at player..should keep count during game
-                avg_hits = avg_hits / 20;
+                //avg_hits = avg_hits / 20;
 
-                Debug.Log("avg_gesture_acc" + avg_gesture_acc);
-                Debug.Log("avg_speech_acc" + avg_speech_acc);
-                Debug.Log("avg_hits" + avg_hits);
+                Debug.Log("avg_gesture_acc " + avg_gesture_acc);
+                Debug.Log("avg_speech_acc " + avg_speech_acc);
+                Debug.Log("n_deaths " + n_deaths);
 
-                if(avg_gesture_acc >= 0.8 &&  avg_speech_acc >= 0.8 && avg_hits >= 0.8)
+                if (avg_gesture_acc >= 0.8 && avg_speech_acc >= 0.8 && n_deaths <= 1)
                 {
                     suggestion = "Suggestion: Great Work! Consider increasing the difficulty for a challenge!";
+                    return;
                 }
-                else if (avg_gesture_acc <= 0.3 && avg_speech_acc <= 0.3 && avg_hits <= 0.3)
+                //else if (avg_gesture_acc <= 0.3 && avg_speech_acc <= 0.3 && avg_hits <= 0.3)
+                //{
+                //    suggestion = "Suggestion: Looks like you're struggling. Consider redoing the tutorial.";
+                //}
+                //else if (avg_gesture_acc <= avg_speech_acc && avg_gesture_acc <= avg_hits)
+                //{
+                //    suggestion = "Suggestion: Practice your gestures by playing the gestures mini-game!";
+                //}
+                //else if (avg_speech_acc <= avg_gesture_acc && avg_speech_acc <= avg_hits)
+                //{
+                //    suggestion = "Suggestion: Practice your speech by playing the speech mini-game!";
+                //}
+                //else if (avg_hits <= avg_speech_acc && avg_hits <= avg_gesture_acc)
+                //{
+                //    suggestion = "Suggestion: Practice your dodging by playing the lasers mini-game!";
+                //}
+
+                suggestion = "Suggestion: Improve your performance by playing the following mini-games: ";
+                if(n_deaths >= 2)
                 {
-                    suggestion = "Suggestion: Looks like you're struggling. Consider redoing the tutorial.";
+                    suggestion += "Lasers Training";
                 }
-                else if (avg_gesture_acc <= avg_speech_acc && avg_gesture_acc <= avg_hits)
+                if(avg_gesture_acc <= .5)
                 {
-                    suggestion = "Suggestion: Practice your gestures by playing the gestures mini-game!";
+                    suggestion += ", Gestures Training";
                 }
-                else if (avg_speech_acc <= avg_gesture_acc && avg_speech_acc <= avg_hits)
+                if (avg_speech_acc <= .5)
                 {
-                    suggestion = "Suggestion: Practice your speech by playing the speech mini-game!";
+                    suggestion += ", Speech Training";
                 }
-                else if (avg_hits <= avg_speech_acc && avg_hits <= avg_gesture_acc)
-                {
-                    suggestion = "Suggestion: Practice your dodging by playing the lasers mini-game!";
-                }
+
             }
         }
     }
