@@ -7,14 +7,10 @@ public class Small_Laser : MonoBehaviour {
 	public AudioClip smallLaserSound;
 	public static float laserTime = 4f;
 	private GameObject player;
+	public float end_position;
 	void Start () {
 		player = GameObject.FindGameObjectWithTag("Player");
 		GameState.PlayClip(smallLaserSound);
-		int end_position = 0;
-		if (player.transform.position.x > GameState.end_column / 2)
-		{
-			end_position = GameState.end_column;
-		}
 		StartCoroutine(MoveToPosition(new Vector3(end_position, transform.position.y), laserTime));
 	}
 	

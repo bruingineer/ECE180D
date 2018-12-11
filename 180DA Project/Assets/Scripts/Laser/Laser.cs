@@ -24,6 +24,8 @@ public class Laser : MonoBehaviour {
             SelectedPlayer.current_hits += 1;
 			Laser_MiniGame.playerWasHit = true;
 		}
+		if (!GameState.gamePlaying)
+			Destroy(gameObject);
 	}
 
 	private IEnumerator MoveLaser(Vector3 end_position, float timeToMove)
