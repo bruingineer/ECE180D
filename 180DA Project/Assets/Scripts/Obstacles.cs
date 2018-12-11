@@ -13,7 +13,7 @@ public class Obstacles : MonoBehaviour {
 	void Awake()
 	{
 		obstacleOn = false;
-		obstacleWaitTime = 5f;
+		obstacleWaitTime = 3f;
 		obstacles = new List<GameObject> {bigLasers, smallLasers};
 	}
 	

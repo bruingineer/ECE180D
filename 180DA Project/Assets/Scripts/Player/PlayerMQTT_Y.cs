@@ -33,11 +33,12 @@ public class PlayerMQTT_Y : MonoBehaviour {
 	{ 
 		int lane_num;
 		if (Int32.TryParse(System.Text.Encoding.UTF8.GetString(e.Message), out lane_num)) {
+			lane_num = GameState.numLanes - lane_num + 1;
 			if (lane_num != cur_lane_num) {
 				cur_lane_num = lane_num;
 			}
 		} else {
-			// Figure out how to handle this
+			Debug.Log("Weird");
 		}
 	} 
 

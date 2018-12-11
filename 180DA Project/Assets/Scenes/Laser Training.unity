@@ -906,6 +906,10 @@ Prefab:
       propertyPath: playerLifeIcons.Array.data[1]
       value: 
       objectReference: {fileID: 2069524343}
+    - target: {fileID: 1164852439685396, guid: d210543711156406490a7ec8c57924c3, type: 2}
+      propertyPath: m_TagString
+      value: Player
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d210543711156406490a7ec8c57924c3, type: 2}
   m_IsPrefabAsset: 0

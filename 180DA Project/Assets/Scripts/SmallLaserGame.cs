@@ -8,9 +8,16 @@ public class SmallLaserGame : MonoBehaviour {
 	public GameObject smallLaser;
 	private int lasersToFire;
 	private float waitForNextLaser;
+	public GameObject player;
 
+	void Update()
+	{
+		if (!GameState.gamePlaying)
+			Destroy(gameObject);
+	}
 	
 	void Start () {
+		player = GameObject.FindGameObjectWithTag("Player");
 		lasersToFire = 15;
 		waitForNextLaser = .5f;
 		StartCoroutine(FireLasers());
@@ -18,11 +25,20 @@ public class SmallLaserGame : MonoBehaviour {
 
 	private IEnumerator FireLasers() 
 	{
+		float start_position = 0;
+		float end_position = GameState.end_column;
+		if (player.transform.position.x < GameState.end_column / 2)
+		{
+			start_position = GameState.end_column;
+			end_position = 0;
+		}
 		for(int i = 0; i < lasersToFire; i++) 
 		{
-			Instantiate(smallLaser, new Vector3(GameState.end_column, 
+			Small_Laser small_laser = Instantiate(smallLaser, new Vector3(start_position, 
 				GameState.laneNums[Random.Range(0, GameState.laneNums.Count)] + 0.5f), 
-					Quaternion.identity);
+					Quaternion.identity).GetComponent<Small_Laser>();
+			small_laser.end_position = end_position;
+			
 			yield return new WaitForSeconds(waitForNextLaser);
 		}
 		yield return new WaitForSeconds(Small_Laser.laserTime + Obstacles.obstacleWaitTime);

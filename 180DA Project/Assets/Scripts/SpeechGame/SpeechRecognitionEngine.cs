@@ -61,7 +61,6 @@ public class SpeechRecognitionEngine : MonoBehaviour
             recognizer = new KeywordRecognizer(keywords, confidence);
             recognizer.OnPhraseRecognized += Recognizer_OnPhraseRecognized;
             recognizer.Start();
-            //print("Recognizer Started");  //for debugging
         }
         StartCoroutine("Timer");
     }
@@ -78,6 +77,7 @@ public class SpeechRecognitionEngine : MonoBehaviour
             StopCoroutine("Timer");
             isCorrect = true;
             scramble.text = "Correct!";
+            Speech_MiniGame.curCorrect++;
             PlayerMQTT_X.playerMoved = true;
             StartCoroutine(Reset());
             //numSuccess++;
@@ -119,6 +119,7 @@ public class SpeechRecognitionEngine : MonoBehaviour
             }
             
             yield return new WaitForSeconds(1);
+            Speech_MiniGame.curCorrect = 0;
             PlayerEvents.eventOn = false;
             timeLeft.text = "";
             if (!isCorrect) {
@@ -143,7 +144,6 @@ public class SpeechRecognitionEngine : MonoBehaviour
             recognizer.OnPhraseRecognized -= Recognizer_OnPhraseRecognized;
             recognizer.Stop();
             recognizer.Dispose();
-            //print("Recognizer Stopped"); //for debugging
         }
     }
 }

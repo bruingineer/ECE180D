@@ -63,7 +63,9 @@ public class GestureGame : MonoBehaviour {
             }
             
             yield return new WaitForSeconds(1);
+			Gesture_MiniGame.curCorrect = 0;
 			PlayerEvents.eventOn = false;
+			Gesture_MiniGame.eventOn = false;
 			timeLeft.text = "";
 			gestureText.text = "";
             Destroy(gameObject);
@@ -73,10 +75,12 @@ public class GestureGame : MonoBehaviour {
 	{
 		
 		PlayerMQTT_X.playerMoved = true;
-		yield return new WaitForSeconds(Obstacles.obstacleWaitTime);
+		yield return new WaitForSeconds(3f);
 		PlayerEvents.eventOn = false;
+		Gesture_MiniGame.eventOn = false;
 		correctGestureReceived = false;
 		gestureText.text = "";
+		Gesture_MiniGame.curCorrect++;
 		Destroy(gameObject);
 	}
 }

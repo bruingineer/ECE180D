@@ -15,6 +15,12 @@ public class LaserCreater : MonoBehaviour {
 		laserWarnings = new List<GameObject>();
 		StartCoroutine(ShootLasers());
 	}
+
+	void Update()
+	{
+		if (!GameState.gamePlaying)
+			Destroy(gameObject);
+	}
 	private IEnumerator ShootLasers() 
 	{
 		List<int> lanesToFireLasers = GetRandomLanes();

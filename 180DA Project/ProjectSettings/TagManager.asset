@@ -9,6 +9,7 @@ TagManager:
   - Gesture_Text
   - Retry
   - Menu
+  - Canvas
   layers:
   - Default
   - TransparentFX

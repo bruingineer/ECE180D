@@ -109,6 +109,7 @@ public class GameState : MonoBehaviour {
 
 	IEnumerator PlayerDiedCoroutine() 
 	{
+		gameOver.GetComponent<Text>().text = "You Lost!";
 		GameObject gameoverText = Instantiate(gameOver, canvas.transform);
 		GameObject explosion = Instantiate(playerExplosion, playerObject.transform.position, Quaternion.identity);
 		Destroy(playerObject);
