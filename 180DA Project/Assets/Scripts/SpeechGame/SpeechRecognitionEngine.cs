@@ -80,7 +80,8 @@ public class SpeechRecognitionEngine : MonoBehaviour
             scramble.text = "Correct!";
             PlayerMQTT_X.playerMoved = true;
             StartCoroutine(Reset());
-            numSuccess++;
+            //numSuccess++;
+            SelectedPlayer.current_speech_pass++;
         }
     }
 
@@ -120,8 +121,9 @@ public class SpeechRecognitionEngine : MonoBehaviour
             yield return new WaitForSeconds(1);
             PlayerEvents.eventOn = false;
             timeLeft.text = "";
-            if (!isCorrect) { 
-                numFails++;
+            if (!isCorrect) {
+                //numFails++;
+                SelectedPlayer.current_speech_fail++;
                 Destroy(TimeLeft);
                 Destroy(gameObject);
             }

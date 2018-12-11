@@ -37,7 +37,8 @@ public class GestureGame : MonoBehaviour {
 		{
 			timeLeft.text = "Correct!";
 			handlingCorrectGesture = true;
-			numSucess++;
+            //numSucess++;
+            SelectedPlayer.current_gesture_pass++;
 			StopCoroutine("Timer");
 			StartCoroutine(HandleCorrectGesture());
 		}
@@ -56,6 +57,7 @@ public class GestureGame : MonoBehaviour {
                 else
                 {
                     timeLeft.text = "Time's Up";
+                    SelectedPlayer.current_gesture_fail++;
                 }
                 yield return null;
             }

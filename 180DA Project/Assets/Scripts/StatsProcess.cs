@@ -44,30 +44,40 @@ public class StatsProcess : MonoBehaviour
 
     public Text gesture_acc;
     public Text speech_acc;
-    public Text n_hits;
+    public Text survived;
     public Text training_suggestion;
+
     string suggestion;
     float g;
     float s;
-    float n;
+    bool died;
+    int d;
 
     void UpdateDatabase()
     {
-        //g = SelectedPlayer.current_gesture_pass / (SelectedPlayer.current_gesture_fail + SelectedPlayer.current_gesture_pass);
-        //s = SelectedPlayer.current_speech_pass / (SelectedPlayer.current_speech_fail + SelectedPlayer.current_speech_pass);
-        //n = SelectedPlayer.current_hits; 
-        g = 0.6f;
-        s = 0.88f;
-        n = 1;
+        g = SelectedPlayer.current_gesture_pass / (SelectedPlayer.current_gesture_fail + SelectedPlayer.current_gesture_pass);
+        s = SelectedPlayer.current_speech_pass / (SelectedPlayer.current_speech_fail + SelectedPlayer.current_speech_pass);
+        died = SelectedPlayer.died;
+        //g = 0.3f;
+        //s = 0.88f;
+        //died = true;
 
         gesture_acc.text += ("  " + g);
         speech_acc.text += ("  " + s);
-        n_hits.text += ("  " + n);
-
-
+        if (died)
+        {
+            survived.text += ("  No");
+            d = 1;
+        }
+        else
+        {
+            survived.text += ("  Yes");
+            d = 2;
+        }
+        
         //Insert game data into db
         string values = string.Format("({0}, {1}, {2}, {3}, {4})",
-                                    SelectedPlayer.id, SelectedPlayer.games_played, g, s, n);
+                                    SelectedPlayer.id, SelectedPlayer.games_played, g, s, d);
         string str_command = "INSERT INTO games (player, player_game_idx, gestures_acc, speech_acc, died) VALUES  " + values;
         byte[] command = Encoding.ASCII.GetBytes(str_command);
         client.Publish("database", command);
@@ -138,7 +148,7 @@ public class StatsProcess : MonoBehaviour
                 //    suggestion = "Suggestion: Practice your dodging by playing the lasers mini-game!";
                 //}
 
-                suggestion = "Suggestion: Improve your performance by playing the following mini-games: ";
+                suggestion = "Suggestion:\n Improve your performance by playing the following mini-games: ";
                 if(n_deaths >= 2)
                 {
                     suggestion += "Lasers Training";

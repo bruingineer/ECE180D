@@ -31,12 +31,12 @@ public class selectTrainingScene : MonoBehaviour {
                 m_DropOptions.Add("Laser Training");
             }
 
-            else if (txt.Contains("Speech Training"))
+            if (txt.Contains("Speech Training"))
             {
                 m_DropOptions.Add("Speech");
             }
 
-            else if (txt.Contains("Gestures"))
+            if (txt.Contains("Gestures"))
             {
                 m_DropOptions.Add("Gesture Training");
             }
