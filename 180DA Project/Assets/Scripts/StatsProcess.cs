@@ -55,8 +55,12 @@ public class StatsProcess : MonoBehaviour
 
     void UpdateDatabase()
     {
-        g = SelectedPlayer.current_gesture_pass / (SelectedPlayer.current_gesture_fail + SelectedPlayer.current_gesture_pass);
-        s = SelectedPlayer.current_speech_pass / (SelectedPlayer.current_speech_fail + SelectedPlayer.current_speech_pass);
+        int tot_gestures = (SelectedPlayer.current_gesture_fail + SelectedPlayer.current_gesture_pass);
+        int tot_speech = (SelectedPlayer.current_speech_fail + SelectedPlayer.current_speech_pass);
+
+        if (tot_gestures == 0 || tot_speech == 0) return;
+        g = SelectedPlayer.current_gesture_pass / tot_gestures;
+        s = SelectedPlayer.current_speech_pass / tot_speech;
         died = SelectedPlayer.died;
         //g = 0.3f;
         //s = 0.88f;

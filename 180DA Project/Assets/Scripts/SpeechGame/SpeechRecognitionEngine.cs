@@ -82,6 +82,7 @@ public class SpeechRecognitionEngine : MonoBehaviour
             StartCoroutine(Reset());
             //numSuccess++;
             SelectedPlayer.current_speech_pass++;
+            Debug.Log("current_speech_pass++");
         }
     }
 
@@ -125,6 +126,7 @@ public class SpeechRecognitionEngine : MonoBehaviour
             if (!isCorrect) {
                 //numFails++;
                 SelectedPlayer.current_speech_fail++;
+                Debug.Log("current_gesture_fail++");
                 Destroy(TimeLeft);
                 Destroy(gameObject);
             }

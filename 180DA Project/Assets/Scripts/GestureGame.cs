@@ -40,6 +40,7 @@ public class GestureGame : MonoBehaviour {
 			handlingCorrectGesture = true;
             //numSucess++;
             SelectedPlayer.current_gesture_pass++;
+            Debug.Log("current_gesture_pass++");
 			StopCoroutine("Timer");
 			StartCoroutine(HandleCorrectGesture());
 		}
@@ -59,7 +60,8 @@ public class GestureGame : MonoBehaviour {
                 {
                     timeLeft.text = "Time's Up";
                     SelectedPlayer.current_gesture_fail++;
-                }
+                    Debug.Log("current_gesture_fail++");
+            }
                 yield return null;
             }
             
