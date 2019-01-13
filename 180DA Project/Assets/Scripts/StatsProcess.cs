@@ -35,50 +35,23 @@ public class GameItem
 
 public class StatsProcess : MonoBehaviour
 {
-
     private MqttClient client;
     GameData gd;
     private const string str_IP = "127.0.0.1";
     private const int int_Port = 1883;
     private const string topic = "database/result";
 
+    //Text objects to display game results and smart training suggestion
     public Text gesture_acc;
     public Text speech_acc;
     public Text survived;
     public Text training_suggestion;
 
     string suggestion;
-    float g;
-    float s;
-    bool died;
-    int d;
+    
 
-    void UpdateDatabase()
+    void UpdateDatabase(float g, float s, int d)
     {
-        int tot_gestures = (SelectedPlayer.current_gesture_fail + SelectedPlayer.current_gesture_pass);
-        int tot_speech = (SelectedPlayer.current_speech_fail + SelectedPlayer.current_speech_pass);
-
-        if (tot_gestures == 0 || tot_speech == 0) return;
-        g = SelectedPlayer.current_gesture_pass / tot_gestures;
-        s = SelectedPlayer.current_speech_pass / tot_speech;
-        died = SelectedPlayer.died;
-        //g = 0.3f;
-        //s = 0.88f;
-        //died = true;
-
-        gesture_acc.text += ("  " + g);
-        speech_acc.text += ("  " + s);
-        if (died)
-        {
-            survived.text += ("  No");
-            d = 1;
-        }
-        else
-        {
-            survived.text += ("  Yes");
-            d = 2;
-        }
-        
         //Insert game data into db
         string values = string.Format("({0}, {1}, {2}, {3}, {4})",
                                     SelectedPlayer.id, SelectedPlayer.games_played, g, s, d);
@@ -104,6 +77,8 @@ public class StatsProcess : MonoBehaviour
         {
             float avg_gesture_acc = 0;
             float avg_speech_acc = 0;
+            int gesture_ctr = gd.count;
+            int speech_ctr = gd.count;
             int n_deaths = 0;
 
             //Predict which training the player requires most
@@ -111,20 +86,24 @@ public class StatsProcess : MonoBehaviour
             {
                 foreach (GameItem game in gd.items)
                 {
-                    avg_gesture_acc += game.gestures_acc;
-                    avg_speech_acc += game.speech_acc;
+                    //If there were no gesture or speech commands in game, do not count toward average
+                    if (game.gestures_acc != -1) avg_gesture_acc += game.gestures_acc;
+                    else gesture_ctr--;
+
+                    if (game.speech_acc != -1) avg_speech_acc += game.speech_acc;
+                    else speech_ctr--;
+
+                    Debug.Log("game.died: " + game.died);
                     if(game.died)
                     {
                         n_deaths++;
                     }
                 }
 
-                avg_gesture_acc = avg_gesture_acc/gd.count;
-                avg_speech_acc = avg_speech_acc/gd.count;
-
-                //TODO: Find way to normalize hits accuracy
-                //For now, asumming total of 20 lasers shot at player..should keep count during game
-                //avg_hits = avg_hits / 20;
+                if (gesture_ctr != 0) avg_gesture_acc = avg_gesture_acc / gesture_ctr;
+                else avg_gesture_acc = -1;
+                if (speech_ctr != 0) avg_speech_acc = avg_speech_acc / speech_ctr;
+                else avg_speech_acc = -1;
 
                 Debug.Log("avg_gesture_acc " + avg_gesture_acc);
                 Debug.Log("avg_speech_acc " + avg_speech_acc);
@@ -135,22 +114,7 @@ public class StatsProcess : MonoBehaviour
                     suggestion = "Suggestion: Great Work! Consider increasing the difficulty for a challenge!";
                     return;
                 }
-                //else if (avg_gesture_acc <= 0.3 && avg_speech_acc <= 0.3 && avg_hits <= 0.3)
-                //{
-                //    suggestion = "Suggestion: Looks like you're struggling. Consider redoing the tutorial.";
-                //}
-                //else if (avg_gesture_acc <= avg_speech_acc && avg_gesture_acc <= avg_hits)
-                //{
-                //    suggestion = "Suggestion: Practice your gestures by playing the gestures mini-game!";
-                //}
-                //else if (avg_speech_acc <= avg_gesture_acc && avg_speech_acc <= avg_hits)
-                //{
-                //    suggestion = "Suggestion: Practice your speech by playing the speech mini-game!";
-                //}
-                //else if (avg_hits <= avg_speech_acc && avg_hits <= avg_gesture_acc)
-                //{
-                //    suggestion = "Suggestion: Practice your dodging by playing the lasers mini-game!";
-                //}
+               
 
                 suggestion = "Suggestion:\n Improve your performance by playing the following mini-games: ";
                 if(n_deaths >= 2)
@@ -184,9 +148,48 @@ public class StatsProcess : MonoBehaviour
         client.Connect(clientId);
         client.Subscribe(new string[] { topic }, new byte[] { MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE });
 
+        float g;
+        float s;
+        bool died;
+        int d;
+
+        //calculate accuracies for the game that just ended and call UpdateDatabase() 
+        //then query last 3 games' data to calculate averages and predict training suggestion
         if (SelectedPlayer.name != null)
         {
-            UpdateDatabase();
+            Debug.Log("current_gesture_fail: " + SelectedPlayer.current_gesture_fail);
+            Debug.Log("current_gesture_pass: " + SelectedPlayer.current_gesture_pass);
+            Debug.Log("current_speech_fail: " + SelectedPlayer.current_speech_fail);
+            Debug.Log("current_speech_pass: " + SelectedPlayer.current_speech_pass);
+
+            int tot_gestures = (SelectedPlayer.current_gesture_fail + SelectedPlayer.current_gesture_pass);
+            int tot_speech = (SelectedPlayer.current_speech_fail + SelectedPlayer.current_speech_pass);
+
+            if (tot_gestures == 0) g = -1;
+            else g = SelectedPlayer.current_gesture_pass / tot_gestures;
+
+            if (tot_speech == 0) s = -1;
+            else s = SelectedPlayer.current_speech_pass / tot_speech;
+
+            died = SelectedPlayer.died;
+            //g = 0.3f;
+            //s = 0.88f;
+            //died = true;
+
+            gesture_acc.text += ("  " + g);
+            speech_acc.text += ("  " + s);
+            if (died)
+            {
+                survived.text += ("  No");
+                d = 1;
+            }
+            else
+            {
+                survived.text += ("  Yes");
+                d = 0;
+            }
+
+            UpdateDatabase(g, s, d);
 
             //Perform the query for selected player's last three game data
             string str_command = string.Format("SELECT * FROM (SELECT * FROM games WHERE player={0}) sub ", SelectedPlayer.id) +
@@ -205,8 +208,10 @@ public class StatsProcess : MonoBehaviour
         }
     }
 
+    //MQTT message expected to contain game results as JSON string
     void client_MqttMsgPublishReceived(object sender, MqttMsgPublishEventArgs e)
     {
+        //unpack JSON
         string gamesResult = Encoding.ASCII.GetString(e.Message);
         Debug.Log(gamesResult);
         gd = GameData.CreateFromJSON(gamesResult);

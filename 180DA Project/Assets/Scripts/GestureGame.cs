@@ -33,8 +33,9 @@ public class GestureGame : MonoBehaviour {
 
 	void Update()
 	{
-		if (correctGestureReceived && !handlingCorrectGesture)
-		{
+        if (correctGestureReceived && !handlingCorrectGesture)
+        {
+            
 			timeLeft.text = "Correct!";
 			GestureClient.gestureClient.Publish(GestureClient.topicGestureSent, System.Text.Encoding.UTF8.GetBytes("stop"), MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE, false);
 			handlingCorrectGesture = true;
@@ -59,12 +60,12 @@ public class GestureGame : MonoBehaviour {
                 else
                 {
                     timeLeft.text = "Time's Up";
-                    SelectedPlayer.current_gesture_fail++;
-                    Debug.Log("current_gesture_fail++");
-            }
+                }
                 yield return null;
             }
-            
+
+            SelectedPlayer.current_gesture_fail++;
+            Debug.Log("current_gesture_fail++");
             yield return new WaitForSeconds(1);
 			Gesture_MiniGame.curCorrect = 0;
 			PlayerEvents.eventOn = false;

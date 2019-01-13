@@ -126,7 +126,7 @@ public class SpeechRecognitionEngine : MonoBehaviour
             if (!isCorrect) {
                 //numFails++;
                 SelectedPlayer.current_speech_fail++;
-                Debug.Log("current_gesture_fail++");
+                Debug.Log("current_speech_fail++");
                 Destroy(TimeLeft);
                 Destroy(gameObject);
             }
