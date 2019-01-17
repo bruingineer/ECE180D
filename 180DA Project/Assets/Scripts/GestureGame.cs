@@ -19,6 +19,8 @@ public class GestureGame : MonoBehaviour {
 	public static int numFails;
 	private Text timeLeft;
 
+
+	private static string currGesture;
 	// Use this for initialization
 	void Awake () {
 		gestureText = GameObject.FindGameObjectWithTag("Gesture_Text").GetComponent<Text>();
@@ -29,10 +31,24 @@ public class GestureGame : MonoBehaviour {
 		gestureText.text = chosenGesture.ToUpper();
 		GestureClient.gestureClient.Publish(GestureClient.topicGestureSent, System.Text.Encoding.UTF8.GetBytes(chosenGesture), MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE, false);
 		StartCoroutine("Timer");
+		currGesture = gestureText.text;
+	}
+
+	
+	IEnumerator makeTextBlink()
+	{
+		while (true)
+		{
+			gestureText.text = "";
+			yield return new WaitForSeconds(0.5f);
+			gestureText.text = currGesture;
+			yield return new WaitForSeconds(0.5f);
+		}
 	}
 
 	void Update()
 	{
+		StartCoroutine("makeTextBlink");
         if (correctGestureReceived && !handlingCorrectGesture)
         {
             
@@ -46,6 +62,8 @@ public class GestureGame : MonoBehaviour {
 			StartCoroutine(HandleCorrectGesture());
 		}
 	}
+
+
 
 	public IEnumerator Timer() 
 	{	

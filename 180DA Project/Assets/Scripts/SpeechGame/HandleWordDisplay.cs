@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class HandleWordDisplay : MonoBehaviour {
 
     public Vector3 InitPosition;
-    public static int Offset = 25;
+    public static int Offset = 42;
 
     public void WhichWord(string w)
     {
@@ -53,7 +53,7 @@ public class HandleWordDisplay : MonoBehaviour {
         foreach (char c in this.word)
         {
             GameObjectStruct myGameObjectStruct = new GameObjectStruct { myGameObject = LoadLetter.GetLetter(c) };
-            myGameObjectStruct.myGameObject.transform.localScale -= new Vector3(0.75f, 0.75f, 0);
+            myGameObjectStruct.myGameObject.transform.localScale -= new Vector3(0.5f, 0.5f, 0);
             myGameObjectStruct.myGameObject.transform.SetParent(this.transform);
             Vector3 pos = InitPosition;
             pos[0] = pos[0] + Offset * letter;
@@ -70,6 +70,15 @@ public class HandleWordDisplay : MonoBehaviour {
         while (!IsRandomized())
         { Randomize(); }
 
+    }
+
+    public void makeBlink()
+    {
+        int r = Random.Range(0, initPositions.Count); //choose a random index
+        if (wordList[r].myGameObject.activeSelf)
+            wordList[r].myGameObject.SetActive(false);
+        else 
+            wordList[r].myGameObject.SetActive(true);
     }
 
     public void Randomize()

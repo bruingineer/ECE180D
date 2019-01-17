@@ -62,11 +62,19 @@ public class SpeechRecognitionEngine : MonoBehaviour
             recognizer.OnPhraseRecognized += Recognizer_OnPhraseRecognized;
             recognizer.Start();
         }
+        
         StartCoroutine("Timer");
+        
+    }
+
+    void makeBlink()
+    {
+        HandleWordDisplay.makeBlink();
     }
 
     void Update()
     {
+        InvokeRepeating("makeBlink", 0, 1);
         if (Player.isDead)
             Destroy(gameObject);
     }
