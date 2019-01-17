@@ -105,6 +105,7 @@ public class SpeechRecognitionEngine : MonoBehaviour
         //to stop the PhraseRecognizer
         StopRecognizer();
         PlayerEvents.eventOn = false;
+        Speech_MiniGame.eventOn = false;
         timeLeft.text = "";
         Destroy(gameObject);
     }
@@ -130,6 +131,7 @@ public class SpeechRecognitionEngine : MonoBehaviour
             yield return new WaitForSeconds(1);
             Speech_MiniGame.curCorrect = 0;
             PlayerEvents.eventOn = false;
+            Speech_MiniGame.eventOn = false;
             timeLeft.text = "";
             if (!isCorrect) {
                 //numFails++;
