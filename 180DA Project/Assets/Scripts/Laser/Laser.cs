@@ -6,7 +6,6 @@ public class Laser : MonoBehaviour {
 	private LineRenderer lineRenderer;
 	Vector3 endPosition;
 	public const float laserTime = 0.005f;
-	
 	public static float destroyLaserDelay = 0.75f;
 
 
