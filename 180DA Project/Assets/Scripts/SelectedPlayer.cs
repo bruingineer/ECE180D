@@ -10,12 +10,13 @@ public static class SelectedPlayer{
 
     //current game info
     public static int current_hits = 0;
-    public static int current_gesture_pass = 0;
-    public static int current_gesture_fail = 0;
-    public static int current_speech_pass = 0;
-    public static int current_speech_fail = 0;
+    public static float current_gesture_pass = 0;
+    public static float current_gesture_fail = 0;
+    public static float current_speech_pass = 0;
+    public static float current_speech_fail = 0;
     public static int bigLaserctr = 0;
     public static bool died = false;
+    public static string current_difficulty = "easy";
 
     public static void resetGameStats()
     {

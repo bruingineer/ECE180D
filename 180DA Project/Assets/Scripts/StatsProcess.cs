@@ -162,8 +162,8 @@ public class StatsProcess : MonoBehaviour
             Debug.Log("current_speech_fail: " + SelectedPlayer.current_speech_fail);
             Debug.Log("current_speech_pass: " + SelectedPlayer.current_speech_pass);
 
-            int tot_gestures = (SelectedPlayer.current_gesture_fail + SelectedPlayer.current_gesture_pass);
-            int tot_speech = (SelectedPlayer.current_speech_fail + SelectedPlayer.current_speech_pass);
+            float tot_gestures = (SelectedPlayer.current_gesture_fail + SelectedPlayer.current_gesture_pass);
+            float tot_speech = (SelectedPlayer.current_speech_fail + SelectedPlayer.current_speech_pass);
 
             if (tot_gestures == 0) g = -1;
             else g = SelectedPlayer.current_gesture_pass / tot_gestures;
