@@ -6,6 +6,7 @@ public class Laser : MonoBehaviour {
 	private LineRenderer lineRenderer;
 	Vector3 endPosition;
 	public const float laserTime = 0.005f;
+	static bool playerHit = false;
 	
 	public static float destroyLaserDelay = 0.75f;
 
@@ -18,11 +19,13 @@ public class Laser : MonoBehaviour {
 	}
 	
 	void Update () {
-        if (Physics.Raycast(transform.position, Vector3.left) && !Player.isHit)
+		RaycastHit hit;
+        if (Physics.Raycast(transform.position, Vector3.left, out hit) && !playerHit)
 		{
-			Player.isHit = true;
+			playerHit = true;
             SelectedPlayer.current_hits += 1;
 			Laser_MiniGame.playerWasHit = true;
+			hit.transform.GetComponent<Player>().isHit = true;
 		}
 		if (!GameState.gamePlaying)
 			Destroy(gameObject);

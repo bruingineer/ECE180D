@@ -3,15 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Player : MonoBehaviour {
-	public static float movementTimeX = .2f;
-	public static float playerLaneNum = PlayerMQTT_Y.cur_lane_num;
-	public static float secondsToMoveY = 0.1f;
-	public static bool isPlayerMoving;
-	public static bool isHit;
+	public float movementTimeX = .2f;
+	public AudioClip y_movement;
+	public AudioClip x_movement;
+	public float playerLaneNum = PlayerMQTT_Y.cur_lane_num;
+	public float secondsToMoveY = 0.1f;
+	public bool isPlayerMoving;
+	public bool isHit;
 	private bool isRecovering;
 	public AudioClip playerHitByLaser;
 	public AudioClip playerRecovered;
-	public static float playerRecoveryTime;
+	public float playerRecoveryTime;
 	public List<GameObject> playerLifeIcons;
 	public int playerLives;
 	public static bool isDead;
@@ -34,8 +36,21 @@ public class Player : MonoBehaviour {
 		if (isHit && !isRecovering && !isDead && !GameState.gameWon) {
 			StartCoroutine(PlayerHit());
 		}
+
+		if(!isPlayerMoving && GameState.gamePlaying) MovePlayerX();
+		if(!isPlayerMoving) MovePlayerY();
 	}
-	public static IEnumerator MoveToPosition(Transform player_transform, Vector3 end_position, float timeToMove)
+
+	private void MovePlayerY() {
+		if ((playerLaneNum != PlayerMQTT_Y.cur_lane_num)) {
+			Vector3 end_position = new Vector3(transform.position.x, 0.5f + PlayerMQTT_Y.cur_lane_num);
+			float timeToMove = secondsToMoveY * Mathf.Abs(playerLaneNum - PlayerMQTT_Y.cur_lane_num);
+			GameState.PlayClip(y_movement);
+			playerLaneNum = PlayerMQTT_Y.cur_lane_num;
+			StartCoroutine(MovePlayerPosition(transform, end_position, timeToMove));	
+		}
+	}
+	public IEnumerator MovePlayerPosition(Transform player_transform, Vector3 end_position, float timeToMove)
    	{
 		isPlayerMoving = true;
 		var initialPos = player_transform.position;
@@ -48,6 +63,16 @@ public class Player : MonoBehaviour {
 		}
 		isPlayerMoving = false;
     }
+
+	private void MovePlayerX() {
+		if (PlayerMQTT_X.playerMoved) {
+			Vector3 end_position = new Vector3(transform.position.x + 1, transform.position.y);
+			GameState.PlayClip(x_movement);
+			PlayerMQTT_X.playerMoved = false;
+			StartCoroutine(MovePlayerPosition(transform, 
+				new Vector3(transform.position.x + 1, transform.position.y), movementTimeX));
+		}
+    } 
 
 	public IEnumerator PlayerHit() 
 	{

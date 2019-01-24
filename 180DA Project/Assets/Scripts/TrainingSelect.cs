@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
-public class selectTrainingScene : MonoBehaviour {
+public class TrainingSelect : MonoBehaviour {
 
     public Text training_suggestion;
     public Button trainingButton;
