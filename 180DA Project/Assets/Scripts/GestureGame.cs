@@ -19,7 +19,6 @@ public class GestureGame : MonoBehaviour {
 	public static int numFails;
 	private Text timeLeft;
 
-
 	private static string currGesture;
 	// Use this for initialization
 	void Awake () {
@@ -34,7 +33,6 @@ public class GestureGame : MonoBehaviour {
 		currGesture = gestureText.text;
 	}
 
-	
 	IEnumerator makeTextBlink()
 	{
 		while (true)
@@ -43,6 +41,7 @@ public class GestureGame : MonoBehaviour {
 			yield return new WaitForSeconds(0.5f);
 			gestureText.text = currGesture;
 			yield return new WaitForSeconds(0.5f);
+			if (timeLeft.text == "Time's Up") break;
 		}
 	}
 
@@ -51,7 +50,6 @@ public class GestureGame : MonoBehaviour {
 		StartCoroutine("makeTextBlink");
         if (correctGestureReceived && !handlingCorrectGesture)
         {
-            
 			timeLeft.text = "Correct!";
 			GestureClient.gestureClient.Publish(GestureClient.topicGestureSent, System.Text.Encoding.UTF8.GetBytes("stop"), MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE, false);
 			handlingCorrectGesture = true;
@@ -62,8 +60,6 @@ public class GestureGame : MonoBehaviour {
 			StartCoroutine(HandleCorrectGesture());
 		}
 	}
-
-
 
 	public IEnumerator Timer() 
 	{	
@@ -86,10 +82,10 @@ public class GestureGame : MonoBehaviour {
             Debug.Log("current_gesture_fail++");
             yield return new WaitForSeconds(1);
 			Gesture_MiniGame.curCorrect = 0;
-			PlayerEvents.eventOn = false;
-			Gesture_MiniGame.eventOn = false;
 			timeLeft.text = "";
 			gestureText.text = "";
+			PlayerEvents.eventOn = false;
+			Gesture_MiniGame.eventOn = false;
             Destroy(gameObject);
 	}
 
