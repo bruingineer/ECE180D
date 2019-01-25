@@ -41,7 +41,9 @@ public class Small_Laser : MonoBehaviour {
     }
 	private void OnTriggerEnter(Collider other)
 	{
-		Player.isHit = true;
+		Player m_player = other.GetComponent<Player>();
+		if (m_player)
+			m_player.isHit = true;
 		Laser_MiniGame.playerWasHit = true;
 		Destroy(gameObject);
 	}
