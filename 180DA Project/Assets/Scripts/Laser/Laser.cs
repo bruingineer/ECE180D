@@ -7,7 +7,7 @@ public class Laser : MonoBehaviour {
 	Vector3 endPosition;
 	public const float laserTime = 0.005f;
 	static bool playerHit = false;
-	
+
 	public static float destroyLaserDelay = 0.75f;
 
 

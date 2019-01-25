@@ -63,20 +63,27 @@ public class GestureGame : MonoBehaviour {
 
 	public IEnumerator Timer() 
 	{	
-			timeLeft = GameObject.FindWithTag("timer").GetComponent<Text>();
-            float duration = 11f;
-            while(duration >= 0)
-            {   
-                duration -= Time.deltaTime;
-                int integer = (int)duration;
-                if (integer >= 1)
-                    timeLeft.text = integer.ToString();
-                else
-                {
-                    timeLeft.text = "Time's Up";
-                }
-                yield return null;
+		timeLeft = GameObject.FindWithTag("timer").GetComponent<Text>();
+        float duration = 11f;
+
+        //Change time allowed to perform gesture based on difficulty selected
+        if (SelectedPlayer.current_difficulty == "easy") duration = 11f;
+        else if (SelectedPlayer.current_difficulty == "medium") duration = 8f;
+        else if (SelectedPlayer.current_difficulty == "hard") duration = 5f; 
+
+        while (duration >= 0)
+        {   
+            duration -= Time.deltaTime;
+            int integer = (int)duration;
+            if (integer >= 1)
+                timeLeft.text = integer.ToString();
+            else
+            {
+                timeLeft.text = "Time's Up";
             }
+            yield return null;
+        }
+
 
             SelectedPlayer.current_gesture_fail++;
             Debug.Log("current_gesture_fail++");

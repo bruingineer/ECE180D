@@ -28,7 +28,7 @@ public class Player : Moving_Object {
 	public int playerLives;
 	SpriteRenderer sr;
 
-	void Awake () {
+	void Start () {
 		transform.position = new Vector3(0.5f, GameState.middle_lane + 0.5f);
 		playerLives = 3;
 		isDead = false;

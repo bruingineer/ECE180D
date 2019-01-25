@@ -18,8 +18,13 @@ public class SmallLaserGame : MonoBehaviour {
 	
 	void Start () {
 		player = GameObject.FindGameObjectWithTag("Player");
-		lasersToFire = 15;
-		waitForNextLaser = .5f;
+
+        //Choose # of lasers to fire based on difficulty selected
+        if(SelectedPlayer.current_difficulty == "easy") lasersToFire = 10;
+        else if(SelectedPlayer.current_difficulty == "medium") lasersToFire = 15;
+        else if(SelectedPlayer.current_difficulty == "hard") lasersToFire = 20;
+
+        waitForNextLaser = .5f;
 		StartCoroutine(FireLasers());
 	}
 
