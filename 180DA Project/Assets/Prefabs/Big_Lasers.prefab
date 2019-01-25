@@ -51,7 +51,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 375faf3bbd7774c509578d61cae41d8b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  laserCountdown: {fileID: 8300000, guid: f9686151d0208498fb7df18d28764d60, type: 3}
+  countdownEasy: {fileID: 8300000, guid: f9686151d0208498fb7df18d28764d60, type: 3}
+  countdownMedium: {fileID: 8300000, guid: 891e9edb5be084d408fd1b9b4d798c20, type: 3}
+  countdownHard: {fileID: 8300000, guid: 344058716c22b40289e08e7fdaedf8c8, type: 3}
+  laserCountdown: {fileID: 0}
   laserFire: {fileID: 8300000, guid: 84259fd14c26f42599b06b5367aad0f9, type: 3}
   laserPrefab: {fileID: 1392909220440448, guid: 346c0891d82f847e2b08af68c0a284be,
     type: 2}

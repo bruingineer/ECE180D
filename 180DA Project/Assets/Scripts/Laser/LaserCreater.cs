@@ -3,7 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class LaserCreater : MonoBehaviour {
+    public AudioClip countdownEasy;
+    public AudioClip countdownMedium;
+    public AudioClip countdownHard;
 	public AudioClip laserCountdown;
+
 	public AudioClip laserFire;
 	public GameObject laserPrefab;
 	private int minLasers = 6;
@@ -12,7 +16,13 @@ public class LaserCreater : MonoBehaviour {
 	private List<GameObject> laserWarnings;
 
 	void Start () {
-		laserWarnings = new List<GameObject>();
+
+        //Choose # of lasers to fire based on difficulty selected
+        if (SelectedPlayer.current_difficulty == "easy") laserCountdown = countdownEasy;
+        else if (SelectedPlayer.current_difficulty == "medium") laserCountdown = countdownMedium;
+        else if (SelectedPlayer.current_difficulty == "hard") laserCountdown = countdownHard;
+
+        laserWarnings = new List<GameObject>();
 		StartCoroutine(ShootLasers());
 	}
 
