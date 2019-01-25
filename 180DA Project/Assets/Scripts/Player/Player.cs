@@ -2,30 +2,34 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player : MonoBehaviour {
-	public float movementTimeX = .2f;
-	public AudioClip y_movement;
-	public AudioClip x_movement;
+public class Player : Moving_Object {
+	// Player Time Parameters
+	private float movementTimeX = .2f;
+	private float secondsToMoveY = 0.1f;
+	private float playerRecoveryTime = 2.5f;
+	
+	// Player Audio Clips
+	private AudioClip y_movement;
+	private AudioClip x_movement;
+	private AudioClip playerHitByLaser;
+	private AudioClip playerRecovered;
+
+	// Player States
+
+	private bool isPlayerMoving = false;
+	public bool isHit = false;
+	private bool isRecovering = false;
+	public static bool isDead = false;
+
+	// Player Objects
+
 	public float playerLaneNum = PlayerMQTT_Y.cur_lane_num;
-	public float secondsToMoveY = 0.1f;
-	public bool isPlayerMoving;
-	public bool isHit;
-	private bool isRecovering;
-	public AudioClip playerHitByLaser;
-	public AudioClip playerRecovered;
-	public float playerRecoveryTime;
 	public List<GameObject> playerLifeIcons;
 	public int playerLives;
-	public static bool isDead;
 	SpriteRenderer sr;
-	void Start () {
-		// change x position to be more dynamic
-		isRecovering = false;
-		playerRecoveryTime = 2.5f;
+
+	void Awake () {
 		transform.position = new Vector3(0.5f, GameState.middle_lane + 0.5f);
-		// bool to see if player is moving
-		isPlayerMoving = false;
-		isHit = false;
 		playerLives = 3;
 		isDead = false;
 		sr = gameObject.GetComponent<SpriteRenderer>();
@@ -33,10 +37,7 @@ public class Player : MonoBehaviour {
 
 	void Update()
 	{
-		if (isHit && !isRecovering && !isDead && !GameState.gameWon) {
-			StartCoroutine(PlayerHit());
-		}
-
+		if (isHit && !isRecovering && !isDead && !GameState.gameWon) StartCoroutine(PlayerHit());
 		if(!isPlayerMoving && GameState.gamePlaying) MovePlayerX();
 		if(!isPlayerMoving) MovePlayerY();
 	}
@@ -56,19 +57,6 @@ public class Player : MonoBehaviour {
 		yield return MoveToPosition(end_position, timeToMove);
 		isPlayerMoving = false;
     }
-
-	public IEnumerator MoveToPosition(Vector3 end_position, float timeToMove)
-	{
-		var initialPos = transform.position;
-		float t = 0f;
-		while(t < 1)
-		{
-				t += Time.deltaTime / timeToMove;
-				transform.position = Vector3.Lerp(initialPos, end_position, t);
-				yield return null;
-		}
-		yield return null;
-	}
 
 	private void MovePlayerX() {
 		if (PlayerMQTT_X.playerMoved) {
