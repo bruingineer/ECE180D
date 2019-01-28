@@ -14,14 +14,14 @@ public class LaserCreater : MonoBehaviour {
 	private int maxLasers = 9;
 	public GameObject laserWarning;
 	private List<GameObject> laserWarnings;
+	public const float laserTime = 0.005f;
+	public static float destroyLaserDelay = 0.75f;
 
 	void Start () {
-
         //Choose # of lasers to fire based on difficulty selected
         if (SelectedPlayer.current_difficulty == "easy") laserCountdown = countdownEasy;
         else if (SelectedPlayer.current_difficulty == "medium") laserCountdown = countdownMedium;
         else if (SelectedPlayer.current_difficulty == "hard") laserCountdown = countdownHard;
-
         laserWarnings = new List<GameObject>();
 		StartCoroutine(ShootLasers());
 	}
@@ -50,14 +50,15 @@ public class LaserCreater : MonoBehaviour {
 		GameState.PlayClip(laserFire);
 		for(int i = 0; i < list_count; i++)
 		{
-			Instantiate(laserPrefab, new Vector3(GameState.end_column, (lanesToFireLasers[i] + 0.5f)), Quaternion.identity);
+			GameObject bigLaser = Instantiate(laserPrefab, new Vector3(GameState.end_column, (lanesToFireLasers[i] + 0.5f)), Quaternion.identity);
+			bigLaser.GetComponent<Big_Laser>().MoveLaser(new Vector3(0, bigLaser.transform.position.y), laserTime, destroyLaserDelay);
 		}
 		while(laserWarnings.Count > 0) {
 			Destroy(laserWarnings[0]);
 			laserWarnings.RemoveAt(0);
 		}
 		
-		yield return new WaitForSeconds(Obstacles.obstacleWaitTime + Laser.destroyLaserDelay);
+		yield return new WaitForSeconds(Obstacles.obstacleWaitTime + destroyLaserDelay);
 		Obstacles.obstacleOn = false;
 		Laser_MiniGame.obstacleOn = false;
 		Destroy(gameObject);
