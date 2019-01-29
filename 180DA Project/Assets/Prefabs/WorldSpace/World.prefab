@@ -729,11 +729,11 @@ Tilemap:
   - m_RefCount: 40
     m_Data: {r: 1, g: 1, b: 1, a: 1}
   - m_RefCount: 1
-    m_Data: {r: 0.90504074, g: 0.38029665, b: 0.5502859, a: 1}
+    m_Data: {r: 0.7029468, g: 0.3215034, b: 0.34491217, a: 1}
   - m_RefCount: 1
-    m_Data: {r: 0.7412565, g: 0.4209962, b: 0.51786095, a: 1}
+    m_Data: {r: 0.8767788, g: 0.583315, b: 0.66513765, a: 1}
   - m_RefCount: 1
-    m_Data: {r: 0.9124554, g: 0.4011831, b: 0.4553577, a: 1}
+    m_Data: {r: 0.7479258, g: 0.30517852, b: 0.41987026, a: 1}
   m_AnimationFrameRate: 1
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Origin: {x: -5, y: -6, z: 0}

@@ -17,6 +17,5 @@ public class Laser_Obstacle : Obstacle {
 	public Laser laserPrefab;
 	protected Laser_Times laserTimes;
 	protected float laserDuration;
-
 	protected virtual IEnumerator FireLasers() {yield return null;}
 }

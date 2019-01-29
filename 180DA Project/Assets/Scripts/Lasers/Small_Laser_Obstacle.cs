@@ -54,7 +54,6 @@ public class Small_Laser_Obstacle : Laser_Obstacle {
 		yield return CreateLasers(start_X_Position, end_X_Position);
 		// wait until last laser ends plus waiting for the next obstacle time
 		yield return new WaitForSeconds(laserTimes.duration + obstacleWaitTime);
-		// might be able to alter based if the item is alive or not
 		Destroy(gameObject);
 	}
 
