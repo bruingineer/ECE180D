@@ -51,4 +51,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 33244f30eea8a4d6281a4df9f794ef1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  smallLaser: {fileID: 1425163666092182, guid: 7d05248bb8318457a81430294f89242d, type: 2}
+  laserPrefab: {fileID: 1425163666092182, guid: 7d05248bb8318457a81430294f89242d,
+    type: 2}

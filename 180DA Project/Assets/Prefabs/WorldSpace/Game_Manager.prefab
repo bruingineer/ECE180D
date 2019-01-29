@@ -386,9 +386,6 @@ MonoBehaviour:
     type: 2}
   playerLost: {fileID: 8300000, guid: 708d967d34b8d49d2b4fac803280dd1e, type: 3}
   playerWon: {fileID: 8300000, guid: ccf604c26e4384f7e8cd2da160dad26b, type: 3}
-  playerLifeIcons:
-  - {fileID: 1263304226989978}
-  - {fileID: 1374373957237898}
 --- !u!114 &114595677538691816
 MonoBehaviour:
   m_ObjectHideFlags: 1
