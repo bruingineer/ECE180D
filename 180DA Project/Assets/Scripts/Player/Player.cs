@@ -9,10 +9,10 @@ public class Player : Moving_Object {
 	private float playerRecoveryTime = 2.5f;
 	
 	// Player Audio Clips
-	private AudioClip y_movement;
-	private AudioClip x_movement;
-	private AudioClip playerHitByLaser;
-	private AudioClip playerRecovered;
+	public AudioClip y_movement;
+	public AudioClip x_movement;
+	public AudioClip playerHitByLaser;
+	public AudioClip playerRecovered;
 
 	// Player States
 

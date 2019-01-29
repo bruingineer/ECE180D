@@ -2,27 +2,22 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Obstacles : MonoBehaviour {
+public class Obstacles : Moving_Object {
 
-	public GameObject bigLasers;
-	public GameObject smallLasers;
-	private List<GameObject> obstacles;
-	public static bool obstacleOn;
-	public static float obstacleWaitTime;
+	public Obstacle bigLasers, smallLasers;
+	private List<Obstacle> obstacles;
+	private Obstacle curObstacle;
 
 	void Awake()
 	{
-		obstacleOn = false;
-		obstacleWaitTime = 3f;
-		obstacles = new List<GameObject> {bigLasers, smallLasers};
+		obstacles = new List<Obstacle> {bigLasers, smallLasers};
 	}
 	
 	void Update () {
-		if(!obstacleOn && !Player.isDead && GameState.gamePlaying) {
-			obstacleOn = true;
-			Instantiate(obstacles[Random.Range(0, obstacles.Count)]);
+		if(!curObstacle && !Player.isDead && GameState.gamePlaying) {
+			curObstacle = Instantiate(obstacles[Random.Range(0, obstacles.Count)]);
 		}
-		if (GameState.gameWon) 
-			Destroy(gameObject);
+		// fix this by having obstacles be created after the timer
+		// CheckGamePlaying();
 	}
 }

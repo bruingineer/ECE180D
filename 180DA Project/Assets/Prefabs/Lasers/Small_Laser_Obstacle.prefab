@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 4401418675937340}
   - component: {fileID: 114875176148155960}
   m_Layer: 0
-  m_Name: SmallLaserGame
+  m_Name: Small_Laser_Obstacle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -51,5 +51,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 33244f30eea8a4d6281a4df9f794ef1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  laserPrefab: {fileID: 1425163666092182, guid: 7d05248bb8318457a81430294f89242d,
+  laserPrefab: {fileID: 114437400025990692, guid: 7d05248bb8318457a81430294f89242d,
     type: 2}

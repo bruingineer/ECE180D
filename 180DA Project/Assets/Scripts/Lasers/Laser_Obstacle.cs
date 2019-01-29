@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Laser_Obstacle : Moving_Object {
+public class Laser_Obstacle : Obstacle {
 	// struct is used to pass in the correct times to the obstacle times
 	public struct Laser_Times
 	{
@@ -14,7 +14,7 @@ public class Laser_Obstacle : Moving_Object {
         	cooldown = cool;
     	}
 	}
-	public GameObject laserPrefab;
+	public Laser laserPrefab;
 	protected Laser_Times laserTimes;
 	protected float laserDuration;
 

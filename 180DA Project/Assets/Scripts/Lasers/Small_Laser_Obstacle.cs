@@ -53,10 +53,8 @@ public class Small_Laser_Obstacle : Laser_Obstacle {
 		// Create lasers
 		yield return CreateLasers(start_X_Position, end_X_Position);
 		// wait until last laser ends plus waiting for the next obstacle time
-		yield return new WaitForSeconds(laserTimes.duration + Obstacles.obstacleWaitTime);
+		yield return new WaitForSeconds(laserTimes.duration + obstacleWaitTime);
 		// might be able to alter based if the item is alive or not
-		Obstacles.obstacleOn = false;
-		Laser_MiniGame.obstacleOn = false;
 		Destroy(gameObject);
 	}
 
@@ -66,7 +64,7 @@ public class Small_Laser_Obstacle : Laser_Obstacle {
 		{
 			Small_Laser small_laser = Instantiate(laserPrefab, new Vector3(start_X_Position, 
 				GameState.laneNums[Random.Range(0, GameState.laneNums.Count)] + 0.5f), 
-					Quaternion.identity).GetComponent<Small_Laser>();
+					Quaternion.identity) as Small_Laser;
 			small_laser.MoveLaser(new Vector3(end_X_Position, small_laser.transform.position.y), laserTimes);
 			yield return new WaitForSeconds(waitForNextLaser);
 		}

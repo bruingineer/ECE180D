@@ -8,11 +8,12 @@ public class Big_Laser_Obstacle : Laser_Obstacle {
     public AudioClip countdownEasy;
     public AudioClip countdownMedium;
     public AudioClip countdownHard;
+	// use this to assign to the others TODO
 	public AudioClip laserCountdown;
 	public AudioClip laserFire;
 
 	// Time Parameters
-	public static float cooldown = 0.75f;
+	private float cooldown = 0.75f;
 
 	// Objects
 	public GameObject laserWarning;
@@ -62,10 +63,7 @@ public class Big_Laser_Obstacle : Laser_Obstacle {
 			laserWarnings.RemoveAt(0);
 		}
 		// waits for cooldown until a new obstacle can turn on
-		yield return new WaitForSeconds(Obstacles.obstacleWaitTime + cooldown);
-		// TODO change how this is handled
-		Obstacles.obstacleOn = false;
-		Laser_MiniGame.obstacleOn = false;
+		yield return new WaitForSeconds(obstacleWaitTime + cooldown);
 		Destroy(gameObject);
 	}
 
@@ -74,7 +72,7 @@ public class Big_Laser_Obstacle : Laser_Obstacle {
 		int list_count = lanesToFireLasers.Count;
 		for(int i = 0; i < list_count; i++)
 		{
-			GameObject bigLaser = Instantiate(laserPrefab, new Vector3(GameState.end_column, (lanesToFireLasers[i] + 0.5f)), Quaternion.identity);
+			Laser bigLaser = Instantiate(laserPrefab, new Vector3(GameState.end_column, (lanesToFireLasers[i] + 0.5f)), Quaternion.identity) as Laser;
 			bigLaser.GetComponent<Big_Laser>().MoveLaser(new Vector3(0, bigLaser.transform.position.y), laserTimes);
 		}
 	}

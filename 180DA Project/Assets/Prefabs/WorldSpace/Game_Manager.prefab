@@ -412,8 +412,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c052b0f23260b4af6941c7368b293c4c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bigLasers: {fileID: 1414992446262796, guid: f187d190f74c348338bdcb53ebea92b2, type: 2}
-  smallLasers: {fileID: 1694344550229690, guid: 933b15eb48d084908b379a6f35756ef8,
+  bigLasers: {fileID: 114528985119158150, guid: f187d190f74c348338bdcb53ebea92b2,
+    type: 2}
+  smallLasers: {fileID: 114875176148155960, guid: 933b15eb48d084908b379a6f35756ef8,
     type: 2}
 --- !u!212 &212609973367027980
 SpriteRenderer:

@@ -275,6 +275,26 @@ Prefab:
       propertyPath: m_TagString
       value: Untagged
       objectReference: {fileID: 0}
+    - target: {fileID: 114668686060887338, guid: d210543711156406490a7ec8c57924c3,
+        type: 2}
+      propertyPath: x_movement
+      value: 
+      objectReference: {fileID: 8300000, guid: 25f8452b7463642c88764b19d5a6a95b, type: 3}
+    - target: {fileID: 114668686060887338, guid: d210543711156406490a7ec8c57924c3,
+        type: 2}
+      propertyPath: playerHitByLaser
+      value: 
+      objectReference: {fileID: 8300000, guid: d4ad8c13e9846451c9a4af22e05d1c65, type: 3}
+    - target: {fileID: 114668686060887338, guid: d210543711156406490a7ec8c57924c3,
+        type: 2}
+      propertyPath: y_movement
+      value: 
+      objectReference: {fileID: 8300000, guid: 4ebb2990efe004f40983156d52beab54, type: 3}
+    - target: {fileID: 114668686060887338, guid: d210543711156406490a7ec8c57924c3,
+        type: 2}
+      propertyPath: playerRecovered
+      value: 
+      objectReference: {fileID: 8300000, guid: aadb72d7667ce425abd3f114ee2ebc61, type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d210543711156406490a7ec8c57924c3, type: 2}
   m_IsPrefabAsset: 0
