@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Laser_Obstacle : MonoBehaviour {
+public class Laser_Obstacle : Moving_Object {
 	// struct is used to pass in the correct times to the obstacle times
 	public struct Laser_Times
 	{
@@ -14,6 +14,9 @@ public class Laser_Obstacle : MonoBehaviour {
         	cooldown = cool;
     	}
 	}
-
+	public GameObject laserPrefab;
 	protected Laser_Times laserTimes;
+	protected float laserDuration;
+
+	protected virtual IEnumerator FireLasers() {yield return null;}
 }

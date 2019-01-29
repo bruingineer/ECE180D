@@ -17,7 +17,6 @@ public class Player : Moving_Object {
 	// Player States
 
 	private bool isPlayerMoving = false;
-	public bool isHit = false;
 	private bool isRecovering = false;
 	public static bool isDead = false;
 
@@ -68,6 +67,7 @@ public class Player : Moving_Object {
 
 	private IEnumerator PlayerHitRoutine() 
 	{
+		isRecovering = true;
 		if (playerLives > 1) {
 			playerLifeIcons[playerLives - 2].SetActive(false);
 			playerLives--;
@@ -76,19 +76,22 @@ public class Player : Moving_Object {
 			yield return ChangeColor();
 			GameState.PlayClip(playerRecovered);
 			isRecovering = false;
-			isHit = false;
 			yield return null;
 		}
 		else {
 			isDead = true;
 		}
+		isRecovering = false;
 	}
 
+	// function used by lasers when it hits the player
 	public void PlayerHit()
 	{
-		StartCoroutine(PlayerHitRoutine());
+		if(!isRecovering)
+			StartCoroutine(PlayerHitRoutine());
 	}
 
+	// used to change the color when the player is in recovery mode
 	public IEnumerator ChangeColor()
 	{
 		bool playerNormal = false;
@@ -101,7 +104,7 @@ public class Player : Moving_Object {
 				playerNormal = !playerNormal;
 				yield return new WaitForSeconds(.5f);
 			}
-			sr.color = new Color(255f, 255f, 255f, 222f);
+			sr.color = new Color(1f, 1f, 1f, 1f);
 		yield return null;
 	}
 }

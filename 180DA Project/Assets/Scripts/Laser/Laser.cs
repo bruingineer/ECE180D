@@ -12,10 +12,5 @@ public class Laser : Moving_Object {
    	{
 		StartCoroutine(MoveLaserToPosition(endPosition, laserTimes));
     }
-	// checks to see if the game is still playing, if not, the object is destroyed
-	protected void CheckGamePlaying()
-	{
-		if (!GameState.gamePlaying)
-			Destroy(gameObject);
-	}
+	
 }

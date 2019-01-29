@@ -4,14 +4,15 @@ MonoImporter:
   externalObjects: {}
   serializedVersion: 2
   defaultReferences:
+  - laserPrefab: {fileID: 114025344114578628, guid: 346c0891d82f847e2b08af68c0a284be,
+      type: 2}
   - countdownEasy: {instanceID: 0}
   - countdownMedium: {instanceID: 0}
   - countdownHard: {instanceID: 0}
   - laserCountdown: {instanceID: 0}
   - laserFire: {instanceID: 0}
-  - laserPrefab: {fileID: 114025344114578628, guid: 346c0891d82f847e2b08af68c0a284be,
+  - laserWarning: {fileID: 1986904642985798, guid: d15878facebc94fe1b1adde940810fa9,
       type: 2}
-  - laserWarning: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

@@ -7,8 +7,7 @@ public class Big_Laser : Laser {
 	// Objects 
 	private LineRenderer lineRenderer;
 	// States
-	// playerHit is static 
-	static bool playerHit = false;
+	static public bool playerHit = false;
 
 	void Awake () {
 		// grabs the line render component from the beam child
@@ -47,7 +46,7 @@ public class Big_Laser : Laser {
 				lineRenderer.SetPosition(1, Vector3.Lerp(initialPos, endPosition, t));
 				yield return null;
 		}
-		yield return null;
 		Destroy(gameObject, laserTimes.cooldown);
+		yield return null;
     }
 }
