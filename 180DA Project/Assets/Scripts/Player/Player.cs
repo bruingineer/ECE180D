@@ -37,7 +37,6 @@ public class Player : Moving_Object {
 
 	void Update()
 	{
-		if (isHit && !isRecovering && !isDead && !GameState.gameWon) StartCoroutine(PlayerHit());
 		if(!isPlayerMoving && GameState.gamePlaying) MovePlayerX();
 		if(!isPlayerMoving) MovePlayerY();
 	}
@@ -67,7 +66,7 @@ public class Player : Moving_Object {
 		}
     } 
 
-	public IEnumerator PlayerHit() 
+	private IEnumerator PlayerHitRoutine() 
 	{
 		if (playerLives > 1) {
 			playerLifeIcons[playerLives - 2].SetActive(false);
@@ -83,6 +82,11 @@ public class Player : Moving_Object {
 		else {
 			isDead = true;
 		}
+	}
+
+	public void PlayerHit()
+	{
+		StartCoroutine(PlayerHitRoutine());
 	}
 
 	public IEnumerator ChangeColor()
