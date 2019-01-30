@@ -10,11 +10,9 @@ using System;
 
 public class PlayerMQTT_Y : MQTT_Class {
 	public int cur_lane_num;
-	public PlayerMQTT_Y(int start_lane)
+	public PlayerMQTT_Y(string topic, int start_lane) : base(topic)
 	{
 		cur_lane_num = start_lane;
-		topic = "localization";
-		CreateClient(topic);
 	}
 	
 	protected override void client_MqttMsgPublishReceived(object sender, MqttMsgPublishEventArgs e) 

@@ -7,13 +7,18 @@ using uPLibrary.Networking.M2Mqtt.Utility;
 using uPLibrary.Networking.M2Mqtt.Exceptions;
 using System;
 
-public class MQTT_Class {
+public abstract class MQTT_Class {
 	protected string topic;
     protected int portNum = 1883;
 	protected string ip = "127.0.0.1";
 	protected MqttClient client;
+
+	public MQTT_Class(string topic) 
+	{
+		CreateClient(topic);
+	}
 	
-	protected void CreateClient(string topic) 
+	private void CreateClient(string topic) 
 	{
 		// create client instance 
 		client = new MqttClient(IPAddress.Parse(ip), portNum, false , null ); 
@@ -28,9 +33,9 @@ public class MQTT_Class {
 		client.Subscribe(new string[] { topic }, new byte[] { MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE }); 
 	}
 
-	public MqttClient GetClient()
+	public void SendMessage(string topic, string message)
 	{
-		return client;
+		client.Publish(topic, System.Text.Encoding.UTF8.GetBytes(message), MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE, false);
 	}
 
 	protected virtual void client_MqttMsgPublishReceived(object sender, MqttMsgPublishEventArgs e) {}

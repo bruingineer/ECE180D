@@ -29,6 +29,7 @@ public class GameState : MonoBehaviour {
 	public static bool gameWon;
 	public static List<int> laneNums;
 	public static MqttClient client;
+	// change for minigame
 	GameObject retry;
 	GameObject gameMenu;
 	
@@ -43,8 +44,6 @@ public class GameState : MonoBehaviour {
 		player = playerObject.GetComponent<Player>();
 		retry = GameObject.FindGameObjectWithTag("Retry");
 		gameMenu = GameObject.FindGameObjectWithTag("Menu");
-		retry.SetActive(false);
-		gameMenu.SetActive(false);
 		InitializeLaneList();
 		StartCoroutine(Timer());
 	}

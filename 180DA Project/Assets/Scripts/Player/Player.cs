@@ -27,10 +27,14 @@ public class Player : Moving_Object {
 	public int playerLives;
 	SpriteRenderer sr;
 
+	// MQTT
+	private string playerMQTT_X_topic = "movement";
+	private string playerMQTT_Y_topic = "localization";
+
 	void Start () {
-		m_playerMQTT_x = new PlayerMQTT_X();
+		m_playerMQTT_x = new PlayerMQTT_X(playerMQTT_X_topic);
 		playerLaneNum = GameState.middle_lane;
-		m_playerMQTT_y = new PlayerMQTT_Y(playerLaneNum);
+		m_playerMQTT_y = new PlayerMQTT_Y(playerMQTT_Y_topic, playerLaneNum);
 		transform.position = new Vector3(0.5f, GameState.middle_lane + 0.5f);
 		playerLives = 3;
 		isDead = false;

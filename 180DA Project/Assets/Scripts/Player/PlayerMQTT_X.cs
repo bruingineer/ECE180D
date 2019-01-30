@@ -21,9 +21,7 @@ public class PlayerMQTT_X : MQTT_Class {
 		}
 	}
     
-	public PlayerMQTT_X() {
-		topic = "movement";
-		CreateClient(topic);
+	public PlayerMQTT_X(string topic) : base(topic){
 		playerMoved = false;
 	}
 	protected override void client_MqttMsgPublishReceived(object sender, MqttMsgPublishEventArgs e) 

@@ -6,17 +6,19 @@ using uPLibrary.Networking.M2Mqtt.Messages;
 using uPLibrary.Networking.M2Mqtt.Utility;
 using uPLibrary.Networking.M2Mqtt.Exceptions;
 using System.Net;
+using System;
 
 public class GestureClient : MQTT_Class {
 	
-	public GestureClient()
+	private Action correctGestureFunc;
+	public GestureClient(string topic, Action correctGesture) : base(topic) 
 	{
-		topic = "gesture_correct";
-		CreateClient(topic);
+		correctGestureFunc = correctGesture;
 	}
+	
 
 	protected override void client_MqttMsgPublishReceived(object sender, MqttMsgPublishEventArgs e) 
 	{ 
-		GestureGame.correctGestureReceived = true;
+		correctGestureFunc();
 	} 
 }

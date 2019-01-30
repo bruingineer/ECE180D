@@ -1,19 +1,19 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.Windows.Speech;
+using UnityEngine.UI;
 
-public class SpeechRecognitionEngine : MonoBehaviour
+public class SpeechRecognitionEngine : Event
 {
-    public Text timeLeft;
+    // Objects
     public HandleWordDisplay HandleWordDisplay;
     public ConfidenceLevel confidence = ConfidenceLevel.Medium;
     protected static PhraseRecognizer recognizer;
+     public Text scramble;
     private bool isCorrect;
-    public Text scramble;
     public string[] keywords = { "" };
-    private Player m_player;
+    
 
     //This will update the keywords that the speech recognizer will recognize
     //For the list of avaiable words see WordList.cs

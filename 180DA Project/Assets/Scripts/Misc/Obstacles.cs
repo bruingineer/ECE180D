@@ -18,6 +18,6 @@ public class Obstacles : Moving_Object {
 			curObstacle = Instantiate(obstacles[Random.Range(0, obstacles.Count)]);
 		}
 		// fix this by having obstacles be created after the timer
-		// CheckGamePlaying();
+		// CheckGamePlaying(); TODO
 	}
 }

@@ -9,111 +9,87 @@ using System.Net;
 using System;
 using UnityEngine.UI;
 
-public class GestureGame : MonoBehaviour {
+public class GestureGame : Event {
 
 	// Objects
-	private List<string> gestures;
+	// available gestures
+	private List<string> gestures = new List<string>()
+	{
+		"tpose", 
+		"fieldgoal"
+	};
 	private Text gestureText;
-	private Text timeLeft;
-	string commandText = "Command_Text"; 
-	private Player m_player;
+	string mainText = "Command_Text"; 
 	private GestureClient gestureClient;
-
-	// States
-	private bool handlingCorrectGesture;
-	public static bool correctGestureReceived;
-	private static string curGesture;
+	private string curGesture;
+	Action correctGestureFunc;
+	// Change as well for difficulty
+	private float repeatRate = 1f;
+	private float timerDuration;
+	
+	// MQTT topics
 	public const string topicGestureSent = "gesture";
+	private string topicCorrectGesture = "gesture_correct";
+	private string stopMessage = "stop";
 	
 
 	void Start () {
-		gestureClient = new GestureClient();
+
+ 		if (SelectedPlayer.current_difficulty == "easy") timerDuration = 11f;
+        else if (SelectedPlayer.current_difficulty == "medium") timerDuration = 8f;
+        else if (SelectedPlayer.current_difficulty == "hard") timerDuration = 5f; 
+
+		correctGestureFunc = HandleCorrectGesture;
+		gestureClient = new GestureClient(topicCorrectGesture, correctGestureFunc);
 		m_player = GameObject.Find("Player").GetComponent<Player>();
-		gestureText = GameObject.Find(commandText).GetComponent<Text>();
-		handlingCorrectGesture = false;
-		correctGestureReceived = false;
-		gestures = new List<string>(){"tpose", "fieldgoal"};
-		string chosenGesture = gestures[UnityEngine.Random.Range(0, gestures.Count)];
-		gestureText.text = chosenGesture.ToUpper();
+
+	timeLeft = GameObject.FindWithTag("timer").GetComponent<Text>();
+		gestureText = GameObject.Find(mainText).GetComponent<Text>();
+		string chosenGesture = gestures[UnityEngine.Random.Range(0, gestures.Count)].ToUpper();
+		curGesture = chosenGesture.ToUpper();
+		gestureText.text = curGesture;
+		gestureClient.SendMessage(topicGestureSent, chosenGesture);
 		
-		gestureClient.GetClient().Publish(topicGestureSent, System.Text.Encoding.UTF8.GetBytes(chosenGesture), MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE, false);
 		StartCoroutine("Timer");
-		curGesture = gestureText.text;
+		InvokeRepeating("MakeTextBlink", 0, repeatRate);
 	}
 
-	IEnumerator makeTextBlink()
+	IEnumerator MakeTextBlink()
 	{
-		while (true)
-		{
-			gestureText.text = "";
-			yield return new WaitForSeconds(0.5f);
-			gestureText.text = curGesture;
-			yield return new WaitForSeconds(0.5f);
-			if (timeLeft.text == "Time's Up") break;
-		}
-	}
-
-	void Update()
-	{
-		StartCoroutine("makeTextBlink");
-        if (correctGestureReceived && !handlingCorrectGesture)
-        {
-			timeLeft.text = "Correct!";
-			gestureClient.GetClient().Publish(topicGestureSent, System.Text.Encoding.UTF8.GetBytes("stop"), MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE, false);
-			handlingCorrectGesture = true;
-            //numSucess++;
-            SelectedPlayer.current_gesture_pass++;
-            Debug.Log("current_gesture_pass++");
-			StopCoroutine("Timer");
-			StartCoroutine(HandleCorrectGesture());
-		}
+		gestureText.text = "";
+		yield return new WaitForSeconds(0.5f);
+		gestureText.text = curGesture;
+		yield return new WaitForSeconds(0.5f);
 	}
 
 	public IEnumerator Timer() 
 	{	
-		timeLeft = GameObject.FindWithTag("timer").GetComponent<Text>();
-        float duration = 11f;
-
-        //Change time allowed to perform gesture based on difficulty selected
-        if (SelectedPlayer.current_difficulty == "easy") duration = 11f;
-        else if (SelectedPlayer.current_difficulty == "medium") duration = 8f;
-        else if (SelectedPlayer.current_difficulty == "hard") duration = 5f; 
-
-        while (duration >= 0)
+		
+        while (timerDuration >= 0)
         {   
-            duration -= Time.deltaTime;
-            int integer = (int)duration;
+            timerDuration -= Time.deltaTime;
+            int integer = (int)timerDuration;
             if (integer >= 1)
                 timeLeft.text = integer.ToString();
             else
-            {
                 timeLeft.text = "Time's Up";
-            }
             yield return null;
         }
-
-
-            SelectedPlayer.current_gesture_fail++;
-            Debug.Log("current_gesture_fail++");
-            yield return new WaitForSeconds(1);
-			Gesture_MiniGame.curCorrect = 0;
+			gestureClient.SendMessage(topicGestureSent, stopMessage);
+            // change based on if mini game or not
 			timeLeft.text = "";
 			gestureText.text = "";
-			PlayerEvents.eventOn = false;
-			Gesture_MiniGame.eventOn = false;
             Destroy(gameObject);
 	}
 
-	private IEnumerator HandleCorrectGesture()
+	private void HandleCorrectGesture()
 	{
-		
+		timeLeft.text = "Correct!";
+		gestureClient.SendMessage(topicGestureSent, stopMessage);
+        SelectedPlayer.current_gesture_pass++;
+		StopCoroutine("Timer");
 		m_player.MovePlayer();
-		yield return new WaitForSeconds(3f);
-		PlayerEvents.eventOn = false;
-		Gesture_MiniGame.eventOn = false;
-		correctGestureReceived = false;
 		gestureText.text = "";
-		Gesture_MiniGame.curCorrect++;
 		Destroy(gameObject);
 	}
 }
