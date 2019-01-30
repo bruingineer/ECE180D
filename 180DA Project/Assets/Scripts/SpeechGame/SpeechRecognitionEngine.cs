@@ -6,25 +6,14 @@ using UnityEngine.Windows.Speech;
 
 public class SpeechRecognitionEngine : MonoBehaviour
 {
-    public static int numSuccess;
-    public static int numFails;
-        //0 = no change      //1 = success      //2 = fail
-    public static int status; // will be checked per frame
-
-    public Text TimeLeft;
-
     public Text timeLeft;
-
     public HandleWordDisplay HandleWordDisplay;
     public ConfidenceLevel confidence = ConfidenceLevel.Medium;
     protected static PhraseRecognizer recognizer;
     private bool isCorrect;
-
-    public static Vector3 SeaRef;
-
     public Text scramble;
-    protected string word = "";
     public string[] keywords = { "" };
+    private Player m_player;
 
     //This will update the keywords that the speech recognizer will recognize
     //For the list of avaiable words see WordList.cs
@@ -48,11 +37,11 @@ public class SpeechRecognitionEngine : MonoBehaviour
     //Can maybe use enable/disable
     private void Start()
     {
+        m_player = GameObject.Find("Player").GetComponent<Player>();
         GameObject time = GameObject.FindWithTag("timer");
         scramble.transform.position = time.transform.position + new Vector3(-450, 0, 0);
         //TimeLeft.transform.position = scramble.transform.position + new Vector3(300,0,0);
         HandleWordDisplay.InitPosition = scramble.transform.position - new Vector3(80,35,0);
-
         isCorrect = false;
         ChooseRandWord();
         HandleWordDisplay.Display();
@@ -86,9 +75,8 @@ public class SpeechRecognitionEngine : MonoBehaviour
             isCorrect = true;
             scramble.text = "Correct!";
             Speech_MiniGame.curCorrect++;
-            PlayerMQTT_X.playerMoved = true;
+            m_player.MovePlayer();
             StartCoroutine(Reset());
-            //numSuccess++;
             SelectedPlayer.current_speech_pass++;
             Debug.Log("current_speech_pass++");
         }
@@ -140,10 +128,9 @@ public class SpeechRecognitionEngine : MonoBehaviour
             Speech_MiniGame.eventOn = false;
             timeLeft.text = "";
             if (!isCorrect) {
-                //numFails++;
                 SelectedPlayer.current_speech_fail++;
                 Debug.Log("current_speech_fail++");
-                Destroy(TimeLeft);
+                Destroy(timeLeft);
                 Destroy(gameObject);
             }
 

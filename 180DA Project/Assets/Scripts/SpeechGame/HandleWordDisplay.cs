@@ -13,7 +13,6 @@ public class HandleWordDisplay : MonoBehaviour {
         SetWord(w);
     }
 
-    // Use this for initialization
     public void Display()
     {
         LoadWord();

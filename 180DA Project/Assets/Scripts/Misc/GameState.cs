@@ -29,8 +29,6 @@ public class GameState : MonoBehaviour {
 	public static bool gameWon;
 	public static List<int> laneNums;
 	public static MqttClient client;
-	public static string str_IP = "127.0.0.1";
-    public static int int_Port = 1883;
 	GameObject retry;
 	GameObject gameMenu;
 	

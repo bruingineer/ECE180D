@@ -7,30 +7,38 @@ using uPLibrary.Networking.M2Mqtt.Utility;
 using uPLibrary.Networking.M2Mqtt.Exceptions;
 using System.Net;
 using System;
-
 using UnityEngine.UI;
 
 public class GestureGame : MonoBehaviour {
+
+	// Objects
 	private List<string> gestures;
+	private Text gestureText;
+	private Text timeLeft;
+	string commandText = "Command_Text"; 
+	private Player m_player;
+	private GestureClient gestureClient;
+
+	// States
 	private bool handlingCorrectGesture;
 	public static bool correctGestureReceived;
-	private Text gestureText;
-	public static int numSucess;
-	public static int numFails;
-	private Text timeLeft;
+	private static string curGesture;
+	public const string topicGestureSent = "gesture";
+	
 
-	private static string currGesture;
-	// Use this for initialization
-	void Awake () {
-		gestureText = GameObject.FindGameObjectWithTag("Gesture_Text").GetComponent<Text>();
+	void Start () {
+		gestureClient = new GestureClient();
+		m_player = GameObject.Find("Player").GetComponent<Player>();
+		gestureText = GameObject.Find(commandText).GetComponent<Text>();
 		handlingCorrectGesture = false;
 		correctGestureReceived = false;
 		gestures = new List<string>(){"tpose", "fieldgoal"};
 		string chosenGesture = gestures[UnityEngine.Random.Range(0, gestures.Count)];
 		gestureText.text = chosenGesture.ToUpper();
-		GestureClient.gestureClient.Publish(GestureClient.topicGestureSent, System.Text.Encoding.UTF8.GetBytes(chosenGesture), MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE, false);
+		
+		gestureClient.GetClient().Publish(topicGestureSent, System.Text.Encoding.UTF8.GetBytes(chosenGesture), MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE, false);
 		StartCoroutine("Timer");
-		currGesture = gestureText.text;
+		curGesture = gestureText.text;
 	}
 
 	IEnumerator makeTextBlink()
@@ -39,7 +47,7 @@ public class GestureGame : MonoBehaviour {
 		{
 			gestureText.text = "";
 			yield return new WaitForSeconds(0.5f);
-			gestureText.text = currGesture;
+			gestureText.text = curGesture;
 			yield return new WaitForSeconds(0.5f);
 			if (timeLeft.text == "Time's Up") break;
 		}
@@ -51,7 +59,7 @@ public class GestureGame : MonoBehaviour {
         if (correctGestureReceived && !handlingCorrectGesture)
         {
 			timeLeft.text = "Correct!";
-			GestureClient.gestureClient.Publish(GestureClient.topicGestureSent, System.Text.Encoding.UTF8.GetBytes("stop"), MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE, false);
+			gestureClient.GetClient().Publish(topicGestureSent, System.Text.Encoding.UTF8.GetBytes("stop"), MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE, false);
 			handlingCorrectGesture = true;
             //numSucess++;
             SelectedPlayer.current_gesture_pass++;
@@ -99,7 +107,7 @@ public class GestureGame : MonoBehaviour {
 	private IEnumerator HandleCorrectGesture()
 	{
 		
-		PlayerMQTT_X.playerMoved = true;
+		m_player.MovePlayer();
 		yield return new WaitForSeconds(3f);
 		PlayerEvents.eventOn = false;
 		Gesture_MiniGame.eventOn = false;

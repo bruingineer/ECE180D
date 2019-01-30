@@ -10,9 +10,11 @@ public class Laser_MiniGame : MonoBehaviour {
 	public static bool obstacleOn;
 	public static float obstacleWaitTime;
 	public static bool playerWasHit;
+	private Player m_player;
 
 	void Awake()
 	{
+		m_player = GameObject.Find("Player").GetComponent<Player>();
 		obstacleOn = false;
 		obstacleWaitTime = 5f;
 		obstacles = new List<GameObject> {bigLasers, smallLasers};
@@ -31,7 +33,7 @@ public class Laser_MiniGame : MonoBehaviour {
 	{
 		while (laser != null) yield return null;
 		if (!playerWasHit)
-			PlayerMQTT_X.playerMoved = true;
+			m_player.MovePlayer();
 		else 
 			playerWasHit = false;
 		yield return null;

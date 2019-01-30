@@ -15,19 +15,22 @@ public class Player : Moving_Object {
 	public AudioClip playerRecovered;
 
 	// Player States
-
 	private bool isPlayerMoving = false;
 	private bool isRecovering = false;
 	public static bool isDead = false;
 
 	// Player Objects
-
-	public float playerLaneNum = PlayerMQTT_Y.cur_lane_num;
+	PlayerMQTT_X m_playerMQTT_x;
+	PlayerMQTT_Y m_playerMQTT_y;
+	public int playerLaneNum;
 	public List<GameObject> playerLifeIcons;
 	public int playerLives;
 	SpriteRenderer sr;
 
 	void Start () {
+		m_playerMQTT_x = new PlayerMQTT_X();
+		playerLaneNum = GameState.middle_lane;
+		m_playerMQTT_y = new PlayerMQTT_Y(playerLaneNum);
 		transform.position = new Vector3(0.5f, GameState.middle_lane + 0.5f);
 		playerLives = 3;
 		isDead = false;
@@ -41,11 +44,11 @@ public class Player : Moving_Object {
 	}
 
 	private void MovePlayerY() {
-		if ((playerLaneNum != PlayerMQTT_Y.cur_lane_num)) {
-			Vector3 end_position = new Vector3(transform.position.x, 0.5f + PlayerMQTT_Y.cur_lane_num);
-			float timeToMove = secondsToMoveY * Mathf.Abs(playerLaneNum - PlayerMQTT_Y.cur_lane_num);
+		if ((playerLaneNum != m_playerMQTT_y.cur_lane_num)) {
+			Vector3 end_position = new Vector3(transform.position.x, 0.5f + m_playerMQTT_y.cur_lane_num);
+			float timeToMove = secondsToMoveY * Mathf.Abs(playerLaneNum - m_playerMQTT_y.cur_lane_num);
 			GameState.PlayClip(y_movement);
-			playerLaneNum = PlayerMQTT_Y.cur_lane_num;
+			playerLaneNum = m_playerMQTT_y.cur_lane_num;
 			StartCoroutine(MovePlayerPosition(end_position, timeToMove));	
 		}
 	}
@@ -57,10 +60,10 @@ public class Player : Moving_Object {
     }
 
 	private void MovePlayerX() {
-		if (PlayerMQTT_X.playerMoved) {
+		if (m_playerMQTT_x.PlayerMoved) {
 			Vector3 end_position = new Vector3(transform.position.x + 1, transform.position.y);
 			GameState.PlayClip(x_movement);
-			PlayerMQTT_X.playerMoved = false;
+			m_playerMQTT_x.PlayerMoved = false;
 			StartCoroutine(MovePlayerPosition(new Vector3(transform.position.x + 1, transform.position.y), movementTimeX));
 		}
     } 
@@ -106,6 +109,11 @@ public class Player : Moving_Object {
 			}
 			sr.color = new Color(1f, 1f, 1f, 1f);
 		yield return null;
+	}
+
+	public void MovePlayer()
+	{
+		m_playerMQTT_x.PlayerMoved = true;
 	}
 }
 
