@@ -6,16 +6,18 @@ using System.Linq;
 
 public class TriviaList : MonoBehaviour
 {
-    public static int size = 2;
+    
     public static IDictionary <string, string> triviaDictionay = new Dictionary<string, string>()
     {
-        {"George Washingtion", "Who was the first US President?"},
-        {"Court of Sciences", "Patio in front of Boelter Hall is called?"}
+        {"george washington", "Who was the first US President?"},
+        //{"thursday", "What day is it?"},
+        {"let there be light", "What is the UC motto?"}
     };
 
-    public static void getQuestion(ref string question, ref string answer){
+    public static int size = triviaDictionay.Count; 
+    public static void getQuestion(ref string ques, ref string ans){
         int r = Random.Range(0, size);
-        question = triviaDictionay.Keys.ElementAt(r);
-        answer = triviaDictionay[question];
+        ans = triviaDictionay.Keys.ElementAt(r);
+        ques = triviaDictionay[ans];
     }
 }
