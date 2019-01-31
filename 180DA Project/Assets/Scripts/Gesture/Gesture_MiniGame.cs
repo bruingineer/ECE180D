@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Gesture_MiniGame : MonoBehaviour {
 
-	// Use this for initialization
+	// TODO fix this
 	int amountCorrectInARow;
 	public GameObject GestureGame;
 	public static int curCorrect;

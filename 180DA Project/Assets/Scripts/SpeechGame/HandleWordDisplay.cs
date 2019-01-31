@@ -8,6 +8,12 @@ public class HandleWordDisplay : MonoBehaviour {
     public Vector3 InitPosition;
     public static int Offset = 42;
 
+    public struct GameObjectStruct
+{
+    public GameObject myGameObject;
+    public Vector3 initPos;
+}
+
     public void WhichWord(string w)
     {
         SetWord(w);
@@ -63,21 +69,19 @@ public class HandleWordDisplay : MonoBehaviour {
             wordList.Add(myGameObjectStruct);
         }
 
-        //Now Randomize initPostions
-        Randomize();
-
         while (!IsRandomized())
         { Randomize(); }
-
+        
     }
 
-    public void makeBlink()
+    public IEnumerator MakeBlink(float repeatRate)
     {
         int r = Random.Range(0, initPositions.Count); //choose a random index
         if (wordList[r].myGameObject.activeSelf)
             wordList[r].myGameObject.SetActive(false);
         else 
             wordList[r].myGameObject.SetActive(true);
+        yield return new WaitForSeconds(repeatRate);
     }
 
     public void Randomize()
@@ -123,12 +127,4 @@ public class HandleWordDisplay : MonoBehaviour {
         }
         wordList.Clear();
     }
-
-
-}
-
-public struct GameObjectStruct
-{
-    public GameObject myGameObject;
-    public Vector3 initPos;
 }

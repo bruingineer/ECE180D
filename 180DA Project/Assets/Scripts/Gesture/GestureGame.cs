@@ -23,73 +23,44 @@ public class GestureGame : Event {
 	private GestureClient gestureClient;
 	private string curGesture;
 	Action correctGestureFunc;
-	// Change as well for difficulty
-	private float repeatRate = 1f;
-	private float timerDuration;
 	
 	// MQTT topics
 	public const string topicGestureSent = "gesture";
 	private string topicCorrectGesture = "gesture_correct";
 	private string stopMessage = "stop";
-	
 
-	void Start () {
-
- 		if (SelectedPlayer.current_difficulty == "easy") timerDuration = 11f;
-        else if (SelectedPlayer.current_difficulty == "medium") timerDuration = 8f;
-        else if (SelectedPlayer.current_difficulty == "hard") timerDuration = 5f; 
-
+	protected override void SetUp()
+    {
 		correctGestureFunc = HandleCorrectGesture;
 		gestureClient = new GestureClient(topicCorrectGesture, correctGestureFunc);
-		m_player = GameObject.Find("Player").GetComponent<Player>();
 
-	timeLeft = GameObject.FindWithTag("timer").GetComponent<Text>();
+		timeLeft = GameObject.FindWithTag("timer").GetComponent<Text>();
 		gestureText = GameObject.Find(mainText).GetComponent<Text>();
 		string chosenGesture = gestures[UnityEngine.Random.Range(0, gestures.Count)].ToUpper();
 		curGesture = chosenGesture.ToUpper();
 		gestureText.text = curGesture;
 		gestureClient.SendMessage(topicGestureSent, chosenGesture);
-		
-		StartCoroutine("Timer");
-		InvokeRepeating("MakeTextBlink", 0, repeatRate);
-	}
+    }
 
-	IEnumerator MakeTextBlink()
+	protected override IEnumerator MakeTextBlink()
 	{
-		gestureText.text = "";
-		yield return new WaitForSeconds(0.5f);
-		gestureText.text = curGesture;
-		yield return new WaitForSeconds(0.5f);
+		gestureText.text = !gestureText ? curGesture : "";
+		yield return new WaitForSeconds(repeatRate);
 	}
 
-	public IEnumerator Timer() 
-	{	
-		
-        while (timerDuration >= 0)
-        {   
-            timerDuration -= Time.deltaTime;
-            int integer = (int)timerDuration;
-            if (integer >= 1)
-                timeLeft.text = integer.ToString();
-            else
-                timeLeft.text = "Time's Up";
-            yield return null;
-        }
-			gestureClient.SendMessage(topicGestureSent, stopMessage);
-            // change based on if mini game or not
-			timeLeft.text = "";
-			gestureText.text = "";
-            Destroy(gameObject);
+	protected override void HandleIncorrect()
+	{
+		gestureClient.SendMessage(topicGestureSent, stopMessage);
+		gestureText.text = "";
+		SelectedPlayer.current_gesture_fail++;
 	}
 
 	private void HandleCorrectGesture()
 	{
-		timeLeft.text = "Correct!";
+		HandleIncorrect();
+		gestureText.text = "Correct!";
 		gestureClient.SendMessage(topicGestureSent, stopMessage);
         SelectedPlayer.current_gesture_pass++;
-		StopCoroutine("Timer");
-		m_player.MovePlayer();
-		gestureText.text = "";
-		Destroy(gameObject);
+		StartCoroutine(DelayAndDestroy());
 	}
 }
