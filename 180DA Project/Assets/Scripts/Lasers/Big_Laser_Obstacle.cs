@@ -24,7 +24,7 @@ public class Big_Laser_Obstacle : Laser_Obstacle {
 	private int minLasers = 6;
 	private int maxLasers = 9;
 	
-	void Start () {
+	void Awake () {
         //Choose # of lasers to fire based on difficulty selected
         if (SelectedPlayer.current_difficulty == "easy") laserCountdown = countdownEasy;
         else if (SelectedPlayer.current_difficulty == "medium") laserCountdown = countdownMedium;
@@ -35,14 +35,11 @@ public class Big_Laser_Obstacle : Laser_Obstacle {
 		laserTimes = new Laser_Times(laserDuration, cooldown);
         laserWarnings = new List<GameObject>();
 		// reset playerHit for big laser objects
-		Big_Laser.playerHit = false;
-		// create it so you can call this outside (from obstacle class) TODO
-		StartCoroutine(FireLasers());
 	}
 
 	void Update()
 	{
-		CheckGamePlaying();
+		// CheckGamePlaying();
 	}
 	protected override IEnumerator FireLasers() 
 	{
@@ -69,6 +66,7 @@ public class Big_Laser_Obstacle : Laser_Obstacle {
 
 	protected void CreateLasers(List<int> lanesToFireLasers)
 	{
+		Big_Laser.playerHit = false;
 		int list_count = lanesToFireLasers.Count;
 		for(int i = 0; i < list_count; i++)
 		{

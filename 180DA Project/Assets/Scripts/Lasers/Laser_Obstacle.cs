@@ -14,6 +14,10 @@ public class Laser_Obstacle : Obstacle {
         	cooldown = cool;
     	}
 	}
+	public override void StartObstacle()
+	{
+		StartCoroutine(FireLasers());
+	}
 	public Laser laserPrefab;
 	protected Laser_Times laserTimes;
 	protected float laserDuration;

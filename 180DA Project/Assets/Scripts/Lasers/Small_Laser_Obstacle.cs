@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 public class Small_Laser_Obstacle : Laser_Obstacle {
 
 	// Objects
-	private GameObject player;
+	private Player player;
 
 	// Parameters
 	// changed based on difficulty in the future
@@ -15,11 +15,11 @@ public class Small_Laser_Obstacle : Laser_Obstacle {
 
 	void Update()
 	{
-		CheckGamePlaying();
+		// CheckGamePlaying();
 	}
 	
-	void Start () {
-		
+	void Awake()
+	{
 		//Choose # of lasers to fire and laser speed based on difficulty selected
         if (SelectedPlayer.current_difficulty == "easy") 
 		{
@@ -37,11 +37,10 @@ public class Small_Laser_Obstacle : Laser_Obstacle {
 			lasersToFire = 20;
 			waitForNextLaser = 0.3f;
 		}
-
-		player = GameObject.Find("Player");
+		
+		laserPrefab = (Resources.Load("Prefabs/Lasers/SmallLaser") as GameObject).GetComponent<SmallLaser>();
+		player = GameObject.Find("Player").GetComponent<Player>();
 		laserTimes = new Laser_Times(laserDuration, waitForNextLaser);
-		// turn into a function that can be called from outside
-		StartCoroutine(FireLasers());
 	}
 
 	protected override IEnumerator FireLasers() 
@@ -61,9 +60,9 @@ public class Small_Laser_Obstacle : Laser_Obstacle {
 	{
 		for(int i = 0; i < lasersToFire; i++) 
 		{
-			Small_Laser small_laser = Instantiate(laserPrefab, new Vector3(start_X_Position, 
+			SmallLaser small_laser = Instantiate(laserPrefab, new Vector3(start_X_Position, 
 				GameState.laneNums[Random.Range(0, GameState.laneNums.Count)] + 0.5f), 
-					Quaternion.identity) as Small_Laser;
+					Quaternion.identity) as SmallLaser;
 			small_laser.MoveLaser(new Vector3(end_X_Position, small_laser.transform.position.y), laserTimes);
 			yield return new WaitForSeconds(waitForNextLaser);
 		}
