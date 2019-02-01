@@ -7,8 +7,8 @@ using TMPro;
 
 public class WordDisplay : MonoBehaviour
 {
-   private TextMeshProUGUI WordText;
-    string word_str;
+    private TextMeshProUGUI WordText;
+    public static string word_str;
     public void SetWordDisplay(string w){
         WordText = GameObject.FindWithTag("task").GetComponent<TextMeshProUGUI>();
         word_str = w;
@@ -17,6 +17,10 @@ public class WordDisplay : MonoBehaviour
 
     public void ResetWordDisplay(){
         WordText.text = word_str;
+    }
+
+    public void DeleteWordDisplay(){
+        WordText.text = "";
     }
 
     void Start(){
