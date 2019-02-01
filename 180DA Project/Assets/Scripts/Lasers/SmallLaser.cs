@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Small_Laser : Laser {
+public class SmallLaser : Laser {
 	// Sounds
 	public AudioClip smallLaserSound;
 	// Objects to interact with 
@@ -14,7 +14,7 @@ public class Small_Laser : Laser {
 	
 	void Update()
 	{
-		CheckGamePlaying();
+		// CheckGamePlaying();
 	}
 
 	protected override IEnumerator MoveLaserToPosition(Vector3 endPosition, Laser_Obstacle.Laser_Times laserTimes)

@@ -17,11 +17,11 @@ public class Big_Laser : Laser {
 	}
 	
 	void Update () {
-		Play();
-		CheckGamePlaying();
+		CheckHitPlayer();
+		// CheckGamePlaying();
 	}
 
-	void Play()
+	void CheckHitPlayer()
 	{
 		// RaycastHit returns information regarding the hit from the LineRenderer (you can access it's transform)
 		RaycastHit hit;
