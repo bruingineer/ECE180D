@@ -28,6 +28,7 @@ public class PlayerItem
     public string name;
     public int id;
     public int games_played;
+    public string suggested_difficulty;
 }
 
 public class StartScene : MonoBehaviour {
@@ -58,33 +59,24 @@ public class StartScene : MonoBehaviour {
         string clientId = Guid.NewGuid().ToString();
         client.Connect(clientId);
         client.Subscribe(new string[] { topic }, new byte[] { MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE });
+
+        //Perform query for player profiles
         client.Publish("database", playersQuery);
-
-        //prevent infinite loop by setting a makeshift timer
-        while (timer < 13033801)
-        {
-            timer += 1;
-            if (populated)
-            {
-                ////Fetch the Dropdown GameObject the script is attached to
-                m_Dropdown = GetComponent<Dropdown>();
-                //Clear the old options of the Dropdown menu
-                m_Dropdown.ClearOptions();
-                //Add the options created in the List above
-                m_Dropdown.AddOptions(m_DropOptions);
-                break;
-            }
-        }
-
-        Debug.Log(timer);
-        //if (!populated)
-        //{
-        //    Debug.Log("FAILED TO FETCH PLAYERS FROM DATABASE");
-        //}
     }
 	
 	// Update is called once per frame
 	void Update () {
+        //Populate dropdown if profiles were found in database
+        if (populated)
+        {
+            //Fetch the Dropdown GameObject the script is attached to
+            m_Dropdown = GetComponent<Dropdown>();
+            m_Dropdown.ClearOptions();
+
+            //Add the options from database query
+            m_Dropdown.AddOptions(m_DropOptions);
+        }
+
         if (pd != null && pd.count != 0)
         {
             selectedPlayer = pd.items[m_Dropdown.value];
@@ -93,13 +85,9 @@ public class StartScene : MonoBehaviour {
                 SelectedPlayer.name = selectedPlayer.name;
                 SelectedPlayer.id = selectedPlayer.id;
                 SelectedPlayer.games_played = selectedPlayer.games_played;
+                SelectedPlayer.suggested_difficulty = selectedPlayer.suggested_difficulty;
                 SelectedPlayer.resetGameStats();
             }
-        }
-        else
-        {
-            Debug.Log("No Profiles found!");
-            Debug.Break();
         }
 	}
 
@@ -109,6 +97,12 @@ public class StartScene : MonoBehaviour {
         Debug.Log(playersResult);
 
         pd = PlayerData.CreateFromJSON(playersResult);
+        if (pd == null || pd.count == 0)
+        {
+            Debug.Log("No Profiles Found!");
+            return;
+        }
+
         for(int i=0; i<pd.count; i++)
         {
             m_DropOptions.Add(pd.items[i].name);
