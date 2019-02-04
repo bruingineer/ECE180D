@@ -28,6 +28,7 @@ public class PlayerItem
     public string name;
     public int id;
     public int games_played;
+    public int difficulty_ctr;
     public string suggested_difficulty;
 }
 
@@ -35,12 +36,13 @@ public class StartScene : MonoBehaviour {
 
     private const string str_IP = "127.0.0.1";
     private const int int_Port = 1883;
-    private const string topic = "database/result";
+    private const string topic = "database/players";
     private byte[] playersQuery = Encoding.ASCII.GetBytes("SELECT * FROM players");
     private bool populated = false;
     public double timer = 0;
     PlayerData pd;
     PlayerItem selectedPlayer;
+    int ctr;
 
     //Create a List of new Dropdown options and attach to object
     List<string> m_DropOptions = new List<string>();
@@ -50,6 +52,7 @@ public class StartScene : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
+        
         // create client instance 
         client = new MqttClient(IPAddress.Parse(str_IP), int_Port, false, null);
 
@@ -62,6 +65,7 @@ public class StartScene : MonoBehaviour {
 
         //Perform query for player profiles
         client.Publish("database", playersQuery);
+        
     }
 	
 	// Update is called once per frame
@@ -86,6 +90,7 @@ public class StartScene : MonoBehaviour {
                 SelectedPlayer.id = selectedPlayer.id;
                 SelectedPlayer.games_played = selectedPlayer.games_played;
                 SelectedPlayer.suggested_difficulty = selectedPlayer.suggested_difficulty;
+                SelectedPlayer.difficulty_ctr = selectedPlayer.difficulty_ctr;
                 SelectedPlayer.resetGameStats();
             }
         }
@@ -93,20 +98,26 @@ public class StartScene : MonoBehaviour {
 
     void client_MqttMsgPublishReceived(object sender, MqttMsgPublishEventArgs e)
     {
+        ctr++;
         string playersResult = Encoding.ASCII.GetString(e.Message);
-        Debug.Log(playersResult);
 
-        pd = PlayerData.CreateFromJSON(playersResult);
-        if (pd == null || pd.count == 0)
+        if (playersResult.Contains("name"))
         {
-            Debug.Log("No Profiles Found!");
-            return;
+            Debug.Log(playersResult);
+            pd = PlayerData.CreateFromJSON(playersResult);
+            if (pd == null || pd.count == 0)
+            {
+                Debug.Log("No Profiles Found!");
+                return;
+            }
+
+            for (int i = 0; i < pd.count; i++)
+            {
+                m_DropOptions.Add(pd.items[i].name);
+            }
+            populated = true;
         }
 
-        for(int i=0; i<pd.count; i++)
-        {
-            m_DropOptions.Add(pd.items[i].name);
-        }
-        populated = true;
+        client.Disconnect();
     }
 }

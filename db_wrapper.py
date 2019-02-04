@@ -44,13 +44,18 @@ def on_message(client, userdata, msg):
             
             print(json_str)
             
-            rc = client.publish(topic + '/result', payload= (json_str), qos =0, retain=False)
+            if 'name' in json_str:
+                target = '/players'
+            elif 'game_id' in json_str:
+                target = '/games'
+            rc = client.publish(topic + target, payload= (json_str), qos =0, retain=False)
             print(rc)
         else:
             print("Committing to db w/ " + cmd_type + " command")
             mydb.commit()
     except Exception as e:
         print(e)
+        
 
 def connect_to_db(ip):
     global mydb, mycursor
