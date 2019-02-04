@@ -16,10 +16,10 @@ public class Moving_Object : MonoBehaviour {
 		yield return null;
 	}
 
-	// checks to see if the game is still playing, if not, the object is destroyed
-	protected void CheckGamePlaying()
-	{
-		if (!GameState.gamePlaying)
-			Destroy(gameObject);
-	}
+	// // checks to see if the game is still playing, if not, the object is destroyed
+	// protected void CheckGamePlaying()
+	// {
+	// 	if (!GameState.gamePlaying)
+	// 		Destroy(gameObject);
+	// }
 }

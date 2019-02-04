@@ -24,7 +24,7 @@ GameObject:
   - component: {fileID: 65217772363067092}
   - component: {fileID: 54970730454949824}
   m_Layer: 0
-  m_Name: Small_Laser
+  m_Name: SmallLaser
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
