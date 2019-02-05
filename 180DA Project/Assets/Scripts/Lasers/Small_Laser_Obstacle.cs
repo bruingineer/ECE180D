@@ -53,7 +53,7 @@ public class Small_Laser_Obstacle : Laser_Obstacle {
 		yield return CreateLasers(start_X_Position, end_X_Position);
 		// wait until last laser ends plus waiting for the next obstacle time
 		yield return new WaitForSeconds(laserTimes.duration + obstacleWaitTime);
-		Destroy(gameObject);
+		
 	}
 
 	private IEnumerator CreateLasers(float start_X_Position, float end_X_Position)

@@ -11,7 +11,7 @@ public class Big_Laser : Laser {
 
 	void Awake () {
 		// grabs the line render component from the beam child
-		lineRenderer = transform.Find("Beam").GetComponent<LineRenderer>();
+		lineRenderer = transform.GetComponent<LineRenderer>();
 		// sets the initial position to wherever the beam was created 
 		lineRenderer.SetPosition(0, transform.position);
 	}
@@ -28,7 +28,6 @@ public class Big_Laser : Laser {
         if (Physics.Raycast(transform.position, Vector3.left, out hit) && !playerHit)
 		{
 			playerHit = true;
-            SelectedPlayer.current_hits += 1;
 			Laser_MiniGame.playerWasHit = true;
 			Player m_player = hit.transform.GetComponent<Player>();
 			if (m_player)

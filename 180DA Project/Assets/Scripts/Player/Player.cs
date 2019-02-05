@@ -74,6 +74,7 @@ public class Player : Moving_Object {
 
 	private IEnumerator PlayerHitRoutine() 
 	{
+		SelectedPlayer.current_hits++;
 		isRecovering = true;
 		if (playerLives > 1) {
 			playerLifeIcons[playerLives - 2].SetActive(false);
@@ -85,9 +86,8 @@ public class Player : Moving_Object {
 			isRecovering = false;
 			yield return null;
 		}
-		else {
+		else 
 			isDead = true;
-		}
 		isRecovering = false;
 	}
 

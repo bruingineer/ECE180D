@@ -6,7 +6,6 @@ public class Obstacles : Moving_Object {
 
 	Obstacle bigLaserObstacle, smallLaserObstacle;
 	private List<Obstacle> obstacles;
-	private bool curObstacle = false;
 
 	void Awake()
 	{
@@ -14,14 +13,19 @@ public class Obstacles : Moving_Object {
 		smallLaserObstacle = gameObject.AddComponent<Small_Laser_Obstacle>();
 		obstacles = new List<Obstacle> {bigLaserObstacle, smallLaserObstacle};
 	}
-	
-	void Update () {
-		if(!curObstacle && !Player.isDead && GameState.gamePlaying) {
-			curObstacle = true;
-			smallLaserObstacle.StartObstacle();
-			// curObstacle = Instantiate(obstacles[Random.Range(0, obstacles.Count)]);
+
+	void Start()
+	{
+		StartCoroutine(HandleObstacles());
+	}
+
+	private IEnumerator HandleObstacles()
+	{	
+		// change to game playing
+		while(true)
+		{	
+			yield return obstacles[Random.Range(0, obstacles.Count-1)].StartObstacle();
 		}
-		// fix this by having obstacles be created after the timer
-		// CheckGamePlaying(); TODO
+		// yield return null;
 	}
 }

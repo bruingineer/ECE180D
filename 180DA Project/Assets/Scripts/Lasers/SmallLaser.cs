@@ -32,8 +32,6 @@ public class SmallLaser : Laser {
 		Player m_player = other.GetComponent<Player>();
 		if (m_player)
 			m_player.PlayerHit();
-		// used for the minigame, will be taken out when a small laser mini game mode is created 
-		Laser_MiniGame.playerWasHit = true;
 		Destroy(gameObject);
 	}
 }
