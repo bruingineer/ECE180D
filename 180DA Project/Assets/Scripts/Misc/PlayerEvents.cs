@@ -16,20 +16,21 @@ public class PlayerEvents : Moving_Object {
 
 	void Start()
 	{
-		StartCoroutine(HandleObstacles());
+		StartCoroutine(HandleEvents());
 	}
 
-	public void StartObstacles()
+	public void StartEvents()
 	{
-		StartCoroutine(HandleObstacles());
+		StartCoroutine(HandleEvents());
 	}
 
-	private IEnumerator HandleObstacles()
+	private IEnumerator HandleEvents()
 	{	
 		// change to game playing
-		while(true)
-		{	
-			yield return obstacles[Random.Range(0, obstacles.Count)].StartObstacle();
-		}
+		// while(true)
+		// {	
+		// 	yield return playerEvents[Random.Range(0, playerEvents.Count)].StartEvent();
+		// }
+		yield return true;
 	}
 }

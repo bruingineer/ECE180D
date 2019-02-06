@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SmallLaser : Laser {
+public class Small_Laser : Laser {
 	// Sounds
 	public AudioClip smallLaserSound;
 	// Objects to interact with 
@@ -31,7 +31,13 @@ public class SmallLaser : Laser {
 		// gets component of the object, if player, it will return true, and the player will get hit
 		Player m_player = other.GetComponent<Player>();
 		if (m_player)
-			m_player.PlayerHit();
+			{
+				m_player.PlayerHit();
+				Handle_Minigame();
+			}
 		Destroy(gameObject);
 	}
+
+	protected virtual void Handle_Minigame() {}
+
 }

@@ -20,7 +20,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4925078081520462}
   - component: {fileID: 212733020319873384}
-  - component: {fileID: 114437400025990692}
   - component: {fileID: 65217772363067092}
   - component: {fileID: 54970730454949824}
   m_Layer: 0
@@ -70,18 +69,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 0.7, z: 0.2}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &114437400025990692
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1425163666092182}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3a63f4ad43d6846b28d0c79d1f313790, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  smallLaserSound: {fileID: 8300000, guid: e4ec287790bb146758ace8784fe02dc7, type: 3}
 --- !u!212 &212733020319873384
 SpriteRenderer:
   m_ObjectHideFlags: 1

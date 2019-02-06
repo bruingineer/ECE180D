@@ -41,12 +41,17 @@ public class Big_Laser_Obstacle : Laser_Obstacle {
         laserWarnings = new List<GameObject>();
 		// Finish loading sounds
 		laserWarning = (Resources.Load("Prefabs/Lasers/Laser_Warning") as GameObject);
-		laserPrefab = (Resources.Load(lasersPath + "BigLaser") as GameObject).GetComponent<Big_Laser>();
+		PrefabSetup();
 	}
 
 	void Update()
 	{
 		// CheckGamePlaying();
+	}
+
+	protected virtual void PrefabSetup()
+	{
+		laserPrefab = (Resources.Load(lasersPath + "BigLaser") as GameObject).GetComponent<Big_Laser>();
 	}
 
 	protected override IEnumerator FireLasers() 
@@ -67,7 +72,6 @@ public class Big_Laser_Obstacle : Laser_Obstacle {
 			Destroy(laserWarnings[0]);
 			laserWarnings.RemoveAt(0);
 		}
-		Handle_MiniGame();
 		// waits for cooldown until a new obstacle can turn on
 		yield return new WaitForSeconds(obstacleWaitTime + cooldown);
 	}
