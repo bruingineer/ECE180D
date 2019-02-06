@@ -28,7 +28,7 @@ public class Big_Laser : Laser {
         if (Physics.Raycast(transform.position, Vector3.left, out hit) && !playerHit)
 		{
 			playerHit = true;
-			Laser_MiniGame.playerWasHit = true;
+			Handle_Minigame();
 			Player m_player = hit.transform.GetComponent<Player>();
 			if (m_player)
 				m_player.PlayerHit();
@@ -48,4 +48,5 @@ public class Big_Laser : Laser {
 		Destroy(gameObject, laserTimes.cooldown);
 		yield return null;
     }
+	protected virtual void Handle_Minigame() {}
 }

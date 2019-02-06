@@ -40,7 +40,7 @@ public class SpeechRecognitionEngine : Event
     protected override void SetUp()
     {
         scramble.transform.position = timeLeft.transform.position + new Vector3(-450, 0, 0);
-        HandleWordDisplay.InitPosition = scramble.transform.position - new Vector3(80,35,0);
+        HandleWordDisplay.InitPosition = scramble.transform.position - new Vector3(80, 35, 0);
         ChooseRandWord();
         HandleWordDisplay.Display();
         if (keywords != null)
@@ -58,8 +58,8 @@ public class SpeechRecognitionEngine : Event
 
     void Update()
     {
-        if (Player.isDead)
-            Destroy(gameObject);
+        // if (Player.isDead)
+        //     Destroy(gameObject);
     }
 
     private void Recognizer_OnPhraseRecognized(PhraseRecognizedEventArgs args)

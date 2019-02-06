@@ -19,13 +19,17 @@ public class Obstacles : Moving_Object {
 		StartCoroutine(HandleObstacles());
 	}
 
+	public void StartObstacles()
+	{
+		StartCoroutine(HandleObstacles());
+	}
+
 	private IEnumerator HandleObstacles()
 	{	
 		// change to game playing
 		while(true)
 		{	
-			yield return obstacles[Random.Range(0, obstacles.Count-1)].StartObstacle();
+			yield return obstacles[Random.Range(0, obstacles.Count)].StartObstacle();
 		}
-		// yield return null;
 	}
 }
