@@ -61,9 +61,10 @@ public abstract class GameState_Base : MonoBehaviour {
 
 	private IEnumerator StartGame()
 	{
+		// fix to set up first and then start after
 		yield return StartCoroutine(GameTimer());
-		SetUp();
 		gamePlaying = true;
+		SetUp();
 	}
 
 	protected abstract void SetUp();	
