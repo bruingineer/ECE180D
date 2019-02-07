@@ -5,17 +5,22 @@ using System;
 using UnityEditor;
 using UnityEngine.UI;
 using UnityEngine.Windows.Speech;
+using TMPro;
 
-public class Trivia : MonoBehaviour
+public class Trivia : Event
 {
     bool GotCorrect;
     static int correct = 0;
     static int failed = 0;
-    [SerializeField]
-    private Text m_Hypotheses;
+    
+    // [SerializeField]
+    // private Text m_Hypotheses;
 
-    [SerializeField]
-    private Text m_Recognitions;
+    // [SerializeField]
+    // private Text m_Recognitions;
+    private TextMeshProUGUI TrivaText;
+    private TextMeshProUGUI answer;
+    
 
     public Text Question;
     private string ques = "";
@@ -23,22 +28,80 @@ public class Trivia : MonoBehaviour
 
     private DictationRecognizer m_DictationRecognizer;
     // Start is called before the first frame update
-    void Start()
-    {
-        Debug.Log("list length: " + TriviaList.size);
+    // void Start()
+    // {
+    //     //Debug.Log("list length: " + TriviaList.size);
+
+    //     m_DictationRecognizer = new DictationRecognizer();
+
+    //     m_DictationRecognizer.DictationResult += (text, confidence) =>
+    //     {
+    //         //Debug.LogFormat("Dictation result: {0}", text);
+    //         answer.text += text;
+    //     };
+
+    //     // m_DictationRecognizer.DictationHypothesis += (text) =>
+    //     // {
+    //     //     //Debug.LogFormat("Dictation hypothesis: {0}", text);
+    //     //     m_Hypotheses.text += text;
+    //     // };
+
+    //     m_DictationRecognizer.DictationComplete += (completionCause) =>
+    //     {
+    //         if (completionCause != DictationCompletionCause.Complete)
+    //             Debug.LogErrorFormat("Dictation completed unsuccessfully: {0}.", completionCause);
+    //     };
+
+    //     m_DictationRecognizer.DictationError += (error, hresult) =>
+    //     {
+    //         Debug.LogErrorFormat("Dictation error: {0}; HResult = {1}.", error, hresult);
+    //     };
+
+    //     GotCorrect = false;
+    //     m_DictationRecognizer.Start();
+
+    //     TriviaList.getQuestion(ref ques, ref ans);
+    //     Debug.Log("Question: " + ques);
+    //     Debug.Log("Answer: " + ans);
+    //     TrivaText.text = ques;
+        
+    // }
+
+    protected override void Initialize(){
+        TrivaText = GameObject.FindWithTag("trivia").GetComponent<TextMeshProUGUI>();
+        TrivaText.text = "";
+        answer = GameObject.FindWithTag("answer").GetComponent<TextMeshProUGUI>();
+        answer.text = "";
+    }
+
+
+    protected override IEnumerator MakeTextBlink(){
+        yield return null;
+    }
+    protected override void SetUpEvent(){
+        //Debug.Log("list length: " + TriviaList.size);
 
         m_DictationRecognizer = new DictationRecognizer();
 
         m_DictationRecognizer.DictationResult += (text, confidence) =>
         {
-            //Debug.LogFormat("Dictation result: {0}", text);
-            m_Recognitions.text += text;
+            //Debug.LogFormat("Dictatiaon result: {0}", text);
+            answer.text += text;
+            if (answer.text == ans){
+                Debug.Log("Answer Corect, Total Corect: " + correct);
+                timerPaused = true;
+                m_player.MovePlayer();
+                TrivaText.text = "Correct!";
+                StopRecognizer();
+                SelectedPlayer.current_speech_pass++;
+                StartCoroutine(Reset());
+            }
         };
 
         m_DictationRecognizer.DictationHypothesis += (text) =>
         {
             //Debug.LogFormat("Dictation hypothesis: {0}", text);
-            m_Hypotheses.text += text;
+            //m_Hypotheses.text += text;
         };
 
         m_DictationRecognizer.DictationComplete += (completionCause) =>
@@ -58,24 +121,35 @@ public class Trivia : MonoBehaviour
         TriviaList.getQuestion(ref ques, ref ans);
         Debug.Log("Question: " + ques);
         Debug.Log("Answer: " + ans);
-        Question.text = ques;
-        
+        TrivaText.text = ques;
     }
 
+    private float endDisplayTime = 1.1f;
     
+    IEnumerator Reset(){
+        yield return new WaitForSeconds(endDisplayTime);
+        TrivaText.text = "";
+        answer.text = "";
+        yield return StartCoroutine(DelayAndEndTimer());
+    }
+
+    protected override IEnumerator HandleIncorrect(){
+        StopRecognizer();
+        SelectedPlayer.current_speech_fail++;
+        yield return StartCoroutine(DelayAndEndTimer());
+    }
 
     // Update is called once per frame
-    void Update()
-    {
-       if (m_Recognitions.text == ans && !GotCorrect){
-            GotCorrect = true;
-            correct++;
-            Debug.Log("Answer Corect, Total Corect: " + correct);
-       } 
-    }
+    // void Update()
+    // {
+    //    if (answer.text == ans && !GotCorrect){
+    //         GotCorrect = true;
+    //         correct++;
+    //         Debug.Log("Answer Corect, Total Corect: " + correct);
+    //    } 
+    // }
 
-    private void OnApplicationQuit()
-    {
+    private void StopRecognizer(){
         //Debug.Log("app quit");
         if (m_DictationRecognizer != null && (m_DictationRecognizer.Status == UnityEngine.Windows.Speech.SpeechSystemStatus.Running))
         {
@@ -83,5 +157,10 @@ public class Trivia : MonoBehaviour
             m_DictationRecognizer.Dispose();
             m_DictationRecognizer.Stop();
         }
+    }
+
+    private void OnApplicationQuit()
+    {
+        StopRecognizer();
     }
 }
