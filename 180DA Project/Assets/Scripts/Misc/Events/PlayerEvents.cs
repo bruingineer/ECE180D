@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public abstract class PlayerEvents : Moving_Object {
-	protected Event gestureGame, speechRecognizerGame;
+	protected Event gestureGame, speechRecognizerGame, triviaGame;
 
 	protected List<Event> playerEvents;
 
@@ -12,6 +12,7 @@ public abstract class PlayerEvents : Moving_Object {
 
 	void Start()
 	{
+		//Debug.Log("PlayerEvents.Start()");
 		StartCoroutine(HandleEvents());
 	}
 
@@ -22,23 +23,19 @@ public abstract class PlayerEvents : Moving_Object {
 
 	private IEnumerator HandleEvents()
 	{	
+		//Debug.Log("PlayerEvents.StartEvents");
 		// change to game playing
 		while(true)
 		{	
 			yield return playerEvents[Random.Range(0, playerEvents.Count)].StartEvent();
+			Debug.Log("returning from an event");
 		}
 		yield return true;
 	}
 }
+	
 
-public class PlayerEvents_MainGame : PlayerEvents {
-	public override void Awake()
-	{
-		gestureGame = gameObject.AddComponent<GestureGame>();
-		speechRecognizerGame = gameObject.AddComponent<SpeechRecognitionEngine>();
-		playerEvents = new List<Event> {gestureGame, speechRecognizerGame};
-	}
-}
+
 
 public abstract class PlayerEvents_Minigame: PlayerEvents {
 	public override abstract void Awake();
@@ -57,7 +54,7 @@ public class PlayerEvents_Gesture_Minigame : PlayerEvents_Minigame {
 public class PlayerEvents_Speech_Minigame : PlayerEvents_Minigame {
 	public override void Awake()
 	{
-		speechRecognizerGame = gameObject.AddComponent<SpeechRecognitionEngine>();
+		speechRecognizerGame = gameObject.AddComponent<SpeechRecognitionEngine2>();
 		playerEvents = new List<Event> {speechRecognizerGame};
 	}
 }

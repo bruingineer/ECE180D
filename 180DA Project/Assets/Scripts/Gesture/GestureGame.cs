@@ -8,6 +8,7 @@ using uPLibrary.Networking.M2Mqtt.Exceptions;
 using System.Net;
 using System;
 using UnityEngine.UI;
+using TMPro;
 
 public class GestureGame : Event {
 
@@ -18,7 +19,10 @@ public class GestureGame : Event {
 		"tpose", 
 		"fieldgoal"
 	};
-	private Text gestureText;
+
+	private TextMeshProUGUI gestureText;
+	//private Text gestureText;
+	private TextMeshProUGUI Msg;
 	string mainText = "Command_Text"; 
 	private GestureClient gestureClient;
 	private string curGesture;
@@ -33,7 +37,8 @@ public class GestureGame : Event {
     {
 		correctGestureFunc = HandleCorrectGesture;
 		gestureClient = new GestureClient(topicCorrectGesture, correctGestureFunc);
-		gestureText = GameObject.Find(mainText).GetComponent<Text>();
+		gestureText = GameObject.FindWithTag("word").GetComponent<TextMeshProUGUI>();
+		Msg = GameObject.FindWithTag("msg").GetComponent<TextMeshProUGUI>();
     }
 
 	protected override void SetUpEvent()
@@ -41,6 +46,7 @@ public class GestureGame : Event {
 		string chosenGesture = gestures[UnityEngine.Random.Range(0, gestures.Count)].ToUpper();
 		curGesture = chosenGesture.ToUpper();
 		gestureText.text = curGesture;
+		Msg.text = "Do This:";
 		gestureClient.SendMessage(topicGestureSent, chosenGesture);
 	}
 
@@ -54,6 +60,7 @@ public class GestureGame : Event {
 	{
 		gestureClient.SendMessage(topicGestureSent, stopMessage);
 		gestureText.text = "";
+		Msg.text = "";
 		SelectedPlayer.current_gesture_fail++;
 		HandleIncorrectMiniGame();
 		yield return StartCoroutine(DelayAndEndTimer());
@@ -63,7 +70,7 @@ public class GestureGame : Event {
 	{
 		timerPaused = true;
 		m_player.MovePlayer();
-		gestureText.text = "Correct!";
+		Msg.text = "Correct!";
 		gestureClient.SendMessage(topicGestureSent, stopMessage);
         SelectedPlayer.current_gesture_pass++;
 		HandleCorrectMiniGame();
