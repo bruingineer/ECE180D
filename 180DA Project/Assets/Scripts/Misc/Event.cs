@@ -9,6 +9,7 @@ public abstract class Event : MonoBehaviour {
 	protected float timerDuration;
 	protected float repeatRate;
 	private float delay;
+	protected bool timerPaused = false;
 
 	void Start()
     {
@@ -20,55 +21,51 @@ public abstract class Event : MonoBehaviour {
 			repeatRate = 2f;
 			
 		}
-		
         else if (SelectedPlayer.current_difficulty == "hard")  {
 			timerDuration = 8f;
 			repeatRate = 1f; 
 		} 
-		
 		delay = 0.75f;
 		m_player = GameObject.Find("Player").GetComponent<Player>();
 		timeLeft = GameObject.FindWithTag("timer").GetComponent<Text>();
         SetUp();
-        SetUpCoroutines();
     }
-
 	protected virtual void SetUp() {}
 	private void SetUpCoroutines() 
 	{
-		StartCoroutine("Timer");
 		if (SelectedPlayer.current_difficulty != "easy")
 			StartCoroutine("MakeTextBlink");
-        
+
+		StartCoroutine(StartTimer());
 	}
 
-	protected abstract void HandleIncorrect();
-	protected void HandleCorrect()
-	{
-		StopCoroutine("Timer");
-		m_player.MovePlayer();
-	}
+	protected abstract IEnumerator HandleIncorrect();
 	protected virtual IEnumerator MakeTextBlink() {yield return null;}
-	protected IEnumerator DelayAndDestroy()
+	protected IEnumerator DelayAndEndTimer()
 	{
 		yield return new WaitForSeconds(delay);
-		Destroy(gameObject);
+		StopCoroutine(StartTimer());
 	}
-	protected IEnumerator Timer()
+	protected IEnumerator StartTimer()
 	{
 		while (timerDuration >= 0)
         {   
-            timerDuration -= Time.deltaTime;
-            int integer = (int)timerDuration;
-            if (integer >= 1)
-                timeLeft.text = integer.ToString();
-            else
+			if(!timerPaused)
 			{
-				timeLeft.text = "Time's Up";
-				HandleIncorrect();
-            	Destroy(gameObject);
+				timerDuration -= Time.deltaTime;
+				int integer = (int)timerDuration;
+				if (integer >= 1)
+					timeLeft.text = integer.ToString();
+				else
+				{
+					timeLeft.text = "Time's Up";
+					yield return StartCoroutine(HandleIncorrect());
+				}
 			}
+
             yield return null;
         }
 	}
+
+	public virtual IEnumerator StartEvent() {yield return null;}
 }

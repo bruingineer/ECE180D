@@ -50,3 +50,10 @@ public class Big_Laser : Laser {
     }
 	protected virtual void Handle_Minigame() {}
 }
+
+public class Big_Laser_Minigame : Big_Laser {
+	protected override void Handle_Minigame()
+	{
+		GetComponent<Obstacles_Laser_Minigame>().laserHit = true;
+	}
+}

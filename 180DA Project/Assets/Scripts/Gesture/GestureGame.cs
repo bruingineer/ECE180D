@@ -33,14 +33,17 @@ public class GestureGame : Event {
     {
 		correctGestureFunc = HandleCorrectGesture;
 		gestureClient = new GestureClient(topicCorrectGesture, correctGestureFunc);
-
-		timeLeft = GameObject.FindWithTag("timer").GetComponent<Text>();
 		gestureText = GameObject.Find(mainText).GetComponent<Text>();
+    }
+
+	public override IEnumerator StartEvent()
+	{
 		string chosenGesture = gestures[UnityEngine.Random.Range(0, gestures.Count)].ToUpper();
 		curGesture = chosenGesture.ToUpper();
 		gestureText.text = curGesture;
 		gestureClient.SendMessage(topicGestureSent, chosenGesture);
-    }
+		yield return StartCoroutine(StartTimer());
+	}
 
 	protected override IEnumerator MakeTextBlink()
 	{
@@ -48,19 +51,38 @@ public class GestureGame : Event {
 		yield return new WaitForSeconds(repeatRate);
 	}
 
-	protected override void HandleIncorrect()
+	protected override IEnumerator HandleIncorrect()
 	{
 		gestureClient.SendMessage(topicGestureSent, stopMessage);
 		gestureText.text = "";
 		SelectedPlayer.current_gesture_fail++;
+		HandleIncorrectMiniGame();
+		yield return StartCoroutine(DelayAndEndTimer());
 	}
 
 	private void HandleCorrectGesture()
 	{
-		HandleIncorrect();
+		timerPaused = true;
+		m_player.MovePlayer();
 		gestureText.text = "Correct!";
 		gestureClient.SendMessage(topicGestureSent, stopMessage);
         SelectedPlayer.current_gesture_pass++;
-		StartCoroutine(DelayAndDestroy());
+		HandleCorrectMiniGame();
+		StartCoroutine(DelayAndEndTimer());
+	}
+
+	protected virtual void HandleCorrectMiniGame() {}
+	protected virtual void HandleIncorrectMiniGame() {}
+}
+
+public class GestureMiniGame : GestureGame {
+	protected override void HandleCorrectMiniGame()
+	{
+		GetComponent<PlayerEvents_Gesture_Minigame>().curCorrect++;
+	}
+
+	protected override void HandleIncorrectMiniGame()
+	{
+		GetComponent<PlayerEvents_Gesture_Minigame>().curCorrect = 0;
 	}
 }

@@ -58,13 +58,13 @@ public class SpeechRecognitionEngine : Event
 
     void Update()
     {
-        // if (Player.isDead)
-        //     Destroy(gameObject);
+       
     }
 
     private void Recognizer_OnPhraseRecognized(PhraseRecognizedEventArgs args)
     {
-            HandleCorrect();
+            timerPaused = true;
+            m_player.MovePlayer();
             scramble.text = "Correct!";
             StopRecognizer();
             SelectedPlayer.current_speech_pass++;
@@ -79,13 +79,14 @@ public class SpeechRecognitionEngine : Event
         //To remove the word from the display
         HandleWordDisplay.RemoveDisplay();
         //to stop the PhraseRecognizer
-        yield return StartCoroutine(DelayAndDestroy());
+        yield return StartCoroutine(DelayAndEndTimer());
     }
 
-    protected override void HandleIncorrect()
+    protected override IEnumerator HandleIncorrect()
 	{
         StopRecognizer();
 		SelectedPlayer.current_speech_fail++;
+        yield return StartCoroutine(DelayAndEndTimer());
 	}
 
     private void OnApplicationQuit()
