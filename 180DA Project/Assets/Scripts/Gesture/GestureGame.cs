@@ -29,20 +29,19 @@ public class GestureGame : Event {
 	private string topicCorrectGesture = "gesture_correct";
 	private string stopMessage = "stop";
 
-	protected override void SetUp()
+	protected override void Initialize()
     {
 		correctGestureFunc = HandleCorrectGesture;
 		gestureClient = new GestureClient(topicCorrectGesture, correctGestureFunc);
 		gestureText = GameObject.Find(mainText).GetComponent<Text>();
     }
 
-	public override IEnumerator StartEvent()
+	protected override void SetUpEvent()
 	{
 		string chosenGesture = gestures[UnityEngine.Random.Range(0, gestures.Count)].ToUpper();
 		curGesture = chosenGesture.ToUpper();
 		gestureText.text = curGesture;
 		gestureClient.SendMessage(topicGestureSent, chosenGesture);
-		yield return StartCoroutine(StartTimer());
 	}
 
 	protected override IEnumerator MakeTextBlink()

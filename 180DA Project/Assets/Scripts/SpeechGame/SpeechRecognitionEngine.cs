@@ -37,11 +37,15 @@ public class SpeechRecognitionEngine : Event
     //Can maybe use enable/disable
     
 
-    protected override void SetUp()
+    protected override void Initialize()
     {
         scramble.transform.position = timeLeft.transform.position + new Vector3(-450, 0, 0);
         HandleWordDisplay.InitPosition = scramble.transform.position - new Vector3(80, 35, 0);
-        ChooseRandWord();
+    }
+
+    protected override void SetUpEvent()
+	{
+		ChooseRandWord();
         HandleWordDisplay.Display();
         if (keywords != null)
         {
@@ -49,16 +53,11 @@ public class SpeechRecognitionEngine : Event
             recognizer.OnPhraseRecognized += Recognizer_OnPhraseRecognized;
             recognizer.Start();
         }
-    }
+	}
 
     protected override IEnumerator MakeTextBlink()
     {
         yield return HandleWordDisplay.MakeBlink(repeatRate);
-    }
-
-    void Update()
-    {
-       
     }
 
     private void Recognizer_OnPhraseRecognized(PhraseRecognizedEventArgs args)

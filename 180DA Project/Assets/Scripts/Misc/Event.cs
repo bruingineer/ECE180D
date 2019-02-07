@@ -28,9 +28,9 @@ public abstract class Event : MonoBehaviour {
 		delay = 0.75f;
 		m_player = GameObject.Find("Player").GetComponent<Player>();
 		timeLeft = GameObject.FindWithTag("timer").GetComponent<Text>();
-        SetUp();
+        Initialize();
     }
-	protected virtual void SetUp() {}
+	protected abstract void Initialize();
 	private void SetUpCoroutines() 
 	{
 		if (SelectedPlayer.current_difficulty != "easy")
@@ -39,8 +39,6 @@ public abstract class Event : MonoBehaviour {
 		StartCoroutine(StartTimer());
 	}
 
-	protected abstract IEnumerator HandleIncorrect();
-	protected virtual IEnumerator MakeTextBlink() {yield return null;}
 	protected IEnumerator DelayAndEndTimer()
 	{
 		yield return new WaitForSeconds(delay);
@@ -66,6 +64,14 @@ public abstract class Event : MonoBehaviour {
             yield return null;
         }
 	}
+	
+	public IEnumerator StartEvent() 
+	{
+		SetUpEvent();
+		yield return StartCoroutine(StartTimer());
+	}
 
-	public virtual IEnumerator StartEvent() {yield return null;}
+	protected abstract IEnumerator HandleIncorrect();
+	protected abstract IEnumerator MakeTextBlink();
+	protected abstract void SetUpEvent();
 }
