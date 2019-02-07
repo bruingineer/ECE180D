@@ -6,7 +6,8 @@ public static class SelectedPlayer{
     
     //player info
     public static string name;
-    public static int id, games_played;
+    public static int id, games_played, difficulty_ctr;
+    public static string suggested_difficulty;
 
     //current game info
     public static int current_hits = 0;

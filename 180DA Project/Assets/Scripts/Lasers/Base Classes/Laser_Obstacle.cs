@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Laser_Obstacle : Obstacle {
+public abstract class Laser_Obstacle : Obstacle {
 	// struct is used to pass in the correct times to the obstacle times
 	public struct Laser_Times
 	{
@@ -14,12 +14,18 @@ public class Laser_Obstacle : Obstacle {
         	cooldown = cool;
     	}
 	}
-	public override void StartObstacle()
+	public override IEnumerator StartObstacle()
 	{
-		StartCoroutine(FireLasers());
+		yield return FireLasers();
 	}
-	public Laser laserPrefab;
+
+	protected IEnumerator WaitandFreeObstacle(float timeToWait)
+	{
+		yield return new WaitForSeconds(timeToWait);
+	}
+
+	protected Laser laserPrefab;
 	protected Laser_Times laserTimes;
 	protected float laserDuration;
-	protected virtual IEnumerator FireLasers() {yield return null;}
+	protected abstract IEnumerator FireLasers();
 }

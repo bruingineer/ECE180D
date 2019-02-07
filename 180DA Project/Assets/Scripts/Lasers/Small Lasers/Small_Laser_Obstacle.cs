@@ -37,10 +37,14 @@ public class Small_Laser_Obstacle : Laser_Obstacle {
 			lasersToFire = 20;
 			waitForNextLaser = 0.3f;
 		}
-		
-		laserPrefab = (Resources.Load("Prefabs/Lasers/SmallLaser") as GameObject).GetComponent<SmallLaser>();
+		PrefabSetup();
 		player = GameObject.Find("Player").GetComponent<Player>();
 		laserTimes = new Laser_Times(laserDuration, waitForNextLaser);
+	}
+	
+	protected virtual void PrefabSetup()
+	{
+		laserPrefab = (Resources.Load("Prefabs/Lasers/Small_Laser") as GameObject).AddComponent<Small_Laser>();
 	}
 
 	protected override IEnumerator FireLasers() 
@@ -53,16 +57,16 @@ public class Small_Laser_Obstacle : Laser_Obstacle {
 		yield return CreateLasers(start_X_Position, end_X_Position);
 		// wait until last laser ends plus waiting for the next obstacle time
 		yield return new WaitForSeconds(laserTimes.duration + obstacleWaitTime);
-		Destroy(gameObject);
+		
 	}
 
 	private IEnumerator CreateLasers(float start_X_Position, float end_X_Position)
 	{
 		for(int i = 0; i < lasersToFire; i++) 
 		{
-			SmallLaser small_laser = Instantiate(laserPrefab, new Vector3(start_X_Position, 
+			Small_Laser small_laser = Instantiate(laserPrefab, new Vector3(start_X_Position, 
 				GameState.laneNums[Random.Range(0, GameState.laneNums.Count)] + 0.5f), 
-					Quaternion.identity) as SmallLaser;
+					Quaternion.identity) as Small_Laser;
 			small_laser.MoveLaser(new Vector3(end_X_Position, small_laser.transform.position.y), laserTimes);
 			yield return new WaitForSeconds(waitForNextLaser);
 		}

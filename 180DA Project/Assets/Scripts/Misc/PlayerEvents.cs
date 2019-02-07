@@ -2,23 +2,35 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerEvents : MonoBehaviour {
+public class PlayerEvents : Moving_Object {
 
-	public GameObject speechScrambler;
-	public GameObject gestureGame;
-	private List<GameObject> playerEvents;
-	public static bool eventOn;
+	Event gestureGame, speechRecognizerGame;
+	private List<Event> playerEvents;
 
 	void Awake()
 	{
-		eventOn = false;
-        playerEvents = new List<GameObject> { gestureGame, speechScrambler};
+		gestureGame = gameObject.AddComponent<GestureGame>();
+		speechRecognizerGame = gameObject.AddComponent<SpeechRecognitionEngine>();
+		playerEvents = new List<Event> {gestureGame, speechRecognizerGame};
 	}
-	
-	void Update () {
-		if(!eventOn && !Player.isDead && GameState.gamePlaying) {
-			eventOn = true;
-			Instantiate(playerEvents[Random.Range(0, playerEvents.Count)]);
-		}
+
+	void Start()
+	{
+		StartCoroutine(HandleEvents());
+	}
+
+	public void StartEvents()
+	{
+		StartCoroutine(HandleEvents());
+	}
+
+	private IEnumerator HandleEvents()
+	{	
+		// change to game playing
+		// while(true)
+		// {	
+		// 	yield return playerEvents[Random.Range(0, playerEvents.Count)].StartEvent();
+		// }
+		yield return true;
 	}
 }
