@@ -8,9 +8,9 @@ using uPLibrary.Networking.M2Mqtt.Exceptions;
 
 using System;
 
-public class PlayerMQTT_Y : MQTT_Class {
+public class PlayerMQTT_newX : MQTT_Class {
 	public int cur_lane_num, numLanes;
-	public PlayerMQTT_Y(string topic, int numL) : base(topic)
+	public PlayerMQTT_newX(string topic, int numL) : base(topic)
 	{
 		cur_lane_num = numL / 2;
 		numLanes = numL;
@@ -20,7 +20,7 @@ public class PlayerMQTT_Y : MQTT_Class {
 	{ 
 		int lane_num;
 		if (Int32.TryParse(System.Text.Encoding.UTF8.GetString(e.Message), out lane_num)) {
-			lane_num = numLanes - lane_num + 1;
+			lane_num -= 1;
 			if (lane_num != cur_lane_num) {
 				cur_lane_num = lane_num;
 			}
