@@ -9,7 +9,7 @@ public class Small_Laser : Laser {
 	private GameObject player;
 	void Start () {
 		player = GameObject.FindGameObjectWithTag("Player");
-		GameState.PlayClip(smallLaserSound);
+		GameState_Base.PlayClip(smallLaserSound);
     }
 	
 	void Update()

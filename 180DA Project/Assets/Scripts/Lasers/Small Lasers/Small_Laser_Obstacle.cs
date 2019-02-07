@@ -50,9 +50,9 @@ public class Small_Laser_Obstacle : Laser_Obstacle {
 	protected override IEnumerator FireLasers() 
 	{
 		// get initial and final x position
-		bool switchPosition = !(player.transform.position.x < GameState.end_column / 2);
-		float start_X_Position = switchPosition ? 0 : GameState.end_column;
-		float end_X_Position = switchPosition ? GameState.end_column : 0;
+		bool switchPosition = !(player.transform.position.x < GameState_Base.end_row / 2);
+		float start_X_Position = switchPosition ? 0 : GameState_Base.end_row;
+		float end_X_Position = switchPosition ? GameState_Base.end_row : 0;
 		// Create lasers
 		yield return CreateLasers(start_X_Position, end_X_Position);
 		// wait until last laser ends plus waiting for the next obstacle time
@@ -65,7 +65,7 @@ public class Small_Laser_Obstacle : Laser_Obstacle {
 		for(int i = 0; i < lasersToFire; i++) 
 		{
 			Small_Laser small_laser = Instantiate(laserPrefab, new Vector3(start_X_Position, 
-				GameState.laneNums[Random.Range(0, GameState.laneNums.Count)] + 0.5f), 
+				GameState_Base.laneNums[Random.Range(0, GameState_Base.laneNums.Count)] + 0.5f), 
 					Quaternion.identity) as Small_Laser;
 			small_laser.MoveLaser(new Vector3(end_X_Position, small_laser.transform.position.y), laserTimes);
 			yield return new WaitForSeconds(waitForNextLaser);

@@ -8,135 +8,71 @@ using uPLibrary.Networking.M2Mqtt.Messages;
 using uPLibrary.Networking.M2Mqtt.Utility;
 using uPLibrary.Networking.M2Mqtt.Exceptions;
 
-public class GameState : MonoBehaviour {
+public abstract class GameState_Base : MonoBehaviour {
 
+	// Variables
 	public static int numLanes;
-	public static int middle_lane;
-	public GameObject playerObject;
-	private Player player;
-	public Canvas canvas;
-	public static int end_column;
-	private static AudioSource m_audio_source;
-	public GameObject gameOver;
-	public GameObject countdown;
-	public AudioSource gameMusic;
-	public static bool gamePlaying;
-	public bool handledPlayer;
-	public GameObject playerExplosion;
-	public AudioClip playerLost;
-	public AudioClip playerWon;
-	public static bool stopPlaying;
-	public static bool gameWon;
+	public static int end_row;
 	public static List<int> laneNums;
-	public static MqttClient client;
-	// change for minigame
-	GameObject retry;
-	GameObject gameMenu;
+
+	// Audio
+	public static AudioSource m_audio_source;
+	protected AudioClip gameLost;
+	protected AudioClip gameWon;
+
+	// Objects
+	protected Canvas canvas;
+	public Text gameOver;
+	public Text countdown;
+	public static bool gamePlaying;
+	
+	// // change for minigame
+	// GameObject retry;
+	// GameObject gameMenu;
+	// retry = GameObject.FindGameObjectWithTag("Retry").GetComponent<Text>();
+	// gameMenu = GameObject.FindGameObjectWithTag("Menu").GetComponent<Text>();
+	// if (SceneManager.GetActiveScene().buildIndex == 0)
+		// 	SceneManager.LoadScene(2);
+		// else 
+		// {
+		// 	retry.SetActive(true);
+		// 	gameMenu.SetActive(true);
+		// }
+
+		// if (player.playerLives == 1) {
+		// 	gameMusic.pitch = 1.25f;
+		// } else {
+		// 	gameMusic.pitch = 1;
+		// } 
+	// if (player.playerLives == 1) {
+		// 	gameMusic.pitch = 1.25f;
+		// } else {
+		// 	gameMusic.pitch = 1;
+		// } 
 	
 	void Awake () {
 		numLanes = 10;
-		middle_lane = numLanes/2;
-		end_column = 20;
+		end_row = 14;
 		m_audio_source = GetComponent<AudioSource>();
 		gamePlaying = false;
-		handledPlayer = false;
-		gameWon = false;
-		player = playerObject.GetComponent<Player>();
-		retry = GameObject.FindGameObjectWithTag("Retry");
-		gameMenu = GameObject.FindGameObjectWithTag("Menu");
-		InitializeLaneList();
-		StartCoroutine(Timer());
+		canvas = GameObject.Find("Canvas").GetComponent<Canvas>();
+		StartCoroutine(StartGame());
 	}
 
-	void Update()
+	private IEnumerator StartGame()
 	{
-		HandlePitchChange();
-		if (!handledPlayer)
-		{
-			HandlePlayerWin();
-			HandlePlayerDied();
-		}
+		yield return StartCoroutine(GameTimer());
+		SetUp();
+		gamePlaying = true;
 	}
 
-	private void HandlePlayerWin() 
-	{
-		if (playerObject.transform.position.x == (end_column - 0.5f))
-		{
-			GameState.gamePlaying = false;
-			handledPlayer = true;
-			gamePlaying = false;
-			StartCoroutine(PlayerWonCoroutine());
-		}
-	}
-
-	private void HandlePitchChange()
-	{
-		if (player.playerLives == 1) {
-			gameMusic.pitch = 1.25f;
-		} else {
-			gameMusic.pitch = 1;
-		} 
-	}
-
-	private void HandlePlayerDied() 
-	{
-		if (Player.isDead) {
-			GameState.gamePlaying = false;
-			SelectedPlayer.died = true;
-			handledPlayer = true;
-			gamePlaying = false;
-			StartCoroutine(PlayerDiedCoroutine());
-		}
-	}
-
-	IEnumerator PlayerWonCoroutine()
-	{
-		gameOver.GetComponent<Text>().text = "You Win!";
-		GameObject gameoverText = Instantiate(gameOver, canvas.transform);
-		PlayClip(playerWon);
-		yield return new WaitForSeconds(playerWon.length);
-		if (SceneManager.GetActiveScene().buildIndex == 0)
-			SceneManager.LoadScene(2);
-		else 
-		{
-			retry.SetActive(true);
-			gameMenu.SetActive(true);
-		}
-	}
-
-	IEnumerator PlayerDiedCoroutine() 
-	{
-		gameOver.GetComponent<Text>().text = "You Lost!";
-		GameObject gameoverText = Instantiate(gameOver, canvas.transform);
-		GameObject explosion = Instantiate(playerExplosion, playerObject.transform.position, Quaternion.identity);
-		Destroy(playerObject);
-		ParticleSystem ps = explosion.GetComponent<ParticleSystem>();
-		PlayClip(playerLost);
-		float explosionDuration = playerLost.length;
-		var main = ps.main;
-		main.duration = explosionDuration;
-		ps.Play();
-		yield return new WaitForSeconds(explosionDuration);
-		if (SceneManager.GetActiveScene().buildIndex == 0)
-			SceneManager.LoadScene(2);
-		else 
-		{
-			retry.SetActive(true);
-			gameMenu.SetActive(true);
-		}
-	}
+	protected abstract void SetUp();	
 
 	public static void PlayClip(AudioClip clip) {
 		m_audio_source.PlayOneShot(clip);
 	}
 
-	private void InitializeLaneList() {
-		laneNums = new List<int>();
-		for (int i = 1; i <= GameState.numLanes; i++)
-			laneNums.Add(i);
-	}
-
-	public IEnumerator Timer() 
+	public IEnumerator GameTimer() 
 	{
 		Text countdownText = countdown.GetComponent<Text>();
 		float duration = 4f;
@@ -151,8 +87,7 @@ public class GameState : MonoBehaviour {
           	yield return null;
       	}
 		Destroy(countdown);
-		gamePlaying = true;
-		gameMusic.Play();
+		m_audio_source.Play();
 	}
 
 	public void RetryLevel()
@@ -163,5 +98,79 @@ public class GameState : MonoBehaviour {
 	public void LoadGameMenu()
 	{
 		SceneManager.LoadScene(6);
+	}
+}
+
+public abstract class GameState_with_Player : GameState_Base {
+	public GameObject playerExplosion;
+	private GameObject player;
+	private bool handledPlayer;
+
+	protected override void SetUp()
+	{
+		handledPlayer = false;
+		player = GameObject.Find("Player");
+		InitializeLaneList();
+		SetUp_Events_Obstacles();
+	}
+
+	protected abstract void SetUp_Events_Obstacles();
+	private void InitializeLaneList() {
+		laneNums = new List<int>();
+		for (int i = 1; i <= numLanes; i++)
+			laneNums.Add(i);
+	}
+
+	void Update()
+	{
+		if (!handledPlayer && gamePlaying)
+		{
+			HandlePlayerWin();
+			HandlePlayerDied();
+		}
+	}
+
+	private void HandlePlayerWin() 
+	{
+		if (player.transform.position.y == (end_row - 0.5f))
+		{
+			handledPlayer = true;
+			gamePlaying = false;
+			StartCoroutine(PlayerWonCoroutine());
+		}
+	}
+
+	private void HandlePlayerDied() 
+	{
+		if (player.GetComponent<Player>().isDead) {
+			handledPlayer = true;
+			gamePlaying = false;
+			SelectedPlayer.died = true;
+			StartCoroutine(PlayerDiedCoroutine());
+		}
+	}
+
+	IEnumerator PlayerWonCoroutine()
+	{
+		// gameOver.text = "You Win!";
+		Instantiate(gameOver, canvas.transform);
+		PlayClip(gameWon);
+		yield return new WaitForSeconds(gameWon.length);
+		// handle won
+	}
+
+	IEnumerator PlayerDiedCoroutine() 
+	{
+		// gameOver.text = "You Lost!";
+		Instantiate(gameOver, canvas.transform);
+		ParticleSystem explosion = Instantiate(playerExplosion, player.transform.position, Quaternion.identity).GetComponent<ParticleSystem>();
+		Destroy(player);
+		PlayClip(gameLost);
+		float explosionDuration = gameLost.length;
+		var main = explosion.main;
+		main.duration = explosionDuration;
+		explosion.Play();
+		yield return new WaitForSeconds(explosionDuration);
+		// handle died
 	}
 }
