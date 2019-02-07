@@ -67,6 +67,7 @@ public class SpeechRecognitionEngine : Event
             scramble.text = "Correct!";
             StopRecognizer();
             SelectedPlayer.current_speech_pass++;
+            HandleCorrectMiniGame();
             StartCoroutine(Reset());
     }
 
@@ -84,6 +85,7 @@ public class SpeechRecognitionEngine : Event
     protected override IEnumerator HandleIncorrect()
 	{
         StopRecognizer();
+        HandleIncorrectMiniGame();
 		SelectedPlayer.current_speech_fail++;
         yield return StartCoroutine(DelayAndEndTimer());
 	}
@@ -102,4 +104,20 @@ public class SpeechRecognitionEngine : Event
             recognizer.Dispose();
         }
     }
+
+    protected virtual void HandleCorrectMiniGame() {}
+    protected virtual void HandleIncorrectMiniGame() {}
+    
+}
+
+public class SpeechRecognitionEngine_Minigame : SpeechRecognitionEngine {
+	protected override void HandleCorrectMiniGame()
+	{
+		GetComponent<PlayerEvents_Gesture_Minigame>().curCorrect++;
+	}
+
+	protected override void HandleIncorrectMiniGame()
+	{
+		GetComponent<PlayerEvents_Gesture_Minigame>().curCorrect = 0;
+	}
 }
