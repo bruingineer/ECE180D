@@ -5,23 +5,77 @@ Multiplayer server for Synchro
 import paho.mqtt.client as mqtt
 import random
 import logging
+from time import sleep
+from time import time
 
+# create logger
 log = logging.getLogger(__name__)
+log.setLevel(logging.DEBUG)
 
-def connect_to_server(ip, port, client_id):
-	client = mqtt.Client(client_id = client_id)
-    client.on_connect = on_connect
-    client.on_message = on_message
-    client.connect(ip, port, 60)
-    return client
+# create console handler and set level to debug
+ch = logging.StreamHandler()
+ch.setLevel(logging.DEBUG)
+
+# create formatter
+formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+
+# add formatter to ch
+ch.setFormatter(formatter)
+
+# add ch to logger
+log.addHandler(ch)
+
+"""
+TOPIC SUMMARY
+
+server should init all topics with retain messages when started and after game is finished
+init values listed first
+
+server:
+game/state = {waiting for players, ready, start, running, pause, game over, finish}
+
+server/player_connected = {"", client id}
+
+player 1:
+player1/challenge = {"", challenge_type + challenge_data}
+player1/challenge_status = {"", requested, sent, in progress}
+player1/request_challenge = {"", requested, fulfilled}
+player1/position = {"",0,1,...10}
+player1/connection_status = {"",connected,disconnected}
+
+player 2: 
+same as player1
+
+"""
 
 def on_connect(client, userdata, flags, rc):
 	log.info("Connection returned result: {}".format(connack_string(rc)))
 	return
 
-def on_message(client, userdata, msg):
-    log.info("mqtt - topic: "+msg.topic+" - message: "+str(msg.payload))
+# userdata is controller class object
+def on_message(client, _controller, msg):
+    log.info("on_message - topic: "+msg.topic+" - message: "+str(msg.payload))
+    # status of game clients
+    if mqtt.topic_matches_sub("+/connection_status", msg.topic):
+    	if str(msg.payload).find('player1') != -1:
+    		_controller.player1 = str(msg.payload)
+    	elif str(msg.payload).find('player2') != -1:
+    		_controller.player2 = str(msg.payload)
+    	else:
+    		pass
+
+    else:
+    	userdata._user = None
     return
+
+def connect_to_server(ip, port, client_id):
+	log.info('*connect_to_server')
+	client = mqtt.Client(client_id = client_id)
+	client.on_connect = on_connect
+	client.on_message = on_message
+	client.connect(ip, port, 60)
+	return client
+
 
 class challengeGenerator:
 	CHALLENGE_INDEX = ['big_lasers', 'small_lasers', 'word', 'gesture']
@@ -90,21 +144,36 @@ class game_client:
 		self.position += 1
 
 class controller:
+
 	def __init__(self):
-		self.mqtt_client = connect_to_server(ip="IP", port="port", client_id="game_server")
+		# self.mqtt_client = connect_to_server(ip="localhost", port="1883", client_id="game_server")
+		self.mqtt_client = mqtt.Client(client_id = 'game_server')
+		self.mqtt_client.on_connect = on_connect
+		self.mqtt_client.on_message = on_message
+		self.mqtt_client.connect('localhost', '1883', 60)
+		self.mqtt_client.subscribe('test',0)
+		self.mqtt_client.user_data_set(self)
 		# self.mqtt_client.subscribe(topic, qos=0)
 		self.mqtt_client.loop_start()
 
 	def sendChallengeTo(self, player_id):
+		pass
 		# get next challenge of player id
 		# package
 		# publish to topic
 
 	# def correctGestureReceived(self, player_id):
 	# 	# 
-	def challengeRequestReceived(self, )
+	def challengeRequestReceived(self):
+		pass
 
 def main():
+	c = controller()
+
+	while(1):
+		print("{}: {}".format(time(), c._user))
+		sleep(1)
+
 
 if __name__ == '__main__':
 	main()
