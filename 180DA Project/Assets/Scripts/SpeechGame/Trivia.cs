@@ -130,13 +130,14 @@ public class Trivia : Event
         yield return new WaitForSeconds(endDisplayTime);
         TrivaText.text = "";
         answer.text = "";
-        yield return StartCoroutine(DelayAndEndTimer());
+        yield return StartCoroutine(Delay());
+        StopCoroutine(StartTimer());
     }
 
     protected override IEnumerator HandleIncorrect(){
         StopRecognizer();
         SelectedPlayer.current_speech_fail++;
-        yield return StartCoroutine(DelayAndEndTimer());
+        yield return StartCoroutine(Delay());
     }
 
     // Update is called once per frame

@@ -57,14 +57,15 @@ public class SpeechRecognitionEngine2 : Event
         yield return new WaitForSeconds(endDisplayTime);
         WDisplay.DeleteWordDisplay();
         Msg.text = "";
-        yield return StartCoroutine(DelayAndEndTimer());
+        yield return StartCoroutine(Delay());
+        StopCoroutine(StartTimer());
     }
 
     protected override IEnumerator HandleIncorrect(){
         StopRecognizer();
         HandleIncorrectMiniGame();
         SelectedPlayer.current_speech_fail++;
-        yield return StartCoroutine(DelayAndEndTimer());
+        yield return StartCoroutine(Delay());
     }
 
     private void OnApplicationQuit(){

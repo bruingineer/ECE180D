@@ -63,7 +63,7 @@ public class GestureGame : Event {
 		Msg.text = "";
 		SelectedPlayer.current_gesture_fail++;
 		HandleIncorrectMiniGame();
-		yield return StartCoroutine(DelayAndEndTimer());
+		yield return Delay();
 	}
 
 	private void HandleCorrectGesture()
@@ -74,7 +74,8 @@ public class GestureGame : Event {
 		gestureClient.SendMessage(topicGestureSent, stopMessage);
         SelectedPlayer.current_gesture_pass++;
 		HandleCorrectMiniGame();
-		StartCoroutine(DelayAndEndTimer());
+		StartCoroutine(Delay());
+		StopCoroutine(StartTimer());
 	}
 
 	protected virtual void HandleCorrectMiniGame() {}

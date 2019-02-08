@@ -84,8 +84,8 @@ public class Big_Laser_Obstacle : Laser_Obstacle {
 		int list_count = lanesToFireLasers.Count;
 		for(int i = 0; i < list_count; i++)
 		{
-			Big_Laser bigLaser = Instantiate(laserPrefab, new Vector3(GameState_Base.end_row, (lanesToFireLasers[i] + 0.5f)), Quaternion.identity) as Big_Laser;
-			bigLaser.MoveLaser(new Vector3(0, bigLaser.transform.position.y), laserTimes);
+			Big_Laser bigLaser = Instantiate(laserPrefab, new Vector3(lanesToFireLasers[i] + 0.5f, GameState_Base.end_row), Quaternion.identity) as Big_Laser;
+			bigLaser.MoveLaser(new Vector3(bigLaser.transform.position.x, 0), laserTimes);
 		}
 	}
 
@@ -94,7 +94,7 @@ public class Big_Laser_Obstacle : Laser_Obstacle {
 		int list_count = lanesToFireLasers.Count;
 		for(int i = 0; i < list_count; i++)
 		{
-			GameObject laserParticle = Instantiate(laserWarning, new Vector3(GameState_Base.end_row, (lanesToFireLasers[i] + 0.5f)), Quaternion.identity);
+			GameObject laserParticle = Instantiate(laserWarning, new Vector3(lanesToFireLasers[i] + 0.5f, GameState_Base.end_row), Quaternion.identity);
 			ParticleSystem ps = laserParticle.GetComponent<ParticleSystem>();
 			var main = ps.main;
 			main.duration = laserWarmUpTime;

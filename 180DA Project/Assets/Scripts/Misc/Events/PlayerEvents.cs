@@ -8,13 +8,6 @@ public abstract class PlayerEvents : Moving_Object {
 	protected List<Event> playerEvents;
 
 	public abstract void Awake();
-	
-
-	void Start()
-	{
-		//Debug.Log("PlayerEvents.Start()");
-		StartCoroutine(HandleEvents());
-	}
 
 	public void StartEvents()
 	{
@@ -23,9 +16,7 @@ public abstract class PlayerEvents : Moving_Object {
 
 	private IEnumerator HandleEvents()
 	{	
-		//Debug.Log("PlayerEvents.StartEvents");
-		// change to game playing
-		while(true)
+		while(GameState_Base.gamePlaying)
 		{	
 			yield return playerEvents[Random.Range(0, playerEvents.Count)].StartEvent();
 			Debug.Log("returning from an event");
@@ -33,9 +24,6 @@ public abstract class PlayerEvents : Moving_Object {
 		yield return true;
 	}
 }
-	
-
-
 
 public abstract class PlayerEvents_Minigame: PlayerEvents {
 	public override abstract void Awake();
