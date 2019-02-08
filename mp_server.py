@@ -7,6 +7,7 @@ import random
 import logging
 from time import sleep
 from time import time
+import json
 
 # create logger
 log = logging.getLogger(__name__)
@@ -32,7 +33,7 @@ server should init all topics with retain messages when started and after game i
 init values listed first
 
 server:
-game/state = {waiting for players, ready, start, running, pause, game over, finish}
+game/state = {waiting for players, start, running, pause, game over, finish}
 
 clients send their client id, the server responds on server/'client_id' with their player number
 server/player_connected = {"", client id}
@@ -40,10 +41,10 @@ server/'client_id' = {player1, player2}
 
 player 1:
 player1/challenge = {"", challenge_type + challenge_data}
-player1/challenge_status = {"", requested, sent, in progress}
 player1/request_challenge = {"", requested, fulfilled}
 player1/position = {"",0,1,...10}
-player1/connection_status = {"",connected,disconnected}
+player1/connection_status = {"",ready,not ready,I WON,disconnected}
+player1/winner_notification = {'', winner, loser, you suck}
 
 player 2: 
 same as player1
@@ -51,8 +52,8 @@ same as player1
 """
 
 def on_connect(client, userdata, flags, rc):
-	log.info("Connection returned result: {}".format(connack_string(rc)))
-	return
+    log.info("Connection returned result: {}".format(connack_string(rc)))
+    return
 
 # userdata is controller class object
 def on_message(client, _controller, msg):
@@ -61,177 +62,275 @@ def on_message(client, _controller, msg):
     
     # request to join
     if mqtt.topic_matches_sub("server/player_connected", msg.topic):
-   		_controller.addGameClient(str(msg.payload))
+        _controller.addGameClient(str(msg.payload))
 
     # status of game clients
-    if mqtt.topic_matches_sub("+/connection_status", msg.topic):
-    	if str(msg.topic).find('player1') != -1:
-    		_controller.player1.connection_status = str(msg.payload)
-    	elif str(msg.topic).find('player2') != -1:
-    		_controller.player2.connection_status = str(msg.payload)
-    	else:
-    		unrecognized_message = True
+    elif mqtt.topic_matches_sub("+/connection_status", msg.topic):
+        #disconnect or connect    
+        if str(msg.topic).find('player1') != -1:
+            _controller.game_clients[0].connection_status = str(msg.payload)
+        elif str(msg.topic).find('player2') != -1:
+            _controller.game_clients[1].connection_status = str(msg.payload)
+        else:
+            unrecognized_message = True
 
-    # position updates
-    elif mqtt.topic_matches_sub('+/position', msg.topic):
-    	if str(msg.topic).find('player1') != -1:
-    		_controller.game_clients[0].position = int(msg.payload)
-    	elif str(msg.topic).find('player2') != -1:
-    		_controller.game_clients[1].position = int(msg.payload)
-    	else:
-    		unrecognized_message = True
+    # # position updates
+    # elif mqtt.topic_matches_sub('+/position', msg.topic):
+    #     if str(msg.topic).find('player1') != -1:
+    #         _controller.game_clients[0].position = int(msg.payload)
+    #     elif str(msg.topic).find('player2') != -1:
+    #         _controller.game_clients[1].position = int(msg.payload)
+    #     else:
+    #         unrecognized_message = True
 
     # challenge request
     elif mqtt.topic_matches_sub('+/request_challenge', msg.topic):
-    	if str(msg.topic).find('player1') != -1:
-    		# send next challenge
-    	elif str(msg.topic).find('player2') != -1:
-    		# send next challenge
-    	else:
-    		unrecognized_message = True
+        if msg.payload == 'requested':
+            if str(msg.topic).find('player1') != -1:
+                # send next challenge
+                _controller.sendChallengeTo(1)
 
-    # # challenge status
-    # elif mqtt.topic_matches_sub('+/position', msg.topic):
-    # 	if str(msg.topic).find('player1') != -1:
-    # 		_controller.game_clients[0].position = int(msg.payload)
-    # 	elif str(msg.topic).find('player2') != -1:
-    # 		_controller.game_clients[1].position = int(msg.payload)
-    # 	else:
-    # 		unrecognized_message = True
+            elif str(msg.topic).find('player2') != -1:
+                # send next challenge
+                _controller.sendChallengeTo(2) 
+
+        else:
+            unrecognized_message = True
 
     else:
-    	log.warning('on_message - message on unexpected topic')
+        log.warning('on_message - unexpected topic')
+
+    if unrecognized_message:
+        log.warning('on_message - unrecognized_message on \'{}\''.format(msg.topic))
     return
 
-def connect_to_server(ip, port, client_id):
-	log.info('*connect_to_server')
-	client = mqtt.Client(client_id = client_id)
-	client.on_connect = on_connect
-	client.on_message = on_message
-	client.connect(ip, port, 60)
-	return client
+# def connect_to_server(ip, port, client_id):
+#   log.info('*connect_to_server')
+#   client = mqtt.Client(client_id = client_id)
+#   client.on_connect = on_connect
+#   client.on_message = on_message
+#   client.connect(ip, port, 60)
+#   return client
 
 
 class challengeGenerator:
-	CHALLENGE_INDEX = ['big_lasers', 'small_lasers', 'word', 'gesture']
-	GESTURES = ['tpose', 'rightHandRaise', 'leftHandRaise', 'fieldGoal', 'rightHandWave']
-	NUMBER_OF_LANES = 10
-	NUMBER_OF_WORD_CHALLENGES = 10
+    CHALLENGE_INDEX = ['big_lasers', 'small_lasers', 'word', 'gesture', 'trivia']
+    GESTURES = ['tpose', 'rightHandRaise', 'leftHandRaise', 'fieldGoal', 'rightHandWave']
+    NUMBER_OF_LANES = 10
+    NUMBER_OF_WORD_CHALLENGES = 17
+    NUMBER_OF_TRIVIA_CHALLENGES = 2
 
+    def __init__(self):
+        self.challenges = []
+        return
+    
+    """
+    %challengeType% = {big_lasers, small_lasers, word, gesture}
+    """
+    def createChallenge(self, challengeType):
+        challenge_data = None
+        if challengeType == 'gesture':
+            gesture = -1
+            gesture = challengeGenerator.GESTURES[random.randint(0, len(challengeGenerator.GESTURES)-1)]
+            challenge_data = gesture 
 
-	def __init__(self):
-		self.challenges = []
-		return
-	
-	"""
-	%challengeType% = {big_lasers, small_lasers, word, gesture}
-	"""
-	def createChallenge(self, challengeType):
-		challenge_data = None
-		if challengeType == 'gesture':
-			gesture = -1
-			gesture = challengeGenerator.GESTURES[random.randint(0, len(challengeGenerator.GESTURES)-1)]
-			challenge_data = gesture 
+        elif challengeType == 'big_lasers':
+            # lanes to populate with lasers
+            number_of_laser_lanes = 6
+            lasers = []
+            lasers = random.sample(xrange(0,challengeGenerator.NUMBER_OF_LANES),number_of_laser_lanes)
+            challenge_data = lasers 
 
-		elif challengeType == 'big_lasers':
-			# lanes to populate with lasers
-			number_of_laser_lanes = 6
-			lasers = []
-			lasers = random.sample(xrange(0,challengeGenerator.NUMBER_OF_LANES),number_of_laser_lanes)
-			challenge_data = lasers 
+        elif challengeType == 'small_lasers':
+            # number_of_small_lasers_to_fire = 15
+            number_of_small_lasers_to_fire = random.randint(10,15)
+            lasers = []
+            for x in range(number_of_small_lasers_to_fire):
+                lasers.append(random.randint(0,challengeGenerator.NUMBER_OF_LANES-1))
+            challenge_data = lasers
 
-		elif challengeType == 'small_lasers':
-			# number_of_small_lasers_to_fire = 15
-			number_of_small_lasers_to_fire = random.randint(10,15)
-			lasers = []
-			for x in range(number_of_small_lasers_to_fire):
-				lasers.append(random.randint(0,challengeGenerator.NUMBER_OF_LANES-1))
-			challenge_data = lasers
+        elif challengeType == 'word':
+            word_index = -1
+            word_index = random.randint(0,challengeGenerator.NUMBER_OF_WORD_CHALLENGES-1)
+            challenge_data = word_index
 
-		elif challengeType == 'word':
-			word_index = -1
-			word_index = random.randint(0,challengeGenerator.NUMBER_OF_WORD_CHALLENGES-1)
-			challenge_data = word_index
+        elif challengeType == 'trivia':
+            trivia_index = -1
+            trivia_index = random.randint(0,challengeGenerator.NUMBER_OF_TRIVIA_CHALLENGES-1)
+            challenge_data = word_index
 
-		else:
-			log.error("unrecognized challenge type.")
+        else:
+            log.error("unrecognized challenge type.")
 
-		return (challengeType, challenge_data)
+        return (challengeType, challenge_data)
 
-	def generate(self, number_of_challenges = 25):
-		for i in range(0, number_of_challenges):
-			challenge = self.createChallenge(challengeGenerator.CHALLENGE_INDEX[random.randint(0,len(challengeGenerator.CHALLENGE_INDEX))-1])
-			self.challenges.append(challenge)
-		return
+    def generate(self, number_of_challenges = 25):
+        for i in range(0, number_of_challenges):
+            challenge = self.createChallenge(challengeGenerator.CHALLENGE_INDEX[random.randint(0,len(challengeGenerator.CHALLENGE_INDEX))-1])
+            self.challenges.append(challenge)
+        return self.challenges
 
 class game_client:
-	def __init__(self, id):
-		self.player_id = id
-		self.current_challenge = 0
-		self.position = 0
-		return
+    def __init__(self, id):
+        self.player_id = id
+        self.current_challenge = 0
+        self.position = 0
+        self.connection_status = ''
+        return
 
-	def getNextChallengeNumber(self):
-		self.current_challenge += 1
-		return self.current_challenge
-
-	def incrementPosition(self):
-		self.position += 1
+    def getNextChallengeNumber(self):
+        self.current_challenge += 1
+        return self.current_challenge
 
 class controller:
 
-	def __init__(self):
-		self.game_clients = []
-		self.player_id_to_client_id = {}
+    def __init__(self):
+        self.challenge_generator = challengeGenerator()
 
-		self.mqtt_client = mqtt.Client(client_id = 'game_server')
-		self.mqtt_client.on_connect = on_connect
-		self.mqtt_client.on_message = on_message
-		self.mqtt_client.connect('localhost', '1883', 60)
-		self.subscribeToGameTopics()
-		self.mqtt_client.user_data_set(self)
-		self.mqtt_client.loop_start()
+        self.game_clients = []
+        self.player_id_to_client_id = {}
 
+        self.state = 'waiting for players'
 
-	def subscribeToGameTopics(self):
-		topics = [('test', 0), ('server/player_connected', 0), ('player1/#', 0), ('player2/#', 0)]
-		self.mqtt_client.subscribe(topics)
+        self.mqtt_client = mqtt.Client(client_id = 'game_server')
+        self.mqtt_client.on_connect = on_connect
+        self.mqtt_client.on_message = on_message
+        self.mqtt_client.connect('localhost', '1883', 60)
+        self.subscribeToGameTopics()
+        self.initTopics()
+        self.mqtt_client.user_data_set(self)
+        self.mqtt_client.loop_start()
 
-	def addGameClient(self, client_id):
-		payload = ''
-    	if len(self.game_clients) < 2:
-			player_id = 1+len(self.game_clients)
-			payload = 'player{}'.format(player_id)
-			new_game_client = game_client(player_id)
-			self.game_clients.append(new_game_client)
-		else:
-			payload = '2 players connected already'
+    def subscribeToGameTopics(self):
+        topics = [('test', 0), ('server/player_connected', 0), ('player1/#', 0), ('player2/#', 0)]
+        self.mqtt_client.subscribe(topics)
+        return 
 
-		self.mqtt_client.publish('server/{}'.format(client_id), payload)
+    def createChallenges(number):
+        self.challenge_generator.generate(50)
+        return
 
+    def addGameClient(self, client_id):
+        payload = ''
+        # add game client if there is room, else reject request
+        if len(self.game_clients) < 2:
+            # player1 = game_clients[0], player2 = game_clients[1]
+            player_id = 1+len(self.game_clients)
+            payload = 'player{}'.format(player_id)
+            new_game_client = game_client(player_id)
+            self.game_clients.append(new_game_client)
+        else:
+            payload = '2 players connected already'
 
-	def sendChallengeTo(self, player_id):
-		pass
-		# get next challenge of player id
-		# package
-		# publish to topic
+        self.mqtt_client.publish(topic='server/{}'.format(client_id), payload=payload)
+        return
 
-	# def correctGestureReceived(self, player_id):
-	# 	# 
-	def challengeRequestReceived(self):
-		pass
+    def sendChallengeTo(self, player_id):
+        challenge_inx = self.game_clients[player_id-1].getNextChallengeNumber()
+        challenge_type, challenge_data = self.challenge_generator.challenges[challenge_inx]
+        payload = json.dumps({challenge_type : challenge_data})
+        self.mqtt_client.publish(topic='player{}/challenge'.format(player_id), payload=payload)
+        self.mqtt_client.publish(topic='player{}/request_challenge'.format(player_id), payload='fulfilled')
+
+    def readyToStart(self):
+        return (self.game_clients[0].connection_status == 'ready' and self.game_clients[1].connection_status == 'ready')
+
+    def startGame(self):
+        self.mqtt_client.publish(topic='game/state', payload=)
+
+    def initTopics(self):
+        """
+        INIT VALUES 
+
+        server:
+        game/state = 'waiting for players'
+        server/player_connected = ""
+
+        player 1:
+        player1/challenge = ""
+        player1/challenge_status = ""
+        player1/request_challenge = ""
+        player1/position = ""
+        player1/connection_status = ""
+
+        player 2: 
+        same as player1
+
+        """
+        self.mqtt_client.publish(topic='game/state', payload='', retain=True)
+        self.mqtt_client.publish(topic='server/player_connected', payload='', retain=True)
+
+        self.mqtt_client.publish(topic='player1/challenge', payload='', retain=True)
+        self.mqtt_client.publish(topic='player1/challenge_status', payload='', retain=True)
+        self.mqtt_client.publish(topic='player1/request_challenge', payload='', retain=True)
+        self.mqtt_client.publish(topic='player1/position', payload='', retain=True)
+        self.mqtt_client.publish(topic='player1/connection_status', payload='', retain=True)
+
+        self.mqtt_client.publish(topic='player2/challenge', payload='', retain=True)
+        self.mqtt_client.publish(topic='player2/challenge_status', payload='', retain=True)
+        self.mqtt_client.publish(topic='player2/request_challenge', payload='', retain=True)
+        self.mqtt_client.publish(topic='player2/position', payload='', retain=True)
+        self.mqtt_client.publish(topic='player2/connection_status', payload='', retain=True)
+        return
+
+    def cleanUp(self):
+        self.game_clients = []
+        self.challenge_generator.challenges = []
+        self.initTopics()
 
 def main():
-	c = controller()
+    c = controller()
+    c.createChallenges(50)
 
-	while(1):
-		print("{}: {}".format(time(), c._user))
-		# if 2 clients connected, start game
-		# if both clients disconnected, initialize topics
 
-		# if position of player is the last spot, send winner message / loser message / game over
+    # game/state = {waiting for players, ready, start, running, pause, game over, finish}
+    previous_state = c.state
 
-		# rest of logic is in message callback
+    while(1):
+        print("{}: {}".format(time(), c.game_clients))
+        if c.state != previous_state:
+            self.mqtt_client.publish(topic='game/state', payload=c.state, retain=True)
+
+        previous_state = c.state
+
+        # waiting for players
+        if c.state == 'waiting for players':
+            #code
+
+            # if 2 clients connected, start game
+            if c.readyToStart():
+                c.state = 'start'
+
+        elif c.state == 'start':
+            #more code
+            c.state = 'running'
+
+        elif c.state == 'running':
+            #more more code
+            for i in range(1,len(c.game_clients)+1):
+                if c.game_clients[i-1].connection_status == 'I WON':
+                    c.mqtt_client.publish(topic='player{}/winner_notification'.format(i), payload='winner')
+                    c.mqtt_client.publish(topic='player{}/winner_notification'.format((i+1)%2), payload='loser')
+                    c.state = 'game over'
+
+        elif c.state == 'pause':
+            #code 
+        elif c.state == 'game over':
+            #more code
+            # clients should send message
+            for i in range(1, 3):
+                c.mqtt_client.publish(topic='player{}/connection_status'.format(i), payload='not ready')
+
+            c.state = 'waiting for players'
+        else:
+            log.error('invalid state!')
+
+
+        # if both clients disconnected, initialize topics
+
+        # if position of player is the last spot, send winner message / loser message / game over
+
+        # rest of logic is in message callback
 
 if __name__ == '__main__':
-	main()
+    main()
