@@ -20,4 +20,15 @@ public class TriviaList : MonoBehaviour
         ans = triviaDictionay.Keys.ElementAt(r);
         ques = triviaDictionay[ans];
     }
+
+    public static void getQuestionNumber(ref string ques, ref string ans, int i = -1){
+        
+        if (i==-1){
+            getQuestion(ref ques, ref ans);
+        }
+        else{
+            ans = triviaDictionay.Keys.ElementAt(i);
+            ques = triviaDictionay[ans];
+        }
+    }
 }
