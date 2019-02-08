@@ -38,7 +38,7 @@ public class Small_Laser_Obstacle : Laser_Obstacle {
 			waitForNextLaser = 0.3f;
 		}
 		PrefabSetup();
-		player = GameObject.Find("Player").GetComponent<Player>();
+		player = GameObject.FindWithTag("Player").GetComponent<Player>();
 		laserTimes = new Laser_Times(laserDuration, waitForNextLaser);
 	}
 	

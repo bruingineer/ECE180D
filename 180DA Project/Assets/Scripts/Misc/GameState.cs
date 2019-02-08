@@ -104,13 +104,14 @@ public abstract class GameState_Base : MonoBehaviour {
 
 public abstract class GameState_with_Player : GameState_Base {
 	public GameObject playerExplosion;
-	private GameObject player;
+	private Player player;
 	private bool handledPlayer;
 
 	protected override void SetUp()
 	{
 		handledPlayer = false;
-		player = GameObject.Find("Player");
+		player = (Resources.Load("Prefabs/Player/Player") as GameObject).GetComponent<Player>();
+		player = Instantiate(player, new Vector3(numLanes / 2, 0.5f), Quaternion.identity);
 		InitializeLaneList();
 		SetUp_Events_Obstacles();
 	}
