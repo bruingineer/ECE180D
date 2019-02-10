@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using System.Collections.Generic;
 using System.Net;
 using uPLibrary.Networking.M2Mqtt;
@@ -24,7 +25,7 @@ public class CreateProfile : MonoBehaviour {
         string str_command = "INSERT INTO players (name) VALUES (\'" + player_name + "\')";
         byte[] command = Encoding.ASCII.GetBytes(str_command);
 
-        // create client instance 
+        // create MQTT client instance 
         client = new MqttClient(IPAddress.Parse(str_IP), int_Port, false, null);
 
         // connect
@@ -33,5 +34,7 @@ public class CreateProfile : MonoBehaviour {
 
         //Add Profile
         client.Publish("database", command);
+
+        SceneManager.LoadScene("Start Scene");
     }
 }

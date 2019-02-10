@@ -8,6 +8,9 @@ CREATE TABLE IF NOT EXISTS players (
     games_played INT DEFAULT 0,
     suggested_difficulty varchar(10) NOT NULL DEFAULT "easy",
     difficulty_ctr INT DEFAULT 0,
+    laser_training BOOLEAN DEFAULT False,
+    gesture_training BOOLEAN DEFAULT False,
+    speech_training BOOLEAN DEFAULT False,
     PRIMARY KEY(id)
 );
 

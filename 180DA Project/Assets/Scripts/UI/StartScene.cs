@@ -25,11 +25,9 @@ public class PlayerData
 [Serializable]
 public class PlayerItem
 {
-    public string name;
-    public int id;
-    public int games_played;
-    public int difficulty_ctr;
-    public string suggested_difficulty;
+    public string name, suggested_difficulty;
+    public int id, games_played, difficulty_ctr;
+    public bool laser_training, gesture_training, speech_training;
 }
 
 public class StartScene : MonoBehaviour {
@@ -39,10 +37,8 @@ public class StartScene : MonoBehaviour {
     private const string topic = "database/players";
     private byte[] playersQuery = Encoding.ASCII.GetBytes("SELECT * FROM players");
     private bool populated = false;
-    public double timer = 0;
     PlayerData pd;
     PlayerItem selectedPlayer;
-    int ctr;
 
     //Create a List of new Dropdown options and attach to object
     List<string> m_DropOptions = new List<string>();
@@ -65,7 +61,6 @@ public class StartScene : MonoBehaviour {
 
         //Perform query for player profiles
         client.Publish("database", playersQuery);
-        
     }
 	
 	// Update is called once per frame
@@ -81,6 +76,7 @@ public class StartScene : MonoBehaviour {
             m_Dropdown.AddOptions(m_DropOptions);
         }
 
+        //Populate Selected Player data when user changes dropdown option
         if (pd != null && pd.count != 0)
         {
             selectedPlayer = pd.items[m_Dropdown.value];
@@ -91,6 +87,9 @@ public class StartScene : MonoBehaviour {
                 SelectedPlayer.games_played = selectedPlayer.games_played;
                 SelectedPlayer.suggested_difficulty = selectedPlayer.suggested_difficulty;
                 SelectedPlayer.difficulty_ctr = selectedPlayer.difficulty_ctr;
+                SelectedPlayer.laser_training = selectedPlayer.laser_training;
+                SelectedPlayer.gesture_training = selectedPlayer.gesture_training;
+                SelectedPlayer.speech_training = selectedPlayer.speech_training;
                 SelectedPlayer.resetGameStats();
             }
         }
@@ -98,11 +97,10 @@ public class StartScene : MonoBehaviour {
 
     void client_MqttMsgPublishReceived(object sender, MqttMsgPublishEventArgs e)
     {
-        ctr++;
         string playersResult = Encoding.ASCII.GetString(e.Message);
-
         if (playersResult.Contains("name"))
         {
+            //Populate PlayerData class with query data
             Debug.Log(playersResult);
             pd = PlayerData.CreateFromJSON(playersResult);
             if (pd == null || pd.count == 0)

@@ -8,6 +8,7 @@ public static class SelectedPlayer{
     public static string name;
     public static int id, games_played, difficulty_ctr;
     public static string suggested_difficulty;
+    public static bool laser_training, gesture_training, speech_training;
 
     //current game info
     public static int current_hits = 0;
