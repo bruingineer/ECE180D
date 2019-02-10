@@ -94,7 +94,7 @@ public class Big_Laser_Obstacle : Laser_Obstacle {
 		int list_count = lanesToFireLasers.Count;
 		for(int i = 0; i < list_count; i++)
 		{
-			GameObject laserParticle = Instantiate(laserWarning, new Vector3(lanesToFireLasers[i] + 0.5f, GameState_Base.end_row), Quaternion.identity);
+			GameObject laserParticle = Instantiate(laserWarning, new Vector3(lanesToFireLasers[i] + 0.5f, GameState_Base.end_row), Quaternion.Euler(0, 0, 90));
 			ParticleSystem ps = laserParticle.GetComponent<ParticleSystem>();
 			var main = ps.main;
 			main.duration = laserWarmUpTime;

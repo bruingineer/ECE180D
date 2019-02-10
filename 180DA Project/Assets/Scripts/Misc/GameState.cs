@@ -111,7 +111,7 @@ public abstract class GameState_with_Player : GameState_Base {
 	{
 		handledPlayer = false;
 		player = (Resources.Load("Prefabs/Player/Player") as GameObject).GetComponent<Player>();
-		player = Instantiate(player, new Vector3(numLanes / 2, 0.5f), Quaternion.identity);
+		player = Instantiate(player, new Vector3(numLanes / 2 + 0.5f, 0.5f), Quaternion.identity);
 		InitializeLaneList();
 		SetUp_Events_Obstacles();
 	}
@@ -119,7 +119,7 @@ public abstract class GameState_with_Player : GameState_Base {
 	protected abstract void SetUp_Events_Obstacles();
 	private void InitializeLaneList() {
 		laneNums = new List<int>();
-		for (int i = 1; i <= numLanes; i++)
+		for (int i = 0; i < numLanes; i++)
 			laneNums.Add(i);
 	}
 
