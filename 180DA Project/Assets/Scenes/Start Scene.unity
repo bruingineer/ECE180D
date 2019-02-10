@@ -441,17 +441,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 1955533904}
-        m_MethodName: changeMenuScene
-        m_Mode: 5
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: Start Scene
-          m_BoolArgument: 0
-        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &251554481
@@ -653,7 +642,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: Main Level
+          m_StringArgument: Game Menu
           m_BoolArgument: 0
         m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
@@ -2178,7 +2167,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Start Game
+  m_Text: Game Menu
 --- !u!222 &1697899014
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2906,7 +2895,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7fb934bb8f2a34a4998f8488c36c6eb0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timer: 0
 --- !u!1 &2130045961
 GameObject:
   m_ObjectHideFlags: 0
