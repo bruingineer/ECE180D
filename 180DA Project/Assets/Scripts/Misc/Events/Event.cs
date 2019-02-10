@@ -25,7 +25,7 @@ public abstract class Event : MonoBehaviour {
 			timerDuration = 8f;
 			repeatRate = 1f; 
 		} 
-		delay = 0.75f;
+		delay = 2f;
 		m_player = GameObject.FindWithTag("Player").GetComponent<Player>();
 		timeLeft = GameObject.FindWithTag("timer").GetComponent<Text>();
         Initialize();

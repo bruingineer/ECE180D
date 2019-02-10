@@ -83,6 +83,18 @@ GameObject:
   - component: {fileID: 114387163138408396}
   - component: {fileID: 114162442984036584}
   - component: {fileID: 114893464205354440}
+  - component: {fileID: 114529856917846824}
+  - component: {fileID: 114945674896860722}
+  - component: {fileID: 114338264104663788}
+  - component: {fileID: 114582359554891838}
+  - component: {fileID: 114916448547502582}
+  - component: {fileID: 114615183860473744}
+  - component: {fileID: 114948303659682500}
+  - component: {fileID: 114554658124086600}
+  - component: {fileID: 114952168662878072}
+  - component: {fileID: 114091074409738790}
+  - component: {fileID: 114160888213733058}
+  - component: {fileID: 114801085482476080}
   m_Layer: 0
   m_Name: Small_Laser
   m_TagString: Untagged
@@ -96,13 +108,13 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1425163666092182}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0.7071068, w: 0.7071068}
   m_LocalPosition: {x: 11.598106, y: 3.9375799, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
 --- !u!54 &54970730454949824
 Rigidbody:
   m_ObjectHideFlags: 1
@@ -178,6 +190,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   smallLaserSound: {fileID: 0}
+--- !u!114 &114091074409738790
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1425163666092182}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a63f4ad43d6846b28d0c79d1f313790, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  smallLaserSound: {fileID: 0}
 --- !u!114 &114107952700504578
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -203,6 +227,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   smallLaserSound: {fileID: 0}
 --- !u!114 &114129291048208816
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1425163666092182}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a63f4ad43d6846b28d0c79d1f313790, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  smallLaserSound: {fileID: 0}
+--- !u!114 &114160888213733058
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
@@ -287,6 +323,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   smallLaserSound: {fileID: 0}
 --- !u!114 &114335188533383882
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1425163666092182}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a63f4ad43d6846b28d0c79d1f313790, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  smallLaserSound: {fileID: 0}
+--- !u!114 &114338264104663788
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
@@ -442,6 +490,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   smallLaserSound: {fileID: 0}
+--- !u!114 &114529856917846824
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1425163666092182}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a63f4ad43d6846b28d0c79d1f313790, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  smallLaserSound: {fileID: 0}
 --- !u!114 &114532456411529166
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -455,6 +515,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   smallLaserSound: {fileID: 0}
 --- !u!114 &114541029181584092
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1425163666092182}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a63f4ad43d6846b28d0c79d1f313790, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  smallLaserSound: {fileID: 0}
+--- !u!114 &114554658124086600
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
@@ -490,6 +562,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   smallLaserSound: {fileID: 0}
+--- !u!114 &114582359554891838
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1425163666092182}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a63f4ad43d6846b28d0c79d1f313790, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  smallLaserSound: {fileID: 0}
 --- !u!114 &114592998965238990
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -503,6 +587,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   smallLaserSound: {fileID: 0}
 --- !u!114 &114606944450526272
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1425163666092182}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a63f4ad43d6846b28d0c79d1f313790, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  smallLaserSound: {fileID: 0}
+--- !u!114 &114615183860473744
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
@@ -658,6 +754,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   smallLaserSound: {fileID: 0}
+--- !u!114 &114801085482476080
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1425163666092182}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a63f4ad43d6846b28d0c79d1f313790, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  smallLaserSound: {fileID: 0}
 --- !u!114 &114825767725330372
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -707,6 +815,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   smallLaserSound: {fileID: 0}
 --- !u!114 &114911668643433100
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1425163666092182}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a63f4ad43d6846b28d0c79d1f313790, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  smallLaserSound: {fileID: 0}
+--- !u!114 &114916448547502582
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
@@ -779,6 +899,42 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   smallLaserSound: {fileID: 0}
 --- !u!114 &114937241424019432
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1425163666092182}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a63f4ad43d6846b28d0c79d1f313790, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  smallLaserSound: {fileID: 0}
+--- !u!114 &114945674896860722
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1425163666092182}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a63f4ad43d6846b28d0c79d1f313790, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  smallLaserSound: {fileID: 0}
+--- !u!114 &114948303659682500
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1425163666092182}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a63f4ad43d6846b28d0c79d1f313790, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  smallLaserSound: {fileID: 0}
+--- !u!114 &114952168662878072
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}

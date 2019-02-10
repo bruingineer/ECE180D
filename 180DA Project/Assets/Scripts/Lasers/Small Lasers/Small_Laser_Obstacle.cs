@@ -50,24 +50,23 @@ public class Small_Laser_Obstacle : Laser_Obstacle {
 	protected override IEnumerator FireLasers() 
 	{
 		// get initial and final x position
-		bool switchPosition = !(player.transform.position.x < GameState_Base.end_row / 2);
-		float start_X_Position = switchPosition ? 0 : GameState_Base.end_row;
-		float end_X_Position = switchPosition ? GameState_Base.end_row : 0;
+		bool switchPosition = !(player.transform.position.y < GameState_Base.end_row / 2);
+		float start_Y_Position = switchPosition ? 0 : GameState_Base.end_row;
+		float end_Y_Position = switchPosition ? GameState_Base.end_row : 0;
 		// Create lasers
-		yield return CreateLasers(start_X_Position, end_X_Position);
+		yield return CreateLasers(start_Y_Position, end_Y_Position);
 		// wait until last laser ends plus waiting for the next obstacle time
 		yield return new WaitForSeconds(laserTimes.duration + obstacleWaitTime);
 		
 	}
 
-	private IEnumerator CreateLasers(float start_X_Position, float end_X_Position)
+	private IEnumerator CreateLasers(float start_Y_Position, float end_Y_Position)
 	{
 		for(int i = 0; i < lasersToFire; i++) 
 		{
-			Small_Laser small_laser = Instantiate(laserPrefab, new Vector3(start_X_Position, 
-				GameState_Base.laneNums[Random.Range(0, GameState_Base.laneNums.Count)] + 0.5f), 
-					Quaternion.identity) as Small_Laser;
-			small_laser.MoveLaser(new Vector3(end_X_Position, small_laser.transform.position.y), laserTimes);
+			Small_Laser small_laser = Instantiate(laserPrefab, new Vector3(GameState_Base.laneNums[Random.Range(0, GameState_Base.laneNums.Count)] + 0.5f, 
+					start_Y_Position), Quaternion.Euler(0, 0, 90)) as Small_Laser;
+			small_laser.MoveLaser(new Vector3(small_laser.transform.position.x, end_Y_Position), laserTimes);
 			yield return new WaitForSeconds(waitForNextLaser);
 		}
 		yield return null;
