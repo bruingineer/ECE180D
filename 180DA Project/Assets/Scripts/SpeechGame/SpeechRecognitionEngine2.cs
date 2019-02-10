@@ -33,6 +33,10 @@ public class SpeechRecognitionEngine2 : Event
             recognizer = new KeywordRecognizer(keywords, confidence);
             recognizer.OnPhraseRecognized += Recognizer_OnPhraseRecognized;
             recognizer.Start();
+            PhraseRecognitionSystem.Restart();
+        }
+        if (PhraseRecognitionSystem.Status == SpeechSystemStatus.Running){
+            Debug.Log("starting another scrabmle");
         }
         Debug.Log(WDisplay.word_str);
     }
@@ -68,6 +72,8 @@ public class SpeechRecognitionEngine2 : Event
         StopRecognizer();
         HandleIncorrectMiniGame();
         SelectedPlayer.current_speech_fail++;
+        WDisplay.DeleteWordDisplay();
+        Msg.text = "";
         yield return Delay();
     }
 
@@ -80,6 +86,7 @@ public class SpeechRecognitionEngine2 : Event
             recognizer.OnPhraseRecognized -= Recognizer_OnPhraseRecognized;
             recognizer.Stop();
             recognizer.Dispose();
+            PhraseRecognitionSystem.Shutdown();
         }    
     }
 
