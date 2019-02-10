@@ -10,6 +10,7 @@ public abstract class Event : MonoBehaviour {
 	protected float repeatRate;
 	private float delay;
 	protected bool timerPaused = false;
+	protected bool eventCorrect;
 
 	void Awake()
     {
@@ -39,7 +40,7 @@ public abstract class Event : MonoBehaviour {
 	protected IEnumerator StartTimer()
 	{
 		float curTime = timerDuration;
-		while (curTime >= 0)
+		while (curTime >= 0 && !eventCorrect)
         {   
 			if(!timerPaused)
 			{
@@ -60,6 +61,7 @@ public abstract class Event : MonoBehaviour {
 	
 	public IEnumerator StartEvent() 
 	{
+		eventCorrect = false;
 		SetUpEvent();
 		if (SelectedPlayer.current_difficulty != "easy")
 			StartCoroutine("MakeTextBlink");

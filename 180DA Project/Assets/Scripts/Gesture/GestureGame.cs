@@ -80,7 +80,7 @@ public class GestureGame : Event {
 	private IEnumerator HandleCorrectCoroutine()
 	{
 			yield return StartCoroutine("Delay");
-			StopCoroutine("StartTimer");
+			eventCorrect = true;
 	}
 
 	protected virtual void HandleCorrectMiniGame() {}

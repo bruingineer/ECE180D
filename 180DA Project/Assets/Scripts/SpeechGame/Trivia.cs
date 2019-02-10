@@ -131,7 +131,7 @@ public class Trivia : Event
         TrivaText.text = "";
         answer.text = "";
         yield return StartCoroutine("Delay");
-        StopCoroutine("StartTimer");
+        eventCorrect = true;
     }
 
     protected override IEnumerator HandleIncorrect(){

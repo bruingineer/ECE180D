@@ -60,7 +60,8 @@ public class SpeechRecognitionEngine2 : Event
         Msg.text = "";
         yield return Delay();
         StopCoroutine("MakeTextBlink");
-        StopCoroutine("StartTimer");
+        eventCorrect = true;
+        yield return null;
     }
 
     protected override IEnumerator HandleIncorrect(){
