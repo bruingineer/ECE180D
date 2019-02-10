@@ -114,7 +114,7 @@ public class Trivia : Event
         {
             Debug.LogErrorFormat("Dictation error: {0}; HResult = {1}.", error, hresult);
         };
-
+        m_DictationRecognizer.InitialSilenceTimeoutSeconds = 14f;
         GotCorrect = false;
         m_DictationRecognizer.Start();
 
@@ -137,6 +137,8 @@ public class Trivia : Event
     protected override IEnumerator HandleIncorrect(){
         StopRecognizer();
         SelectedPlayer.current_speech_fail++;
+        answer.text = "";
+        TrivaText.text = "";
         yield return StartCoroutine("Delay");
     }
 
