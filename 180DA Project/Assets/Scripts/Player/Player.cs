@@ -48,7 +48,8 @@ public class Player : Moving_Object {
 		if(!isPlayerMoving) 
 			{
 				MovePlayerX();
-				MovePlayerY();
+				if (GameState_Base.gamePlaying)
+					MovePlayerY();
 			}
 	}
 
@@ -89,6 +90,7 @@ public class Player : Moving_Object {
 		isRecovering = true;
 		if (playerLives > 1) {
 			playerLives--;
+			GameObject.Find("Game_Manager").GetComponent<GameState_with_Player>().RemoveLife(playerLives);
 			isRecovering = true;
 			GameState_Base.PlayClip(playerHitByLaser);
 			yield return ChangeColor();
@@ -97,10 +99,7 @@ public class Player : Moving_Object {
 			yield return null;
 		}
 		else 
-		{
-			Debug.Log("hi");
 			isDead = true;
-		}
 	}
 
 	// function used by lasers when it hits the player

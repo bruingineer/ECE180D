@@ -390,6 +390,11 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &539403994 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1349712183322244, guid: 845256913211b44809f85d872213b61d,
+    type: 2}
+  m_PrefabInternal: {fileID: 1545103948}
 --- !u!1 &946149243
 GameObject:
   m_ObjectHideFlags: 0
@@ -5842,10 +5847,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 91eb4adcdfde84d5bbe069205cf50130, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameOver: {fileID: 0}
+  gameOver: {fileID: 539403994}
   countdown: {fileID: 1782858402}
   playerExplosion: {fileID: 1930362069647888, guid: 0fc2a53664375441a9bac3adc653c04d,
     type: 2}
+  playerLives: []
 --- !u!82 &2081299344
 AudioSource:
   m_ObjectHideFlags: 0

@@ -7,6 +7,7 @@ using uPLibrary.Networking.M2Mqtt;
 using uPLibrary.Networking.M2Mqtt.Messages;
 using uPLibrary.Networking.M2Mqtt.Utility;
 using uPLibrary.Networking.M2Mqtt.Exceptions;
+using TMPro;
 
 public abstract class GameState_Base : MonoBehaviour {
 
@@ -17,12 +18,12 @@ public abstract class GameState_Base : MonoBehaviour {
 
 	// Audio
 	public static AudioSource m_audio_source;
-	protected AudioClip gameLost;
-	protected AudioClip gameWon;
+	public AudioClip gameLost;
+	public AudioClip gameWon;
 
 	// Objects
 	protected Canvas canvas;
-	public Text gameOver;
+	public GameObject gameOver;
 	public Text countdown;
 	public static bool gamePlaying;
 	
@@ -100,12 +101,18 @@ public abstract class GameState_Base : MonoBehaviour {
 	{
 		SceneManager.LoadScene(6);
 	}
+
+	public void LoadStatsMenu()
+	{
+		SceneManager.LoadScene(2);
+	}
 }
 
 public abstract class GameState_with_Player : GameState_Base {
 	public GameObject playerExplosion;
 	private Player player;
 	private bool handledPlayer;
+	public List<GameObject> playerLives;
 
 	protected override void SetUp()
 	{
@@ -132,6 +139,11 @@ public abstract class GameState_with_Player : GameState_Base {
 		}
 	}
 
+	public void RemoveLife(int curLives)
+	{
+		playerLives[curLives - 1].SetActive(false);
+	}
+
 	private void HandlePlayerWin() 
 	{
 		if (player.transform.position.y == (end_row - 0.5f))
@@ -144,13 +156,13 @@ public abstract class GameState_with_Player : GameState_Base {
 
 	private void HandlePlayerDied() 
 	{
-		if (player.GetComponent<Player>().isDead) {
+		if (player.isDead) {
 			handledPlayer = true;
 			gamePlaying = false;
 			SelectedPlayer.died = true;
-			Instantiate(gameOver, canvas.transform);
+			gameOver.GetComponent<TextMeshProUGUI>().text = "Game Over!";
 			ParticleSystem explosion = Instantiate(playerExplosion, player.transform.position, Quaternion.identity).GetComponent<ParticleSystem>();
-			Destroy(player);
+			Destroy(player.gameObject);
 			PlayClip(gameLost);
 			float explosionDuration = gameLost.length;
 			var main = explosion.main;
@@ -162,16 +174,15 @@ public abstract class GameState_with_Player : GameState_Base {
 
 	IEnumerator PlayerWonCoroutine()
 	{
-		// gameOver.text = "You Win!";
-		Instantiate(gameOver, canvas.transform);
+		gameOver.GetComponent<TextMeshProUGUI>().text = "You win!";
 		PlayClip(gameWon);
 		yield return new WaitForSeconds(gameWon.length);
-		// handle won
+		LoadStatsMenu();
 	}
 
 	IEnumerator PlayerDiedCoroutine(float explosionDuration) 
 	{
 		yield return new WaitForSeconds(explosionDuration);
-		// handle died
+		LoadStatsMenu();
 	}
 }
