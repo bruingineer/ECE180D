@@ -61,6 +61,7 @@ public abstract class Event : MonoBehaviour {
 	
 	public IEnumerator StartEvent() 
 	{
+		timerPaused = false;
 		eventCorrect = false;
 		SetUpEvent();
 		if (SelectedPlayer.current_difficulty != "easy")
