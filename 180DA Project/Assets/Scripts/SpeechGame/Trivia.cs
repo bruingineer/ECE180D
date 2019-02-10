@@ -94,7 +94,7 @@ public class Trivia : Event
                 TrivaText.text = "Correct!";
                 StopRecognizer();
                 SelectedPlayer.current_speech_pass++;
-                StartCoroutine(Reset());
+                StartCoroutine("Reset");
             }
         };
 
@@ -130,14 +130,14 @@ public class Trivia : Event
         yield return new WaitForSeconds(endDisplayTime);
         TrivaText.text = "";
         answer.text = "";
-        yield return StartCoroutine(Delay());
-        StopCoroutine(StartTimer());
+        yield return StartCoroutine("Delay");
+        StopCoroutine("StartTimer");
     }
 
     protected override IEnumerator HandleIncorrect(){
         StopRecognizer();
         SelectedPlayer.current_speech_fail++;
-        yield return StartCoroutine(Delay());
+        yield return StartCoroutine("Delay");
     }
 
     // Update is called once per frame

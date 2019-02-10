@@ -41,17 +41,12 @@ public class Big_Laser_Obstacle : Laser_Obstacle {
         laserWarnings = new List<GameObject>();
 		// Finish loading sounds
 		laserWarning = (Resources.Load("Prefabs/Lasers/Laser_Warning") as GameObject);
-		PrefabSetup();
+		laserPrefab = (Resources.Load(lasersPath + "BigLaser") as GameObject);
 	}
 
 	void Update()
 	{
 		// CheckGamePlaying();
-	}
-
-	protected virtual void PrefabSetup()
-	{
-		laserPrefab = (Resources.Load(lasersPath + "BigLaser") as GameObject).GetComponent<Big_Laser>();
 	}
 
 	protected override IEnumerator FireLasers() 
@@ -84,7 +79,8 @@ public class Big_Laser_Obstacle : Laser_Obstacle {
 		int list_count = lanesToFireLasers.Count;
 		for(int i = 0; i < list_count; i++)
 		{
-			Big_Laser bigLaser = Instantiate(laserPrefab, new Vector3(lanesToFireLasers[i] + 0.5f, GameState_Base.end_row), Quaternion.identity) as Big_Laser;
+			GameObject prefab = Instantiate(laserPrefab, new Vector3(lanesToFireLasers[i] + 0.5f, GameState_Base.end_row), Quaternion.identity) as GameObject;
+			Big_Laser bigLaser = AddComponentToLaser(prefab).GetComponent<Big_Laser>();
 			bigLaser.MoveLaser(new Vector3(bigLaser.transform.position.x, 0), laserTimes);
 		}
 	}
@@ -117,12 +113,19 @@ public class Big_Laser_Obstacle : Laser_Obstacle {
 		}
 		return lanesToFireLasers;
 	}
+
+	protected virtual GameObject AddComponentToLaser(GameObject prefab)
+	{
+		prefab.AddComponent<Big_Laser>();
+		return prefab;
+	}
 }
 
 public class Big_Laser_Obstacle_Minigame : Big_Laser_Obstacle {
 	
-	protected override void PrefabSetup()
+	protected override GameObject AddComponentToLaser(GameObject prefab)
 	{
-		laserPrefab = (Resources.Load("Prefabs/Lasers/SmallLaser") as GameObject).AddComponent<Big_Laser_Minigame>();
+		prefab.AddComponent<Big_Laser_Minigame>();
+		return prefab;
 	}
 }

@@ -211,56 +211,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!1001 &143314502
-Prefab:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 4686574202049894, guid: d15878facebc94fe1b1adde940810fa9, type: 2}
-      propertyPath: m_LocalPosition.x
-      value: 20
-      objectReference: {fileID: 0}
-    - target: {fileID: 4686574202049894, guid: d15878facebc94fe1b1adde940810fa9, type: 2}
-      propertyPath: m_LocalPosition.y
-      value: 8.46
-      objectReference: {fileID: 0}
-    - target: {fileID: 4686574202049894, guid: d15878facebc94fe1b1adde940810fa9, type: 2}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4686574202049894, guid: d15878facebc94fe1b1adde940810fa9, type: 2}
-      propertyPath: m_LocalRotation.x
-      value: -0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 4686574202049894, guid: d15878facebc94fe1b1adde940810fa9, type: 2}
-      propertyPath: m_LocalRotation.y
-      value: -0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 4686574202049894, guid: d15878facebc94fe1b1adde940810fa9, type: 2}
-      propertyPath: m_LocalRotation.z
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 4686574202049894, guid: d15878facebc94fe1b1adde940810fa9, type: 2}
-      propertyPath: m_LocalRotation.w
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 4686574202049894, guid: d15878facebc94fe1b1adde940810fa9, type: 2}
-      propertyPath: m_RootOrder
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 4686574202049894, guid: d15878facebc94fe1b1adde940810fa9, type: 2}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4686574202049894, guid: d15878facebc94fe1b1adde940810fa9, type: 2}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 90
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: d15878facebc94fe1b1adde940810fa9, type: 2}
-  m_IsPrefabAsset: 0
 --- !u!1 &215692187
 GameObject:
   m_ObjectHideFlags: 0

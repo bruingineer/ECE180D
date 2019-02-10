@@ -24,7 +24,7 @@ public abstract class Laser_Obstacle : Obstacle {
 		yield return new WaitForSeconds(timeToWait);
 	}
 
-	protected Laser laserPrefab;
+	protected GameObject laserPrefab;
 	protected Laser_Times laserTimes;
 	protected float laserDuration;
 	protected abstract IEnumerator FireLasers();

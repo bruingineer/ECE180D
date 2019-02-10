@@ -4,16 +4,17 @@ using UnityEngine;
 
 public class Player : Moving_Object {
 	// Player Time Parameters
-	private float movementTimenewy = .2f;
-	private float secondsToMovenewX = 0.1f;
+	private float movementTimeY = .2f;
+	private float secondsToMoveX = 0.1f;
 	private float playerRecoveryTime = 2.5f;
 	private float recoveryStepTime = 0.5f;
 	// must be odd
 	private float numberOfChanges = 5;
+	private bool facingRight = true;
 	
 	// Player Audio Clips
-	public AudioClip newx_movement;
-	public AudioClip newy_movement;
+	public AudioClip X_movement;
+	public AudioClip Y_movement;
 	public AudioClip playerHitByLaser;
 	public AudioClip playerRecovered;
 
@@ -23,20 +24,20 @@ public class Player : Moving_Object {
 	public bool isDead = false;
 
 	// Player Objects
-	PlayerMQTT_newy m_playerMQTT_newy;
-	PlayerMQTT_newX m_playerMQTT_newx;
+	PlayerMQTT_Y m_playerMQTT_Y;
+	PlayerMQTT_X m_playerMQTT_X;
 	private int playerLaneNum;
 	private int playerLives;
 	SpriteRenderer sr;
 
 	// MQTT
-	private string playerMQTT_newy_topic = "movement";
-	private string playerMQTT_newx_topic = "localization";
+	private string playerMQTT_Y_topic = "movement";
+	private string playerMQTT_X_topic = "localization";
 
 	void Awake () {
-		m_playerMQTT_newy = new PlayerMQTT_newy(playerMQTT_newy_topic);
+		m_playerMQTT_Y = new PlayerMQTT_Y(playerMQTT_Y_topic);
 		playerLaneNum = (int)transform.position.y;
-		m_playerMQTT_newx = new PlayerMQTT_newX(playerMQTT_newx_topic, playerLaneNum);
+		m_playerMQTT_X = new PlayerMQTT_X(playerMQTT_X_topic, playerLaneNum);
 		playerLives = 3;
 		sr = gameObject.GetComponent<SpriteRenderer>();
 	}
@@ -46,18 +47,23 @@ public class Player : Moving_Object {
 		Debug.Log(transform.position);
 		if(!isPlayerMoving) 
 			{
-				MovePlayernewY();
-				MovePlayernewX();
+				MovePlayerX();
+				MovePlayerY();
 			}
 	}
 
-	private void MovePlayernewX() {
-		if ((playerLaneNum != m_playerMQTT_newx.cur_lane_num)) {
-			Debug.Log(m_playerMQTT_newx.cur_lane_num);
-			Vector3 end_position = new Vector3(0.5f + m_playerMQTT_newx.cur_lane_num, transform.position.y );
-			float timeToMove = secondsToMovenewX * Mathf.Abs(playerLaneNum - m_playerMQTT_newx.cur_lane_num);
-			GameState_Base.PlayClip(newx_movement);
-			playerLaneNum = m_playerMQTT_newx.cur_lane_num;
+	private void MovePlayerX() {
+		if ((playerLaneNum != m_playerMQTT_X.cur_lane_num)) {
+			Vector3 end_position = new Vector3(0.5f + m_playerMQTT_X.cur_lane_num, transform.position.y );
+			float timeToMove = secondsToMoveX * Mathf.Abs(playerLaneNum - m_playerMQTT_X.cur_lane_num);
+			GameState_Base.PlayClip(X_movement);
+			if ((facingRight && m_playerMQTT_X.cur_lane_num < playerLaneNum)
+				|| (!facingRight && m_playerMQTT_X.cur_lane_num > playerLaneNum))
+				{
+					facingRight = !facingRight;
+					transform.Rotate(new Vector3(0, 180, 0));
+				}
+			playerLaneNum = m_playerMQTT_X.cur_lane_num;
 			StartCoroutine(MovePlayerPosition(end_position, timeToMove));	
 		}
 	}
@@ -68,12 +74,12 @@ public class Player : Moving_Object {
 		isPlayerMoving = false;
     }
 
-	private void MovePlayernewY() {
-		if (m_playerMQTT_newy.PlayerMoved) {
+	private void MovePlayerY() {
+		if (m_playerMQTT_Y.PlayerMoved) {
 			Vector3 end_position = new Vector3(transform.position.x, transform.position.y + 1);
-			GameState_Base.PlayClip(newy_movement);
-			m_playerMQTT_newy.PlayerMoved = false;
-			StartCoroutine(MovePlayerPosition(end_position, movementTimenewy));
+			GameState_Base.PlayClip(Y_movement);
+			m_playerMQTT_Y.PlayerMoved = false;
+			StartCoroutine(MovePlayerPosition(end_position, movementTimeY));
 		}
     } 
 
@@ -91,7 +97,10 @@ public class Player : Moving_Object {
 			yield return null;
 		}
 		else 
+		{
+			Debug.Log("hi");
 			isDead = true;
+		}
 	}
 
 	// function used by lasers when it hits the player
@@ -120,7 +129,7 @@ public class Player : Moving_Object {
 
 	public void MovePlayer()
 	{
-		m_playerMQTT_newy.PlayerMoved = true;
+		m_playerMQTT_Y.PlayerMoved = true;
 	}
 }
 

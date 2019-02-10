@@ -148,7 +148,15 @@ public abstract class GameState_with_Player : GameState_Base {
 			handledPlayer = true;
 			gamePlaying = false;
 			SelectedPlayer.died = true;
-			StartCoroutine(PlayerDiedCoroutine());
+			Instantiate(gameOver, canvas.transform);
+			ParticleSystem explosion = Instantiate(playerExplosion, player.transform.position, Quaternion.identity).GetComponent<ParticleSystem>();
+			Destroy(player);
+			PlayClip(gameLost);
+			float explosionDuration = gameLost.length;
+			var main = explosion.main;
+			main.duration = explosionDuration;
+			explosion.Play();
+			StartCoroutine(PlayerDiedCoroutine(explosionDuration));
 		}
 	}
 
@@ -161,17 +169,8 @@ public abstract class GameState_with_Player : GameState_Base {
 		// handle won
 	}
 
-	IEnumerator PlayerDiedCoroutine() 
+	IEnumerator PlayerDiedCoroutine(float explosionDuration) 
 	{
-		// gameOver.text = "You Lost!";
-		Instantiate(gameOver, canvas.transform);
-		ParticleSystem explosion = Instantiate(playerExplosion, player.transform.position, Quaternion.identity).GetComponent<ParticleSystem>();
-		Destroy(player);
-		PlayClip(gameLost);
-		float explosionDuration = gameLost.length;
-		var main = explosion.main;
-		main.duration = explosionDuration;
-		explosion.Play();
 		yield return new WaitForSeconds(explosionDuration);
 		// handle died
 	}

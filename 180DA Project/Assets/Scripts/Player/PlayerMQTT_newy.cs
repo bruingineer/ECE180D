@@ -7,7 +7,7 @@ using uPLibrary.Networking.M2Mqtt.Utility;
 using uPLibrary.Networking.M2Mqtt.Exceptions;
 using System;
 
-public class PlayerMQTT_newy : MQTT_Class {
+public class PlayerMQTT_Y : MQTT_Class {
 	private bool playerMoved;
 	public bool PlayerMoved 
 	{
@@ -21,7 +21,7 @@ public class PlayerMQTT_newy : MQTT_Class {
 		}
 	}
     
-	public PlayerMQTT_newy(string topic) : base(topic){
+	public PlayerMQTT_Y(string topic) : base(topic){
 		playerMoved = false;
 	}
 	protected override void client_MqttMsgPublishReceived(object sender, MqttMsgPublishEventArgs e) 

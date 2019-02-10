@@ -47,9 +47,10 @@ public class SpeechRecognitionEngine2 : Event
         m_player.MovePlayer();
         Msg.text = "Correct!";
         StopRecognizer();
+        // potentially change selected player
         SelectedPlayer.current_speech_pass++;
         HandleCorrectMiniGame();
-        StartCoroutine(Reset());            
+        StartCoroutine("Reset");            
     }
 
     IEnumerator Reset(){
@@ -57,15 +58,16 @@ public class SpeechRecognitionEngine2 : Event
         yield return new WaitForSeconds(endDisplayTime);
         WDisplay.DeleteWordDisplay();
         Msg.text = "";
-        yield return StartCoroutine(Delay());
-        StopCoroutine(StartTimer());
+        yield return Delay();
+        StopCoroutine("MakeTextBlink");
+        StopCoroutine("StartTimer");
     }
 
     protected override IEnumerator HandleIncorrect(){
         StopRecognizer();
         HandleIncorrectMiniGame();
         SelectedPlayer.current_speech_fail++;
-        yield return StartCoroutine(Delay());
+        yield return Delay();
     }
 
     private void OnApplicationQuit(){

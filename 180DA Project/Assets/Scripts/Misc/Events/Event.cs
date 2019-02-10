@@ -31,13 +31,6 @@ public abstract class Event : MonoBehaviour {
         Initialize();
     }
 	protected abstract void Initialize();
-	private void SetUpCoroutines() 
-	{
-		if (SelectedPlayer.current_difficulty != "easy")
-			StartCoroutine("MakeTextBlink");
-
-		StartCoroutine(StartTimer());
-	}
 
 	protected IEnumerator Delay()
 	{
@@ -68,7 +61,9 @@ public abstract class Event : MonoBehaviour {
 	public IEnumerator StartEvent() 
 	{
 		SetUpEvent();
-		yield return StartTimer();
+		if (SelectedPlayer.current_difficulty != "easy")
+			StartCoroutine("MakeTextBlink");
+		yield return StartCoroutine("StartTimer");
 	}
 
 	protected abstract IEnumerator HandleIncorrect();

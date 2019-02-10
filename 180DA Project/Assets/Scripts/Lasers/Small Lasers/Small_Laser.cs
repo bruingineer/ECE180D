@@ -7,8 +7,9 @@ public class Small_Laser : Laser {
 	public AudioClip smallLaserSound;
 	// Objects to interact with 
 	private GameObject player;
-	void Start () {
+	void Awake () {
 		player = GameObject.FindGameObjectWithTag("Player");
+		smallLaserSound = Resources.Load<AudioClip>("Sounds/Small_Laser_Sound");
 		GameState_Base.PlayClip(smallLaserSound);
     }
 	

@@ -25,7 +25,7 @@ public class Big_Laser : Laser {
 	{
 		// RaycastHit returns information regarding the hit from the LineRenderer (you can access it's transform)
 		RaycastHit hit;
-        if (Physics.Raycast(transform.position, Vector3.left, out hit) && !playerHit)
+        if (Physics.Raycast(transform.position, Vector3.down, out hit) && !playerHit)
 		{
 			playerHit = true;
 			Handle_Minigame();
