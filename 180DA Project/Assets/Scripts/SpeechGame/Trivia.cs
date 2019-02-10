@@ -27,45 +27,6 @@ public class Trivia : Event
     private string ans = "";
 
     private DictationRecognizer m_DictationRecognizer;
-    // Start is called before the first frame update
-    // void Start()
-    // {
-    //     //Debug.Log("list length: " + TriviaList.size);
-
-    //     m_DictationRecognizer = new DictationRecognizer();
-
-    //     m_DictationRecognizer.DictationResult += (text, confidence) =>
-    //     {
-    //         //Debug.LogFormat("Dictation result: {0}", text);
-    //         answer.text += text;
-    //     };
-
-    //     // m_DictationRecognizer.DictationHypothesis += (text) =>
-    //     // {
-    //     //     //Debug.LogFormat("Dictation hypothesis: {0}", text);
-    //     //     m_Hypotheses.text += text;
-    //     // };
-
-    //     m_DictationRecognizer.DictationComplete += (completionCause) =>
-    //     {
-    //         if (completionCause != DictationCompletionCause.Complete)
-    //             Debug.LogErrorFormat("Dictation completed unsuccessfully: {0}.", completionCause);
-    //     };
-
-    //     m_DictationRecognizer.DictationError += (error, hresult) =>
-    //     {
-    //         Debug.LogErrorFormat("Dictation error: {0}; HResult = {1}.", error, hresult);
-    //     };
-
-    //     GotCorrect = false;
-    //     m_DictationRecognizer.Start();
-
-    //     TriviaList.getQuestion(ref ques, ref ans);
-    //     Debug.Log("Question: " + ques);
-    //     Debug.Log("Answer: " + ans);
-    //     TrivaText.text = ques;
-        
-    // }
 
     protected override void Initialize(){
         TrivaText = GameObject.FindWithTag("trivia").GetComponent<TextMeshProUGUI>();
@@ -141,16 +102,6 @@ public class Trivia : Event
         TrivaText.text = "";
         yield return StartCoroutine("Delay");
     }
-
-    // Update is called once per frame
-    // void Update()
-    // {
-    //    if (answer.text == ans && !GotCorrect){
-    //         GotCorrect = true;
-    //         correct++;
-    //         Debug.Log("Answer Corect, Total Corect: " + correct);
-    //    } 
-    // }
 
     private void StopRecognizer(){
         //Debug.Log("app quit");
