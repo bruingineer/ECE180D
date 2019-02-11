@@ -57,15 +57,18 @@ public abstract class GameState_Base : MonoBehaviour {
 		m_audio_source = GetComponent<AudioSource>();
 		gamePlaying = false;
 		canvas = GameObject.Find("Canvas").GetComponent<Canvas>();
+		SetUp();
 		StartCoroutine(StartGame());
 	}
+
+	protected abstract void SetUp_Events_Obstacles();
 
 	private IEnumerator StartGame()
 	{
 		// fix to set up first and then start after
 		yield return StartCoroutine(GameTimer());
 		gamePlaying = true;
-		SetUp();
+		SetUp_Events_Obstacles();
 	}
 
 	protected abstract void SetUp();	
@@ -120,10 +123,8 @@ public abstract class GameState_with_Player : GameState_Base {
 		player = (Resources.Load("Prefabs/Player/Player") as GameObject).GetComponent<Player>();
 		player = Instantiate(player, new Vector3(numLanes / 2 + 0.5f, 0.5f), Quaternion.identity);
 		InitializeLaneList();
-		SetUp_Events_Obstacles();
 	}
 
-	protected abstract void SetUp_Events_Obstacles();
 	private void InitializeLaneList() {
 		laneNums = new List<int>();
 		for (int i = 0; i < numLanes; i++)
