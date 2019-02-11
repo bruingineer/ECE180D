@@ -75,12 +75,12 @@ public class Player : Moving_Object {
     }
 
 	private void MovePlayerY() {
-		if (m_playerMQTT_Y.PlayerMoved) {
-			Vector3 end_position = new Vector3(transform.position.x, transform.position.y + 1);
-			GameState_Base.PlayClip(Y_movement);
-			m_playerMQTT_Y.PlayerMoved = false;
-			StartCoroutine(MovePlayerPosition(end_position, movementTimeY));
-		}
+			if (m_playerMQTT_Y.PlayerMoved) {
+				Vector3 end_position = new Vector3(transform.position.x, transform.position.y + 1);
+				GameState_Base.PlayClip(Y_movement);
+				m_playerMQTT_Y.PlayerMoved = false;
+				StartCoroutine(MovePlayerPosition(end_position, movementTimeY));
+			}
     } 
 
 	private IEnumerator PlayerHitRoutine() 
@@ -105,7 +105,7 @@ public class Player : Moving_Object {
 	// function used by lasers when it hits the player
 	public void PlayerHit()
 	{
-		if(!isRecovering)
+		if(!isRecovering && GameState_Base.gamePlaying)
 			StartCoroutine(PlayerHitRoutine());
 	}
 

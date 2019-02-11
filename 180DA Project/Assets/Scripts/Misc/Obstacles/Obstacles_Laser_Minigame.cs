@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class Obstacles_Laser_Minigame : Obstacles {
 
-	public bool laserHit = false;
+	public static bool laserHit = false;
 	private Player m_player;
 
 	protected override void Awake()
 	{
-		m_player = GameObject.Find("Player").GetComponent<Player>();
+		m_player = GameObject.FindWithTag("Player").GetComponent<Player>();
 		bigLaserObstacle = gameObject.AddComponent<Big_Laser_Obstacle_Minigame>();
 		smallLaserObstacle = gameObject.AddComponent<Small_Laser_Obstacle_Minigame>();
 		obstacles = new List<Obstacle> {bigLaserObstacle, smallLaserObstacle};
@@ -17,7 +17,7 @@ public class Obstacles_Laser_Minigame : Obstacles {
 
 	protected override void Handle_Minigame()
 	{
-		if (laserHit)
+		if (!laserHit)
 			m_player.MovePlayer();
 		
 		laserHit = false;

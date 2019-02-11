@@ -18,7 +18,7 @@ public class Big_Laser : Laser {
 	
 	void Update () {
 		CheckHitPlayer();
-		// CheckGamePlaying();
+		CheckGamePlaying();
 	}
 
 	void CheckHitPlayer()
@@ -54,6 +54,6 @@ public class Big_Laser : Laser {
 public class Big_Laser_Minigame : Big_Laser {
 	protected override void Handle_Minigame()
 	{
-		GetComponent<Obstacles_Laser_Minigame>().laserHit = true;
+		Obstacles_Laser_Minigame.laserHit = true;
 	}
 }

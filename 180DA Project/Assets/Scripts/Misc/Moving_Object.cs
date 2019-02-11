@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Moving_Object : MonoBehaviour {
-	protected IEnumerator MoveToPosition(Vector3 end_position, float timeToMove)
+	public IEnumerator MoveToPosition(Vector3 end_position, float timeToMove)
 	{
 		var initialPos = transform.position;
 		float t = 0f;
@@ -14,12 +14,5 @@ public class Moving_Object : MonoBehaviour {
 				yield return null;
 		}
 		yield return null;
-	}
-
-	// checks to see if the game is still playing, if not, the object is destroyed
-	protected void CheckGamePlaying()
-	{
-		if (!GameState_Base.gamePlaying)
-			Destroy(gameObject);
 	}
 }

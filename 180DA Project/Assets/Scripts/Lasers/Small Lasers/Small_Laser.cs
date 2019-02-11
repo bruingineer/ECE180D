@@ -11,12 +11,13 @@ public class Small_Laser : Laser {
 		player = GameObject.FindGameObjectWithTag("Player");
 		smallLaserSound = Resources.Load<AudioClip>("Sounds/Small_Laser_Sound");
 		GameState_Base.PlayClip(smallLaserSound);
-    }
-	
+  }
+
 	void Update()
 	{
-		// CheckGamePlaying();
+			CheckGamePlaying();
 	}
+
 
 	protected override IEnumerator MoveLaserToPosition(Vector3 endPosition, Laser_Obstacle.Laser_Times laserTimes)
 	{
@@ -47,6 +48,6 @@ public class Small_Laser_Minigame : Small_Laser {
 
 	protected override void Handle_Minigame()
 	{
-		GetComponent<Obstacles_Laser_Minigame>().laserHit = true;
+		Obstacles_Laser_Minigame.laserHit = true;
 	}
 }

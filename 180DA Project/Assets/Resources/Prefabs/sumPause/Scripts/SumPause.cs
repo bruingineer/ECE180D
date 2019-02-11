@@ -83,11 +83,13 @@ public class SumPause : MonoBehaviour {
             // What to do when paused
             // change to object
             GameObject.Find("Game_Manager").GetComponent<GameState_Base>().gameMusic.Pause();
+            GameState_Base.m_audio_source.Pause();
             Time.timeScale = 0; // Set game speed to 0
         }
         else {
             // What to do when unpaused
-             GameObject.Find("Game_Manager").GetComponent<GameState_Base>().gameMusic.Play();
+            GameObject.Find("Game_Manager").GetComponent<GameState_Base>().gameMusic.UnPause();
+            GameState_Base.m_audio_source.UnPause(); 
             Time.timeScale = 1; // Resume normal game speed
         }
     }

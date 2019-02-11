@@ -8,8 +8,14 @@ public abstract class Laser : Moving_Object {
 
 	// called from the obstacle mini game to move the laser
 	public void MoveLaser(Vector3 endPosition, Laser_Obstacle.Laser_Times laserTimes)
-   	{
+	{
 		StartCoroutine(MoveLaserToPosition(endPosition, laserTimes));
-    }
+	}
+
+	protected void CheckGamePlaying()
+	{
+		if (!GameState_Base.gamePlaying)
+			Destroy(gameObject);
+	}
 	
 }

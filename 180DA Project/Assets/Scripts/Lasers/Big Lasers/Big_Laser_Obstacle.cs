@@ -73,6 +73,7 @@ public class Big_Laser_Obstacle : Laser_Obstacle {
 
 	protected virtual void Handle_MiniGame() {}
 
+	// add laser prefab component to laser later
 	protected void CreateLasers(List<int> lanesToFireLasers)
 	{
 		Big_Laser.playerHit = false;
