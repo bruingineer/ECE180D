@@ -44,6 +44,14 @@ public class WordDisplay
         // yield return new WaitForSeconds(repeatRate);
     }
 
+    
+    public void MakeWordBlink(){
+        if (WordText.text != orginal_scramble)
+            WordText.text = orginal_scramble;
+        else
+            WordText.text = "";
+    }
+
 }
 
 
