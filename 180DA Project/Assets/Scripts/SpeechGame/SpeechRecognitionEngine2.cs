@@ -42,8 +42,14 @@ public class SpeechRecognitionEngine2 : Event
     }
 
     protected override IEnumerator MakeTextBlink(){
-        WDisplay.MakeBlink();
-        yield return new WaitForSeconds(repeatRate);
+        // WDisplay.MakeBlink();
+        // yield return new WaitForSeconds(repeatRate);
+        while(true && !timerPaused){
+            Debug.Log("making word blink");
+            WDisplay.MakeWordBlink();
+			yield return new WaitForSeconds(repeatRate/1.5f);
+        }
+
     }
 
     private void Recognizer_OnPhraseRecognized(PhraseRecognizedEventArgs arg){
@@ -69,6 +75,7 @@ public class SpeechRecognitionEngine2 : Event
     }
 
     protected override IEnumerator HandleIncorrect(){
+        timerPaused = true;
         StopRecognizer();
         HandleIncorrectMiniGame();
         SelectedPlayer.current_speech_fail++;

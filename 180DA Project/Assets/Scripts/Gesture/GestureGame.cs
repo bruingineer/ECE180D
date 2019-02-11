@@ -52,12 +52,20 @@ public class GestureGame : Event {
 
 	protected override IEnumerator MakeTextBlink()
 	{
-		gestureText.text = !gestureText ? curGesture : "";
-		yield return new WaitForSeconds(repeatRate);
+		// gestureText.text = !gestureText ? curGesture : "";
+		// yield return new WaitForSeconds(repeatRate);
+		while (true && !timerPaused){
+			gestureText.text = "";
+			yield return new WaitForSeconds(repeatRate);
+			gestureText.text = curGesture;
+			yield return new WaitForSeconds(repeatRate);
+		}
+		gestureText.text = "";
 	}
 
 	protected override IEnumerator HandleIncorrect()
 	{
+		timerPaused = true;
 		gestureClient.SendMessage(topicGestureSent, stopMessage);
 		gestureText.text = "";
 		Msg.text = "";
