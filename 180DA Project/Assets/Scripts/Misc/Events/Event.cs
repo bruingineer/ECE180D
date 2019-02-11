@@ -19,12 +19,12 @@ public abstract class Event : MonoBehaviour {
 		}
         else if (SelectedPlayer.current_difficulty == "medium") {
 			timerDuration = 5f;
-			repeatRate = 2f;
+			repeatRate = .5f;
 			
 		}
         else if (SelectedPlayer.current_difficulty == "hard")  {
 			timerDuration = 8f;
-			repeatRate = 1f; 
+			repeatRate = .25f; 
 		} 
 		delay = 2f;
 		m_player = GameObject.FindWithTag("Player").GetComponent<Player>();
