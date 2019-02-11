@@ -33,7 +33,7 @@ public class TrainingSelect : MonoBehaviour {
 
             if (txt.Contains("Speech Training"))
             {
-                m_DropOptions.Add("Speech");
+                m_DropOptions.Add("Speech Training");
             }
 
             if (txt.Contains("Gestures"))

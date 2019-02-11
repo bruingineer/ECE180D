@@ -18,12 +18,12 @@ public abstract class Event : MonoBehaviour {
 			timerDuration = 11f;
 		}
         else if (SelectedPlayer.current_difficulty == "medium") {
-			timerDuration = 5f;
+			timerDuration = 8f;
 			repeatRate = .5f;
 			
 		}
         else if (SelectedPlayer.current_difficulty == "hard")  {
-			timerDuration = 8f;
+			timerDuration = 5f;
 			repeatRate = .25f; 
 		} 
 		delay = 2f;
