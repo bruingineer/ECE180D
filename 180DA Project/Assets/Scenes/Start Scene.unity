@@ -2477,9 +2477,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e303d43f0685a6c4ea486e8e44af4eb5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-<<<<<<< HEAD
-  m_SecondCamera: {fileID: 1955533902}
-=======
 --- !u!224 &1955533905
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2498,7 +2495,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
->>>>>>> d7861f0869d9f2589ad2dab756c7715588be71b8
 --- !u!1 &2021369382
 GameObject:
   m_ObjectHideFlags: 0
