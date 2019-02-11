@@ -35,27 +35,31 @@ public class GameItem
 
 public class StatsProcess : MonoBehaviour
 {
+    //MQTT stuff
     private MqttClient client;
     GameData gd;
     private const string str_IP = "127.0.0.1";
     private const int int_Port = 1883;
     private const string topic = "database/games";
-    bool training_query_done = false;
-    bool difficulty_query_done = false;
 
     //Text objects to display game results and smart training suggestion
     public Text gesture_acc;
     public Text speech_acc;
     public Text survived;
     public Text training_suggestion;
-
     string suggestion;
-    int ctr = 0;
+
+    //Capture first training suggestion before difficulty change suggestion replaces it
+    //used to fix dropdown menu not populating
+    public Text temp_text; 
+    string first_suggestion;
+
+    bool training_query_done = false;
+    bool difficulty_query_done = false;
 
     // Use this for initialization
     void Start()
     {
-        
         // create client instance 
         client = new MqttClient(IPAddress.Parse(str_IP), int_Port, false, null);
 
@@ -67,7 +71,33 @@ public class StatsProcess : MonoBehaviour
         client.Connect(clientId);
         client.Subscribe(new string[] { topic }, new byte[] { MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE });
 
-        //accuracies to push to database
+        //calculate results for current game and update database, then reset stats
+        CalculateResults();
+        SelectedPlayer.resetGameStats();
+
+        //Query game data for iterative learning model
+        QueryDB();
+    }
+    
+
+    //Update training suggestion on screen based on iterative learning results
+    void Update()
+    {
+        if (suggestion != null)
+        {
+            training_suggestion.text = suggestion;
+        }
+
+        if (first_suggestion != null)
+        {
+            temp_text.text = first_suggestion;
+        }
+    }
+
+
+    void CalculateResults()
+    {
+        //current game stats to push to database
         float g;
         float s;
         bool died;
@@ -84,20 +114,20 @@ public class StatsProcess : MonoBehaviour
             float tot_gestures = (SelectedPlayer.current_gesture_fail + SelectedPlayer.current_gesture_pass);
             float tot_speech = (SelectedPlayer.current_speech_fail + SelectedPlayer.current_speech_pass);
 
-            if (tot_gestures == 0) g = -1;
+            if (tot_gestures == 0) g = -1;  //-1 represents 'NULL'
             else g = SelectedPlayer.current_gesture_pass / tot_gestures;
 
             if (tot_speech == 0) s = -1;
             else s = SelectedPlayer.current_speech_pass / tot_speech;
 
             died = SelectedPlayer.died;
-            
+
             /////////////////HARDCODED test values///////////////
-            g = 0.7f;
-            s = 0.7f;
+            g = 0.3f;
+            s = 0.3f;
             died = false;
             ////////////////////////////////////////////////////
-            
+
             gesture_acc.text += ("  " + g);
             speech_acc.text += ("  " + s);
             if (died)
@@ -111,31 +141,8 @@ public class StatsProcess : MonoBehaviour
                 d = 0;
             }
 
-            //Input game data into database and reset stats for next game
+            //Input game data into database
             UpdateDatabase(g, s, d);
-            SelectedPlayer.resetGameStats();
-
-            //Perform the query for selected player's last three game data for Training Suggestion
-            string str_command = string.Format("SELECT * FROM (SELECT * FROM games WHERE player={0}) sub ", SelectedPlayer.id) +
-                                               "ORDER BY game_id DESC LIMIT 3";
-            byte[] command = Encoding.ASCII.GetBytes(str_command);
-            client.Publish("database", command);
-
-            //Perform the query for selected player's last five game data for Difficulty Suggesion
-            str_command = string.Format("SELECT * FROM (SELECT * FROM games WHERE player={0} AND difficulty=\"{1}\") sub ",
-                                        SelectedPlayer.id, SelectedPlayer.suggested_difficulty) +
-                                        "ORDER BY game_id DESC LIMIT 5";
-            command = Encoding.ASCII.GetBytes(str_command);
-            client.Publish("database", command);
-        }
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        if (suggestion != null)
-        {
-            training_suggestion.text = suggestion;
         }
     }
 
@@ -161,6 +168,22 @@ public class StatsProcess : MonoBehaviour
         
     }
 
+    void QueryDB()
+    {
+        //Perform the query for selected player's last three game data for Training Suggestion
+        string str_command = string.Format("SELECT * FROM (SELECT * FROM games WHERE player={0}) sub ", SelectedPlayer.id) +
+                                            "ORDER BY game_id DESC LIMIT 3";
+        byte[] command = Encoding.ASCII.GetBytes(str_command);
+        client.Publish("database", command);
+
+        //Perform the query for selected player's last five game data for Difficulty Suggesion
+        str_command = string.Format("SELECT * FROM (SELECT * FROM games WHERE player={0} AND difficulty=\"{1}\") sub ",
+                                    SelectedPlayer.id, SelectedPlayer.suggested_difficulty) +
+                                    "ORDER BY game_id DESC LIMIT 5";
+        command = Encoding.ASCII.GetBytes(str_command);
+        client.Publish("database", command);
+    }
+
     void ChangeDifficulty(string direction)
     {
         string current = SelectedPlayer.suggested_difficulty;
@@ -179,7 +202,7 @@ public class StatsProcess : MonoBehaviour
             if (direction == "lower") updated = "medium";
         }
 
-        //Update database
+        //Update database if a difficulty change has been allowed
         if (updated != current)
         {
             Debug.Log("Updating player difficulty to :" + updated);
@@ -216,10 +239,10 @@ public class StatsProcess : MonoBehaviour
             int speech_ctr = gd.count;
             int n_deaths = 0;
 
-            //Predict which training the player requires most
+            //iterative learning 
             if (gd != null && gd.count != 0)
-            {
-                //Debug.Log("gd.count: " + gd.count);
+            {   
+                //calculate averages over queried games 
                 foreach (GameItem game in gd.items)
                 {
                     //If there were no gesture or speech commands in game, do not count toward average
@@ -241,6 +264,7 @@ public class StatsProcess : MonoBehaviour
                 //Debug.Log("avg_speech_acc " + avg_speech_acc);
                 //Debug.Log("n_deaths " + n_deaths);
 
+                //First query will be for training suggestion
                 if (!training_query_done)
                 {
                     if (avg_gesture_acc >= 0.69 && avg_speech_acc >= 0.69 && n_deaths < 2)
@@ -250,55 +274,54 @@ public class StatsProcess : MonoBehaviour
                         return;
                     }
 
-                    suggestion = "Suggestion:\n Improve your performance by playing the following mini-games: ";
+                    suggestion = "Suggestion:\nImprove your performance by playing the following mini-games:";
                     if (n_deaths >= 2)
                     {
-                        suggestion += "Lasers Training";
+                        suggestion += "\n\tLasers Training";
                     }
                     if (avg_gesture_acc < .69)
                     {
-                        suggestion += ", Gestures Training";
+                        suggestion += "\n\tGestures Training";
                     }
                     if (avg_speech_acc < .69)
                     {
-                        suggestion += ", Speech Training";
+                        suggestion += "\n\tSpeech Training";
                     }
                     training_query_done = true;
+                    first_suggestion = suggestion;
                     return;
                 }
 
                 //Second Query is to determine difficulty eligibility
+                //Only consider difficulty change when at least 5 games have
+                //been played in currently suggested difficulty
                 else if (SelectedPlayer.difficulty_ctr >= 5)
                 {
                     Debug.Log("Checking for difficulty change!");
                     if (n_deaths <= 1 && avg_gesture_acc >= 0.69 && avg_speech_acc >= 0.69) { ChangeDifficulty("higher");}
-                    else if (n_deaths >= 4 || (avg_gesture_acc <= 0.4 && avg_speech_acc <= 0.4)) { ChangeDifficulty("lower");}
+                    else if (n_deaths >= 4 || (avg_gesture_acc <= 0.39 && avg_speech_acc <= 0.39)) { ChangeDifficulty("lower");}
                     else Debug.Log("Difficulty staying the same");
                 }
                 difficulty_query_done = true;
                 
             }
         }
-
     }
 
     //MQTT message expected to contain game results as JSON string
     void client_MqttMsgPublishReceived(object sender, MqttMsgPublishEventArgs e)
     {
-        ctr++;
-        //unpack JSON
         string gamesResult = Encoding.ASCII.GetString(e.Message);
         if (gamesResult.Contains("game_id"))
         {
+            //Unpack JSON
             Debug.Log(gamesResult);
             gd = GameData.CreateFromJSON(gamesResult);
         
-            //Debug.Log("GameData received");
-            //Give Smart suggestion and reset game stats for new game
+            //Call iterative learning fxn once game data is loaded
             PredictTraining();
         }
 
         if (training_query_done && difficulty_query_done) client.Disconnect();
-
     }
 }
