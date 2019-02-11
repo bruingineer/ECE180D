@@ -44,7 +44,6 @@ public class Player : Moving_Object {
 
 	void Update()
 	{
-		Debug.Log(transform.position);
 		if(!isPlayerMoving) 
 			{
 				MovePlayerX();
@@ -90,6 +89,7 @@ public class Player : Moving_Object {
 		isRecovering = true;
 		if (playerLives > 1) {
 			playerLives--;
+			// create object for game_manager
 			GameObject.Find("Game_Manager").GetComponent<GameState_with_Player>().RemoveLife(playerLives);
 			isRecovering = true;
 			GameState_Base.PlayClip(playerHitByLaser);

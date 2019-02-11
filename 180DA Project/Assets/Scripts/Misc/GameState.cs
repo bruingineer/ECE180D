@@ -17,13 +17,15 @@ public abstract class GameState_Base : MonoBehaviour {
 	public static List<int> laneNums;
 
 	// Audio
+	// fix later, by having an audio source for objects that make noise
+	public AudioSource gameMusic;
 	public static AudioSource m_audio_source;
 	public AudioClip gameLost;
 	public AudioClip gameWon;
 
 	// Objects
 	protected Canvas canvas;
-	public GameObject gameOver;
+	public Text result;
 	public Text countdown;
 	public static bool gamePlaying;
 	
@@ -40,17 +42,6 @@ public abstract class GameState_Base : MonoBehaviour {
 		// 	gameMenu.SetActive(true);
 		// }
 
-		// if (player.playerLives == 1) {
-		// 	gameMusic.pitch = 1.25f;
-		// } else {
-		// 	gameMusic.pitch = 1;
-		// } 
-	// if (player.playerLives == 1) {
-		// 	gameMusic.pitch = 1.25f;
-		// } else {
-		// 	gameMusic.pitch = 1;
-		// } 
-	
 	void Awake () {
 		numLanes = 10;
 		end_row = 14;
@@ -65,7 +56,6 @@ public abstract class GameState_Base : MonoBehaviour {
 
 	private IEnumerator StartGame()
 	{
-		// fix to set up first and then start after
 		yield return StartCoroutine(GameTimer());
 		gamePlaying = true;
 		SetUp_Events_Obstacles();
@@ -92,7 +82,7 @@ public abstract class GameState_Base : MonoBehaviour {
           	yield return null;
       	}
 		Destroy(countdown);
-		m_audio_source.Play();
+		gameMusic.Play();
 	}
 
 	public void RetryLevel()
@@ -100,9 +90,10 @@ public abstract class GameState_Base : MonoBehaviour {
 		SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
 	}
 
+
 	public void LoadGameMenu()
 	{
-		SceneManager.LoadScene(6);
+		SceneManager.LoadScene(5);
 	}
 
 	public void LoadStatsMenu()
@@ -131,6 +122,12 @@ public abstract class GameState_with_Player : GameState_Base {
 			laneNums.Add(i);
 	}
 
+	// change later
+	public void ChangePitch(int playerLives)
+	{
+		gameMusic.pitch = playerLives > 1 ? 1 : 1.25f;
+	}
+
 	void Update()
 	{
 		if (!handledPlayer && gamePlaying)
@@ -143,6 +140,7 @@ public abstract class GameState_with_Player : GameState_Base {
 	public void RemoveLife(int curLives)
 	{
 		playerLives[curLives - 1].SetActive(false);
+		ChangePitch(curLives);
 	}
 
 	private void HandlePlayerWin() 
@@ -151,6 +149,8 @@ public abstract class GameState_with_Player : GameState_Base {
 		{
 			handledPlayer = true;
 			gamePlaying = false;
+			result.text = "You win!";
+			PlayClip(gameWon);
 			StartCoroutine(PlayerWonCoroutine());
 		}
 	}
@@ -161,7 +161,7 @@ public abstract class GameState_with_Player : GameState_Base {
 			handledPlayer = true;
 			gamePlaying = false;
 			SelectedPlayer.died = true;
-			gameOver.GetComponent<TextMeshProUGUI>().text = "Game Over!";
+			result.text = "Game Over!";
 			ParticleSystem explosion = Instantiate(playerExplosion, player.transform.position, Quaternion.identity).GetComponent<ParticleSystem>();
 			Destroy(player.gameObject);
 			PlayClip(gameLost);
@@ -175,8 +175,6 @@ public abstract class GameState_with_Player : GameState_Base {
 
 	IEnumerator PlayerWonCoroutine()
 	{
-		gameOver.GetComponent<TextMeshProUGUI>().text = "You win!";
-		PlayClip(gameWon);
 		yield return new WaitForSeconds(gameWon.length);
 		LoadStatsMenu();
 	}
