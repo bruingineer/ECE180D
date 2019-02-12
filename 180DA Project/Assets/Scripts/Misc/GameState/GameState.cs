@@ -29,20 +29,6 @@ public abstract class GameState_Base : MonoBehaviour {
 	public Text countdown;
 	public static bool gamePlaying;
 
-	
-	// // change for minigame
-	// GameObject retry;
-	// GameObject gameMenu;
-	// retry = GameObject.FindGameObjectWithTag("Retry").GetComponent<Text>();
-	// gameMenu = GameObject.FindGameObjectWithTag("Menu").GetComponent<Text>();
-	// if (SceneManager.GetActiveScene().buildIndex == 0)
-		// 	SceneManager.LoadScene(2);
-		// else 
-		// {
-		// 	retry.SetActive(true);
-		// 	gameMenu.SetActive(true);
-		// }
-
 	void Awake () {
 		numLanes = 10;
 		end_row = 14;
@@ -62,7 +48,16 @@ public abstract class GameState_Base : MonoBehaviour {
 		SetUp_Events_Obstacles();
 	}
 
-	protected abstract void SetUp();	
+	void Update()
+	{
+		if (gamePlaying)
+		{
+			HandleWin();
+			HandleLose();
+		}
+	}
+
+	protected virtual void SetUp() {}
 
 	public static void PlayClip(AudioClip clip) {
 		m_audio_source.PlayOneShot(clip);
@@ -86,6 +81,7 @@ public abstract class GameState_Base : MonoBehaviour {
 		gameMusic.Play();
 	}
 
+	// add these to a scenemanager static class
 	public void RetryLevel()
 	{
 		SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
@@ -111,6 +107,16 @@ public abstract class GameState_Base : MonoBehaviour {
 		menu = Instantiate((Resources.Load("Prefabs/WorldSpace/Menu") as GameObject), canvas.transform).GetComponent<Button>();
 		menu.onClick.AddListener(LoadGameMenu);
 	}
+
+	protected IEnumerator HandlePostGame(float length)
+	{
+		yield return new WaitForSeconds(length);
+		HandlePostGameScene();
+	}
+
+	protected abstract void HandlePostGameScene();
+	protected abstract void HandleWin();
+	protected abstract void HandleLose();
 
 }
 
@@ -140,26 +146,16 @@ public abstract class GameState_with_Player : GameState_Base {
 		gameMusic.pitch = playerLives > 1 ? 1 : 1.25f;
 	}
 
-	void Update()
-	{
-		if (!handledPlayer && gamePlaying)
-		{
-			HandlePlayerWin();
-			HandlePlayerDied();
-		}
-	}
-
 	public void RemoveLife(int curLives)
 	{
 		playerLives[curLives - 1].SetActive(false);
 		ChangePitch(curLives);
 	}
 
-	private void HandlePlayerWin() 
+	protected override void HandleWin() 
 	{
 		if (player.transform.position.y == (end_row - 0.5f))
 		{
-			handledPlayer = true;
 			gamePlaying = false;
 			result.text = "You win!";
 			PlayClip(gameWon);
@@ -167,10 +163,9 @@ public abstract class GameState_with_Player : GameState_Base {
 		}
 	}
 
-	private void HandlePlayerDied() 
+	protected override void HandleLose() 
 	{
 		if (player.isDead) {
-			handledPlayer = true;
 			gamePlaying = false;
 			SelectedPlayer.died = true;
 			result.text = "Game Over!";
@@ -185,12 +180,30 @@ public abstract class GameState_with_Player : GameState_Base {
 		}
 	}
 
-	IEnumerator HandlePostGame(float length)
+}
+
+public abstract class GameState_Event_Minigame : GameState_Base {
+	private int numCorrect = 5;
+	public static int curCorrect = 0;
+
+	protected override void HandleWin()
 	{
-		yield return new WaitForSeconds(length);
-		HandlePostGameScene();
+		if(curCorrect == numCorrect)
+		{
+			gamePlaying = false;
+			result.text = "You win!";
+			PlayClip(gameWon);
+			StartCoroutine(HandlePostGame(gameWon.length));
+		}
 	}
 
-	protected abstract void HandlePostGameScene();
+	protected override void HandlePostGameScene()
+	{
+		SetUpButtons();
+	}
 
+	protected override void HandleLose()
+	{
+		// Handle loss later lol
+	}
 }

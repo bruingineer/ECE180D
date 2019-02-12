@@ -27,7 +27,6 @@ public abstract class Event : MonoBehaviour {
 			repeatRate = .25f; 
 		} 
 		delay = 2f;
-		m_player = GameObject.FindWithTag("Player").GetComponent<Player>();
 		timeLeft = GameObject.FindWithTag("timer").GetComponent<Text>();
         Initialize();
     }

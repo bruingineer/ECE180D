@@ -95,14 +95,15 @@ public class GestureGame : Event {
 	protected virtual void HandleIncorrectMiniGame() {}
 }
 
+// potentially change implementation of curCorrect
 public class GestureMiniGame : GestureGame {
 	protected override void HandleCorrectMiniGame()
 	{
-		GetComponent<PlayerEvents_Gesture_Minigame>().curCorrect++;
+		GameState_Event_Minigame.curCorrect++;
 	}
 
 	protected override void HandleIncorrectMiniGame()
 	{
-		GetComponent<PlayerEvents_Gesture_Minigame>().curCorrect = 0;
+		GameState_Event_Minigame.curCorrect = 0;
 	}
 }

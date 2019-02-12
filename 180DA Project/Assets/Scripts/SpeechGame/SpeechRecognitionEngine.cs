@@ -1,123 +1,121 @@
-﻿// using System.Collections;
-// using System.Collections.Generic;
-// using UnityEngine;
-// using UnityEngine.Windows.Speech;
-// using UnityEngine.UI;
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.Windows.Speech;
+using UnityEngine.UI;
+using TMPro;
 
-// public class SpeechRecognitionEngine : Event
-// {
-//     // Objects
-//     public HandleWordDisplay HandleWordDisplay;
-//     public ConfidenceLevel confidence = ConfidenceLevel.Medium;
-//     protected static PhraseRecognizer recognizer;
-//     public Text scramble;
-//     public string[] keywords = { "" };
-//     private float endDisplayTime = 1.1f;
-    
+public class SpeechRecognitionEngine : Event 
+{
+    private WordDisplay WDisplay;
+    public TextMeshProUGUI Msg;
+    public ConfidenceLevel confidence = ConfidenceLevel.Medium;
+    protected static PhraseRecognizer recognizer;
+    public string[] keywords = {""};
+    private float endDisplayTime = 1.1f;
+    protected override void Initialize(){
+        WDisplay = new WordDisplay();
+        WDisplay.WordText = GameObject.FindWithTag("word").GetComponent<TextMeshProUGUI>();
+        WDisplay.WordText.text = "";
+        Msg = GameObject.FindWithTag("msg").GetComponent<TextMeshProUGUI>();
+        Msg.text = "";
+        SetUp();
+    }
+    protected override void SetUpEvent(){
+        //choose a random word
+        System.Random rnd = new System.Random();
+        keywords[0] = WordList.WordList_[rnd.Next(WordList.WordList_.Length)];
+        WDisplay.SetWordDisplay(keywords[0]);
+        Msg.text = "Unscramble This:";
+        if (keywords != null){
+            recognizer = new KeywordRecognizer(keywords, confidence);
+            recognizer.OnPhraseRecognized += Recognizer_OnPhraseRecognized;
+            recognizer.Start();
+            PhraseRecognitionSystem.Restart();
+        }
+        if (PhraseRecognitionSystem.Status == SpeechSystemStatus.Running){
+            Debug.Log("starting another scrabmle");
+        }
+        Debug.Log(WDisplay.word_str);
+    }
 
-//     //This will update the keywords that the speech recognizer will recognize
-//     //For the list of avaiable words see WordList.cs
+    protected virtual void SetUp()
+    {
+        m_player = GameObject.FindWithTag("Player").GetComponent<Player>();
+    }
 
-//     //To select which word
-//     public void WhichWord(int i)
-//     {
-//         keywords[0] = WordList.WordList_[i];
-//         HandleWordDisplay.WhichWord(keywords[0]);
-//     }
+    protected override IEnumerator MakeTextBlink(){
+        // WDisplay.MakeBlink();
+        // yield return new WaitForSeconds(repeatRate);
+        while(true && !timerPaused){
+            Debug.Log("making word blink");
+            WDisplay.MakeWordBlink();
+			yield return new WaitForSeconds(repeatRate/1.5f);
+        }
 
-//     //To randomize which word
-//     public void ChooseRandWord()
-//     {
-//         System.Random rnd = new System.Random();
-//         keywords[0] = WordList.WordList_[rnd.Next(WordList.WordList_.Length)];
-//         //print(keywords[0]);
-//         HandleWordDisplay.WhichWord(keywords[0]);
-//     }
+    }
 
-//     //Can maybe use enable/disable
-    
+    private void Recognizer_OnPhraseRecognized(PhraseRecognizedEventArgs arg){
+        timerPaused = true;
+        m_player.MovePlayer();
+        Msg.text = "Correct!";
+        StopRecognizer();
+        // potentially change selected player
+        SelectedPlayer.current_speech_pass++;
+        HandleCorrectMiniGame();
+        StartCoroutine("Reset");            
+    }
 
-//     protected override void Initialize()
-//     {
-//         scramble.transform.position = timeLeft.transform.position + new Vector3(-450, 0, 0);
-//         HandleWordDisplay.InitPosition = scramble.transform.position - new Vector3(80, 35, 0);
-//     }
+    IEnumerator Reset(){
+        WDisplay.ResetWordDisplay();
+        yield return new WaitForSeconds(endDisplayTime);
+        WDisplay.DeleteWordDisplay();
+        Msg.text = "";
+        yield return Delay();
+        StopCoroutine("MakeTextBlink");
+        eventCorrect = true;
+        yield return null;
+    }
 
-//     protected override void SetUpEvent()
-// 	{
-// 		ChooseRandWord();
-//         HandleWordDisplay.Display();
-//         if (keywords != null)
-//         {
-//             recognizer = new KeywordRecognizer(keywords, confidence);
-//             recognizer.OnPhraseRecognized += Recognizer_OnPhraseRecognized;
-//             recognizer.Start();
-//         }
-// 	}
+    protected override IEnumerator HandleIncorrect(){
+        timerPaused = true;
+        StopRecognizer();
+        HandleIncorrectMiniGame();
+        SelectedPlayer.current_speech_fail++;
+        WDisplay.DeleteWordDisplay();
+        Msg.text = "";
+        yield return Delay();
+    }
 
-//     protected override IEnumerator MakeTextBlink()
-//     {
-//         yield return HandleWordDisplay.MakeBlink(repeatRate);
-//     }
+    private void OnApplicationQuit(){
+        StopRecognizer();
+    }
 
-//     private void Recognizer_OnPhraseRecognized(PhraseRecognizedEventArgs args)
-//     {
-//             timerPaused = true;
-//             m_player.MovePlayer();
-//             scramble.text = "Correct!";
-//             StopRecognizer();
-//             SelectedPlayer.current_speech_pass++;
-//             HandleCorrectMiniGame();
-//             StartCoroutine(Reset());
-//     }
+    private void StopRecognizer(){
+        if (recognizer != null && recognizer.IsRunning){
+            recognizer.OnPhraseRecognized -= Recognizer_OnPhraseRecognized;
+            recognizer.Stop();
+            recognizer.Dispose();
+            PhraseRecognitionSystem.Shutdown();
+        }    
+    }
 
-//     IEnumerator Reset()
-//     {
-//         HandleWordDisplay.ResetDisplay();
-//         //Think we can display the word for a few second then remove it from the display
-//         yield return new WaitForSeconds(endDisplayTime);
-//         //To remove the word from the display
-//         HandleWordDisplay.RemoveDisplay();
-//         //to stop the PhraseRecognizer
-//         yield return StartCoroutine(DelayAndEndTimer());
-//     }
+    protected virtual void HandleCorrectMiniGame() {}
+    protected virtual void HandleIncorrectMiniGame() {}
 
-//     protected override IEnumerator HandleIncorrect()
-// 	{
-//         StopRecognizer();
-//         HandleIncorrectMiniGame();
-// 		SelectedPlayer.current_speech_fail++;
-//         yield return StartCoroutine(DelayAndEndTimer());
-// 	}
+}
 
-//     private void OnApplicationQuit()
-//     {
-//         StopRecognizer();
-//     }
+public class SpeechRecognitionEngine_Minigame : SpeechRecognitionEngine {
+	protected override void HandleCorrectMiniGame()
+	{
+		GameState_Event_Minigame.curCorrect++;
+	}
 
-//     private void StopRecognizer()
-//     {
-//         if (recognizer != null && recognizer.IsRunning)
-//         {   
-//             recognizer.OnPhraseRecognized -= Recognizer_OnPhraseRecognized;
-//             recognizer.Stop();
-//             recognizer.Dispose();
-//         }
-//     }
+	protected override void HandleIncorrectMiniGame()
+	{
+		GameState_Event_Minigame.curCorrect = 0;
+	}
 
-//     protected virtual void HandleCorrectMiniGame() {}
-//     protected virtual void HandleIncorrectMiniGame() {}
-    
-// }
+    protected override void SetUp() {}
+}
 
-// public class SpeechRecognitionEngine_Minigame : SpeechRecognitionEngine {
-// 	protected override void HandleCorrectMiniGame()
-// 	{
-// 		GetComponent<PlayerEvents_Gesture_Minigame>().curCorrect++;
-// 	}
-
-// 	protected override void HandleIncorrectMiniGame()
-// 	{
-// 		GetComponent<PlayerEvents_Gesture_Minigame>().curCorrect = 0;
-// 	}
-// }

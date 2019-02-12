@@ -27,8 +27,6 @@ public abstract class PlayerEvents : Moving_Object {
 
 public abstract class PlayerEvents_Minigame: PlayerEvents {
 	public override abstract void Awake();
-	private int numCorrect = 5;
-	public int curCorrect = 0;
 }
 
 public class PlayerEvents_Gesture_Minigame : PlayerEvents_Minigame {
@@ -42,7 +40,7 @@ public class PlayerEvents_Gesture_Minigame : PlayerEvents_Minigame {
 public class PlayerEvents_Speech_Minigame : PlayerEvents_Minigame {
 	public override void Awake()
 	{
-		speechRecognizerGame = gameObject.AddComponent<SpeechRecognitionEngine2>();
+		speechRecognizerGame = gameObject.AddComponent<SpeechRecognitionEngine_Minigame>();
 		playerEvents = new List<Event> {speechRecognizerGame};
 	}
 }
