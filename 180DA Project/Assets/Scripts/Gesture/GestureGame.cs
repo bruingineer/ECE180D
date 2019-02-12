@@ -35,12 +35,12 @@ public class GestureGame : Event {
 
 	protected override void Initialize()
     {
-		correctGestureFunc = HandleCorrectGesture;
-		gestureClient = new GestureClient(topicCorrectGesture, correctGestureFunc);
-		gestureText = GameObject.FindWithTag("word").GetComponent<TextMeshProUGUI>();
-		Msg = GameObject.FindWithTag("msg").GetComponent<TextMeshProUGUI>();
+			correctGestureFunc = HandleCorrectGesture;
+			gestureClient = new GestureClient(topicCorrectGesture, correctGestureFunc);
+			gestureText = GameObject.FindWithTag("word").GetComponent<TextMeshProUGUI>();
+			Msg = GameObject.FindWithTag("msg").GetComponent<TextMeshProUGUI>();
+			SetUp();
     }
-
 	protected override void SetUpEvent()
 	{
 		string chosenGesture = gestures[UnityEngine.Random.Range(0, gestures.Count)].ToUpper();
@@ -95,7 +95,7 @@ public class GestureGame : Event {
 	protected virtual void HandleIncorrectMiniGame() {}
 }
 
-// potentially change implementation of curCorrect
+// potentially change
 public class GestureMiniGame : GestureGame {
 	protected override void HandleCorrectMiniGame()
 	{

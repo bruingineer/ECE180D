@@ -33,6 +33,7 @@ public class Trivia : Event
         TrivaText.text = "";
         answer = GameObject.FindWithTag("answer").GetComponent<TextMeshProUGUI>();
         answer.text = "";
+        SetUp();
     }
 
 

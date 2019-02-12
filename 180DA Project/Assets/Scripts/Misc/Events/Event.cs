@@ -36,10 +36,14 @@ public abstract class Event : MonoBehaviour {
 	{
 		yield return new WaitForSeconds(delay);
 	}
+	protected virtual void SetUp()
+    {
+        m_player = GameObject.FindWithTag("Player").GetComponent<Player>();
+    }
 	protected IEnumerator StartTimer()
 	{
 		float curTime = timerDuration;
-		while (curTime >= 0 && !eventCorrect)
+		while (!eventCorrect)
         {   
 			if(!timerPaused)
 			{

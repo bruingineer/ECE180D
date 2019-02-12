@@ -39,15 +39,10 @@ public class SpeechRecognitionEngine : Event
         Debug.Log(WDisplay.word_str);
     }
 
-    protected virtual void SetUp()
-    {
-        m_player = GameObject.FindWithTag("Player").GetComponent<Player>();
-    }
-
     protected override IEnumerator MakeTextBlink(){
         // WDisplay.MakeBlink();
         // yield return new WaitForSeconds(repeatRate);
-        while(true && !timerPaused){
+        while(!timerPaused){
             Debug.Log("making word blink");
             WDisplay.MakeWordBlink();
 			yield return new WaitForSeconds(repeatRate/1.5f);
