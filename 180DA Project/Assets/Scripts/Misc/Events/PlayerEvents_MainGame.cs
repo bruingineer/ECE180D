@@ -8,6 +8,6 @@ public class PlayerEvents_MainGame : PlayerEvents {
 		gestureGame = gameObject.AddComponent<GestureGame>();
 		speechRecognizerGame = gameObject.AddComponent<SpeechRecognitionEngine>();
 		triviaGame = gameObject.AddComponent<Trivia>();
-		playerEvents = new List<Event> {gestureGame, speechRecognizerGame, triviaGame};
+		playerEvents = new List<Event> {gestureGame}; // speechRecognizerGame, triviaGame};
 	}
 }

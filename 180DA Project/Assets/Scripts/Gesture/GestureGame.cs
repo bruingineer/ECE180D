@@ -26,7 +26,10 @@ public class GestureGame : Event {
 	string mainText = "Command_Text"; 
 	private GestureClient gestureClient;
 	private string curGesture;
-	Action correctGestureFunc;
+	public static bool gestureCorrect = false;
+
+	private bool handledCorrect = false;
+	
 	
 	// MQTT topics
 	public const string topicGestureSent = "gesture";
@@ -35,8 +38,7 @@ public class GestureGame : Event {
 
 	protected override void Initialize()
     {
-			correctGestureFunc = HandleCorrectGesture;
-			gestureClient = new GestureClient(topicCorrectGesture, correctGestureFunc);
+			gestureClient = new GestureClient(topicCorrectGesture);
 			gestureText = GameObject.FindWithTag("word").GetComponent<TextMeshProUGUI>();
 			Msg = GameObject.FindWithTag("msg").GetComponent<TextMeshProUGUI>();
 			SetUp();
@@ -48,6 +50,12 @@ public class GestureGame : Event {
 		gestureText.text = curGesture;
 		Msg.text = "Do This:";
 		gestureClient.SendMessage(topicGestureSent, chosenGesture);
+	}
+
+	void Update()
+	{
+		if (gestureCorrect && !handledCorrect)
+			HandleCorrectGesture();
 	}
 
 	protected override IEnumerator MakeTextBlink()
@@ -74,13 +82,14 @@ public class GestureGame : Event {
 		yield return StartCoroutine("Delay");
 	}
 
-	private void HandleCorrectGesture()
+	public void HandleCorrectGesture()
 	{
+		handledCorrect = true;
 		timerPaused = true;
 		m_player.MovePlayer();
 		Msg.text = "Correct!";
 		gestureClient.SendMessage(topicGestureSent, stopMessage);
-        SelectedPlayer.current_gesture_pass++;
+    SelectedPlayer.current_gesture_pass++;
 		HandleCorrectMiniGame();
 		StartCoroutine("HandleCorrectCoroutine");
 	}
