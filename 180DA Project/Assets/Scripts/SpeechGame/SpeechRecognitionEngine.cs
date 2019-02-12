@@ -52,12 +52,11 @@ public class SpeechRecognitionEngine : Event
 
     private void Recognizer_OnPhraseRecognized(PhraseRecognizedEventArgs arg){
         timerPaused = true;
-        m_player.MovePlayer();
         Msg.text = "Correct!";
         StopRecognizer();
         // potentially change selected player
         SelectedPlayer.current_speech_pass++;
-        HandleCorrectMiniGame();
+        HandleCorrect();
         StartCoroutine("Reset");            
     }
 
@@ -95,13 +94,16 @@ public class SpeechRecognitionEngine : Event
         }    
     }
 
-    protected virtual void HandleCorrectMiniGame() {}
+    protected virtual void HandleCorrect() 
+    {
+        m_player.MovePlayer();
+    }
     protected virtual void HandleIncorrectMiniGame() {}
 
 }
 
 public class SpeechRecognitionEngine_Minigame : SpeechRecognitionEngine {
-	protected override void HandleCorrectMiniGame()
+	protected override void HandleCorrect()
 	{
 		GameState_Event_Minigame.curCorrect++;
 	}
