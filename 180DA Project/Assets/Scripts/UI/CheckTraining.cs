@@ -9,12 +9,13 @@ public class CheckTraining : MonoBehaviour {
     public Text txt;
     public Button start;
 
-	// Use this for initialization
+	//Use this for initialization
 	void Start () {
 		start = GetComponent<Button>();
         start.onClick.AddListener(checkTraining);
 	}
 
+    //Unlocks Main Level once training is complete
     void checkTraining()
     {
         string message = "To unlock the Main Level, please complete the following:\n";
