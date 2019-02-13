@@ -86,10 +86,10 @@ public class GestureGame : Event {
 	{
 		handledCorrect = true;
 		timerPaused = true;
-		m_player.MovePlayer();
+        m_player.MovePlayer();
 		Msg.text = "Correct!";
 		gestureClient.SendMessage(topicGestureSent, stopMessage);
-    SelectedPlayer.current_gesture_pass++;
+        SelectedPlayer.current_gesture_pass++;
 		HandleCorrectMiniGame();
 		StartCoroutine("HandleCorrectCoroutine");
 	}
@@ -98,7 +98,9 @@ public class GestureGame : Event {
 	{
 			yield return StartCoroutine("Delay");
 			eventCorrect = true;
-	}
+            gestureCorrect = false;
+            handledCorrect = false;
+    }
 
 	protected virtual void HandleCorrectMiniGame() {}
 	protected virtual void HandleIncorrectMiniGame() {}
