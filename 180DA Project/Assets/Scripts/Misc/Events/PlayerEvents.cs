@@ -32,7 +32,7 @@ public abstract class PlayerEvents_Minigame: PlayerEvents {
 public class PlayerEvents_Gesture_Minigame : PlayerEvents_Minigame {
 	public override void Awake()
 	{
-		gestureGame = gameObject.AddComponent<GestureGame>();
+		gestureGame = gameObject.AddComponent<GestureMiniGame>();
 		playerEvents = new List<Event> {gestureGame};
 	}
 }

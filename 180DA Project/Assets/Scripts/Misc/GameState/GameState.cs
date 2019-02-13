@@ -184,7 +184,7 @@ public abstract class GameState_with_Player : GameState_Base {
 
 public abstract class GameState_Event_Minigame : GameState_Base {
 	private int numCorrect = 5;
-	public static int curCorrect = 0;
+	public static int curCorrect;
 
 	protected override void SetUp()
 	{
