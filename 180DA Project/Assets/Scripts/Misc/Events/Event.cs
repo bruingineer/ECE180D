@@ -60,6 +60,7 @@ public abstract class Event : MonoBehaviour {
 			}
             yield return null;
         }
+		yield return null;
 	}
 	
 	public IEnumerator StartEvent() 
