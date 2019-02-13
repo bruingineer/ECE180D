@@ -100,6 +100,8 @@ public class GestureGame : Event {
 			eventCorrect = true;
             gestureCorrect = false;
             handledCorrect = false;
+			Msg.text = "";
+			gestureText.text = "";
     }
 
 	protected virtual void HandleCorrectMiniGame() {}
