@@ -186,6 +186,11 @@ public abstract class GameState_Event_Minigame : GameState_Base {
 	private int numCorrect = 5;
 	public static int curCorrect = 0;
 
+	protected override void SetUp()
+	{
+		curCorrect = 0;
+	}
+
 	protected override void HandleWin()
 	{
 		if(curCorrect == numCorrect)
