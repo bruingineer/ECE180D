@@ -83,6 +83,7 @@ public class GestureGame : Event {
 
 	public void HandleCorrectGesture()
 	{
+        Debug.Log("Handling Correct Gesture");
 		handledCorrect = true;
 		timerPaused = true;
         m_player.MovePlayer();

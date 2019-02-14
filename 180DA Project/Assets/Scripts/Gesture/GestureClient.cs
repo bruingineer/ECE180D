@@ -15,7 +15,8 @@ public class GestureClient : MQTT_Class {
 	
 
 	protected override void client_MqttMsgPublishReceived(object sender, MqttMsgPublishEventArgs e) 
-	{ 
+	{
+        Debug.Log("correct msg received");
 		GestureGame.gestureCorrect = true;
 	} 
 }
