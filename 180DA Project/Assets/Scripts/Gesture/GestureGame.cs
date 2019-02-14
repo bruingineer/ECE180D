@@ -60,8 +60,7 @@ public class GestureGame : Event {
 
 	protected override IEnumerator MakeTextBlink()
 	{
-		// gestureText.text = !gestureText ? curGesture : "";
-		// yield return new WaitForSeconds(repeatRate);
+
 		while (true && !timerPaused){
 			gestureText.text = "";
 			yield return new WaitForSeconds(repeatRate);
@@ -96,12 +95,13 @@ public class GestureGame : Event {
 
 	private IEnumerator HandleCorrectCoroutine()
 	{
+			Msg.text = "";
+			gestureText.text = "";
 			yield return StartCoroutine("Delay");
 			eventCorrect = true;
             gestureCorrect = false;
             handledCorrect = false;
-			Msg.text = "";
-			gestureText.text = "";
+			
     }
 
 	protected virtual void HandleCorrectMiniGame() {}

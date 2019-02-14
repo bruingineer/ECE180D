@@ -33,8 +33,9 @@ public class SpeechRecognitionEngine : Event
             recognizer.Start();
             PhraseRecognitionSystem.Restart();
         }
+
         if (PhraseRecognitionSystem.Status == SpeechSystemStatus.Running){
-            Debug.Log("starting another scrabmle");
+            Debug.Log("starting another scramble");
         }
         Debug.Log(WDisplay.word_str);
     }
@@ -54,7 +55,6 @@ public class SpeechRecognitionEngine : Event
         timerPaused = true;
         Msg.text = "Correct!";
         StopRecognizer();
-        // potentially change selected player
         SelectedPlayer.current_speech_pass++;
         HandleCorrect();
         StartCoroutine("Reset");            
@@ -66,7 +66,6 @@ public class SpeechRecognitionEngine : Event
         WDisplay.DeleteWordDisplay();
         Msg.text = "";
         yield return Delay();
-        StopCoroutine("MakeTextBlink");
         eventCorrect = true;
         yield return null;
     }
