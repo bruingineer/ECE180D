@@ -43,7 +43,7 @@ public class SpeechRecognitionEngine : Event
         // WDisplay.MakeBlink();
         // yield return new WaitForSeconds(repeatRate);
         while(!timerPaused){
-            Debug.Log("making word blink");
+            //Debug.Log("making word blink");
             WDisplay.MakeWordBlink();
 			yield return new WaitForSeconds(repeatRate/1.5f);
         }
