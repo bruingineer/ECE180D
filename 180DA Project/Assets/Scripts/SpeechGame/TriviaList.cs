@@ -12,10 +12,15 @@ public class TriviaList : MonoBehaviour
         {"george washington", "Who was the first US President?"},
         //{"thursday", "What day is it?"},
         {"let there be light", "What is the UC motto?"},
-        {"murder","What do you call a flock of crows?"},
-        {"wooden","Who is the most successful UCLA coach?"},
-        {"bowl", "Where does UCLA play home football games?"}
-        //{"ohm's law", "What do you call: I = V / R?"}
+        {"murder","What do you call a flock of crows"},
+        {"john wooden","Who is the most successful UCLA coach?"},
+        {"rose bowl", "Where does UCLA play home football games?"},
+        {"hogwarts","Name the school that Harry Potter attended" },
+        //{"woody","What is the name of the toy cowboy in Toy Story?" },
+        {"pizza","What's round and has pepperoni?" },
+        {"circumference", "What is the distance around a circle called?" },
+        {"exit", "What's the opposite of enter?" }
+        //{"ohm's law", "What do you call: I = V / R"}
     };
 
     //public static string[] WordList_ = new string[] {
