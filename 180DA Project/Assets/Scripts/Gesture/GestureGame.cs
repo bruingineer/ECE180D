@@ -119,4 +119,6 @@ public class GestureMiniGame : GestureGame {
 	{
 		GameState_Event_Minigame.curCorrect = 0;
 	}
+
+	protected override void SetUp() {}
 }
