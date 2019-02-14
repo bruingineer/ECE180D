@@ -12,11 +12,44 @@ public class TriviaList : MonoBehaviour
         {"george washington", "Who was the first US President?"},
         //{"thursday", "What day is it?"},
         {"let there be light", "What is the UC motto?"},
-        {"murder","What do you call a flock of crows"},
-        {"john wooden","Who is the most successful UCLA coach?"},
-        {"rose bowl", "Where does UCLA play home football games?"},
-        {"ohm's law", "What do you call: I = V / R"}
+        {"murder","What do you call a flock of crows?"},
+        {"wooden","Who is the most successful UCLA coach?"},
+        {"bowl", "Where does UCLA play home football games?"}
+        //{"ohm's law", "What do you call: I = V / R?"}
     };
+
+    //public static string[] WordList_ = new string[] {
+    public static List<string> WordList_ = new List<string>()
+    {
+        "crime",
+        "fame",
+        "apple",
+        //"mouse", hard to detect
+        "lime",
+        "kid",
+        "make",
+        "pot", // may not work
+        "pick",
+        "bit",
+        "luck",
+        "boat",
+        "look",
+        "outreach",
+        "engineer",
+        "national",
+        "week",
+
+        //"lake", ambiguous
+        "snake",
+        //"nap" ambiguous
+        //"slime" ambiguous
+    };
+
+    public static int ListSize = WordList_.Count();
+
+    public static string getWord(){
+        return WordList_[Random.Range(0,ListSize)];
+    }
 
     public static int size = triviaDictionay.Count; 
     public static void getQuestion(ref string ques, ref string ans){

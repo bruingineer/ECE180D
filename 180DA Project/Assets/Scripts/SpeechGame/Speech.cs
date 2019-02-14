@@ -7,8 +7,9 @@ using UnityEngine.UI;
 using UnityEngine.Windows.Speech;
 using TMPro;
 
-public class Trivia : Event
+public class Speech : Event
 {
+    WordDisplay WDisplay;
     bool GotCorrect;
     static int correct = 0;
     static int failed = 0;
@@ -18,10 +19,10 @@ public class Trivia : Event
 
     // [SerializeField]
     // private Text m_Recognitions;
-    private TextMeshProUGUI TrivaText;
+    private TextMeshProUGUI triviaText;
     private TextMeshProUGUI answer;
     
-
+    private int triviaORScrabmle;
     public Text Question;
     private string ques = "";
     private string ans = "";
@@ -29,16 +30,24 @@ public class Trivia : Event
     private DictationRecognizer m_DictationRecognizer;
 
     protected override void Initialize(){
-        TrivaText = GameObject.FindWithTag("trivia").GetComponent<TextMeshProUGUI>();
-        TrivaText.text = "";
+        WDisplay = new WordDisplay();
+        triviaText = GameObject.FindWithTag("trivia").GetComponent<TextMeshProUGUI>();
+        WDisplay.WordText = GameObject.FindWithTag("trivia").GetComponent<TextMeshProUGUI>();
+        triviaText.text = "";
         answer = GameObject.FindWithTag("answer").GetComponent<TextMeshProUGUI>();
         answer.text = "";
+        // Msg = GameObject.FindWithTag("msg").GetComponent<TextMeshProUGUI>();
+        // Msg.text = "";
         SetUp();
     }
 
 
     protected override IEnumerator MakeTextBlink(){
-        yield return null;
+            while(triviaORScrabmle == 1 && !timerPaused){
+            //Debug.Log("making word blink");
+            WDisplay.MakeWordBlink();
+			yield return new WaitForSeconds(repeatRate/1.5f);
+        }
     }
     protected override void SetUpEvent(){
         //Debug.Log("list length: " + TriviaList.size);
@@ -48,12 +57,14 @@ public class Trivia : Event
         m_DictationRecognizer.DictationResult += (text, confidence) =>
         {
             //Debug.LogFormat("Dictatiaon result: {0}", text);
-            answer.text += text;
+            answer.text = "";
+            answer.text = text;
+            Debug.Log(text);
             if (answer.text == ans){
                 Debug.Log("Answer Corect, Total Corect: " + correct);
                 timerPaused = true;
                 m_player.MovePlayer();
-                TrivaText.text = "Correct!";
+                triviaText.text = "Correct!";
                 StopRecognizer();
                 SelectedPlayer.current_speech_pass++;
                 StartCoroutine("Reset");
@@ -76,31 +87,49 @@ public class Trivia : Event
         {
             Debug.LogErrorFormat("Dictation error: {0}; HResult = {1}.", error, hresult);
         };
+
         m_DictationRecognizer.InitialSilenceTimeoutSeconds = 14f;
         GotCorrect = false;
         m_DictationRecognizer.Start();
+        
 
-        TriviaList.getQuestion(ref ques, ref ans);
-        Debug.Log("Question: " + ques);
-        Debug.Log("Answer: " + ans);
-        TrivaText.text = ques;
+        triviaORScrabmle = UnityEngine.Random.Range(0,2);
+        if (triviaORScrabmle == 0)
+        {
+            Debug.Log("Starting trivia");
+            TriviaList.getQuestion(ref ques, ref ans);
+            Debug.Log("Question: " + ques);
+            Debug.Log("Answer: " + ans);
+            triviaText.text = ques;
+            Debug.Log(triviaText.text);
+        }
+        else{
+            Debug.Log("Starting Scramble");
+            ans = TriviaList.getWord();
+            WDisplay.SetWordDisplay(ans);
+            Debug.Log(ans);
+            Debug.Log(WDisplay.WordText.text);
+        }
+        // if (m_DictationRecognizer.Status != UnityEngine.Windows.Speech.SpeechSystemStatus.Running)
+        //     Debug.Log("not running");
     }
 
     private float endDisplayTime = 1.1f;
     
     IEnumerator Reset(){
         yield return new WaitForSeconds(endDisplayTime);
-        TrivaText.text = "";
+        triviaText.text = "";
         answer.text = "";
         yield return StartCoroutine("Delay");
         eventCorrect = true;
     }
 
     protected override IEnumerator HandleIncorrect(){
+        timerPaused = true;
         StopRecognizer();
         SelectedPlayer.current_speech_fail++;
         answer.text = "";
-        TrivaText.text = "";
+        triviaText.text = "";
         yield return StartCoroutine("Delay");
     }
 
