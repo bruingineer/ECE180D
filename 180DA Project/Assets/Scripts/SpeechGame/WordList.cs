@@ -24,6 +24,14 @@ public class WordList : MonoBehaviour {
         "engineer",
         "national",
         "week",
+        "mistake",
+        "cake",
+        "active",
+        "super",
+        "random",
+        "country",
+        "dolphin",
+        "between",
 
         //"lake", ambiguous
         "snake",
