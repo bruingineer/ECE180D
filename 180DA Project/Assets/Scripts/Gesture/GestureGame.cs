@@ -86,8 +86,6 @@ public class GestureGame : Event {
         Debug.Log("Handling Correct Gesture");
 		handledCorrect = true;
 		timerPaused = true;
-		
-        m_player.MovePlayer();
 		Msg.text = "Correct!";
 		gestureClient.SendMessage(topicGestureSent, stopMessage);
         SelectedPlayer.current_gesture_pass++;
@@ -107,9 +105,9 @@ public class GestureGame : Event {
     }
 
 	protected virtual void HandleCorrect() 
-    {
-        m_player.MovePlayer();
-    }
+	{
+		m_player.MovePlayer();
+	}
 	protected virtual void HandleIncorrectMiniGame() {}
 }
 
@@ -124,8 +122,6 @@ public class GestureMiniGame : GestureGame {
 	{
 		GameState_Event_Minigame.curCorrect = 0;
 	}
-
-	
 
 	protected override void SetUp() {}
 }
