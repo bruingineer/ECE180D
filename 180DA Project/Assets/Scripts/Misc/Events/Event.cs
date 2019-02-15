@@ -30,16 +30,17 @@ public abstract class Event : MonoBehaviour {
 		timerStopped = false;
 		timeLeft = GameObject.FindWithTag("timer").GetComponent<Text>();
         Event_Initializer();
+		// check to see if the player is in the game
+		GameObject playerPresent = GameObject.FindWithTag("Player");
+		if(playerPresent)
+			m_player = GameObject.FindWithTag("Player").GetComponent<Player>();
     }
 
-	protected IEnumerator Delay()
+	protected virtual IEnumerator Delay()
 	{
 		yield return new WaitForSeconds(delay);
 	}
-	protected virtual void SetUp()
-    {
-        m_player = GameObject.FindWithTag("Player").GetComponent<Player>();
-    }
+
 	protected IEnumerator StartTimer()
 	{
 		float curTime = timerDuration;
@@ -70,14 +71,14 @@ public abstract class Event : MonoBehaviour {
 		eventCorrect = false;
 		SetUpEvent();
 		if (SelectedPlayer.current_difficulty != "easy")
-			StartCoroutine("MakeTextBlink");
-		yield return StartCoroutine("StartTimer");
+			StartCoroutine(MakeTextBlink());
+		yield return StartCoroutine(StartTimer());
 	}
 
 	protected abstract IEnumerator HandleIncorrectEvent();
 	protected abstract IEnumerator MakeTextBlink();
 	protected abstract void SetUpEvent();
-	protected abstract void HandleCorrectEvent();
+	protected abstract IEnumerator HandleCorrectEvent();
 	protected abstract void Event_Initializer();
 	protected abstract void HandleCorrectAction();
 }

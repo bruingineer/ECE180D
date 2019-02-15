@@ -124,7 +124,7 @@ public class Speech : Event
         yield return new WaitForSeconds(endDisplayTime);
         triviaText.text = "";
         answer.text = "";
-        yield return StartCoroutine("Delay");
+        yield return StartCoroutine(Delay());
         eventCorrect = true;
     }
 
@@ -134,7 +134,7 @@ public class Speech : Event
         SelectedPlayer.current_speech_fail++;
         answer.text = "";
         triviaText.text = "";
-        yield return StartCoroutine("Delay");
+        yield return StartCoroutine(Delay());
     }
 
     private void StopRecognizer(){

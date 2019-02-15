@@ -67,7 +67,7 @@ public class GestureGame : Event {
 	void Update()
 	{
 		if (gestureCorrect && !handledCorrect)
-			HandleCorrectEvent();
+			StartCoroutine(HandleCorrectEvent());
 	}
 
 	// This function is overridden from the Event base class,
@@ -78,7 +78,6 @@ public class GestureGame : Event {
 			gestureClient = new GestureClient(topicCorrectGesture);
 			gestureText = GameObject.FindWithTag("word").GetComponent<TextMeshProUGUI>();
 			Msg = GameObject.FindWithTag("msg").GetComponent<TextMeshProUGUI>();
-			SetUp();
     }
 
 	// This function is overriden from the Event base class,
@@ -104,58 +103,68 @@ public class GestureGame : Event {
 		yield return null;
 	}
 
-
+	/*
+		This gets called whenever the timer runs out, signifying an
+		incorrect event.
+	*/
 	protected override IEnumerator HandleIncorrectEvent()
 	{
-		gestureClient.SendMessage(topicGestureSent, stopMessage);
-		SelectedPlayer.current_gesture_fail++;
-		gestureText.text = "";
-		Msg.text = "";
-		HandleIncorrectMiniGame();
 		yield return StartCoroutine(Delay());
+		// incremement field for SelectedPlayer database
+		SelectedPlayer.current_gesture_fail++;
+		// reset based on if minigame or not
 	}
 
-	protected override void HandleCorrectEvent()
+	// function called when event is correct
+	protected override IEnumerator HandleCorrectEvent()
 	{
-		Debug.Log("Handling Correct Gesture");
-		gestureClient.SendMessage(topicGestureSent, stopMessage);
-		SelectedPlayer.current_gesture_pass++;
+		// set to true as to not repeat the function
 		handledCorrect = true;
+		// increment SelectedPlayer database
+		SelectedPlayer.current_gesture_pass++;
 		Msg.text = "Correct!";
 		HandleCorrectAction();
-		StartCoroutine(HandleCorrectCoroutine());
+		yield return StartCoroutine(Delay());
+		// reset variables
+		eventCorrect = true;
+		gestureCorrect = false;
+        handledCorrect = false;
 	}
 
-	private IEnumerator HandleCorrectCoroutine()
+	/*
+		This function is used to reset some UI elements, stop OpenPose
+		from continuing to recognize gesture, and delay by specified amount
+		of time
+	*/
+	protected override IEnumerator Delay()
 	{
-			Msg.text = "";
-			gestureText.text = "";
-			yield return StartCoroutine("Delay");
-			eventCorrect = true;
-            gestureCorrect = false;
-            handledCorrect = false;
-			
-    }
+		Msg.text = "";
+		gestureText.text = "";
+		// send a stop message to OpenPose to stop looking at messages
+		gestureClient.SendMessage(topicGestureSent, stopMessage);
+		yield return base.Delay();
+	}
 
-	// change to interface with regular event maybe?
+	// The correct action here moves the player (for the main game)
 	protected override void HandleCorrectAction() 
 	{
 		m_player.MovePlayer();
 	}
-	protected virtual void HandleIncorrectMiniGame() {}
 }
 
 // potentially change
 public class GestureMiniGame : GestureGame {
+
+	// number of current gestures correct increments when it is a minigame
 	protected override void HandleCorrectAction()
 	{
 		GameState_Event_Minigame.curCorrect++;
 	}
 
-	protected override void HandleIncorrectMiniGame()
+	// number of correct gestures resets to 0 when incorrect
+	protected override IEnumerator HandleIncorrectEvent()
 	{
 		GameState_Event_Minigame.curCorrect = 0;
+		yield return base.HandleIncorrectEvent();
 	}
-
-	protected override void SetUp() {}
 }
