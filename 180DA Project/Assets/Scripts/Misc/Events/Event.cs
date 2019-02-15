@@ -9,7 +9,7 @@ public abstract class Event : MonoBehaviour {
 	protected float timerDuration;
 	protected float repeatRate;
 	private float delay;
-	protected bool timerPaused = false;
+	protected bool timerStopped;
 	protected bool eventCorrect;
 
 	void Awake()
@@ -27,10 +27,10 @@ public abstract class Event : MonoBehaviour {
 			repeatRate = .25f; 
 		} 
 		delay = 2f;
+		timerStopped = false;
 		timeLeft = GameObject.FindWithTag("timer").GetComponent<Text>();
-        Initialize();
+        Event_Initializer();
     }
-	protected abstract void Initialize();
 
 	protected IEnumerator Delay()
 	{
@@ -45,7 +45,7 @@ public abstract class Event : MonoBehaviour {
 		float curTime = timerDuration;
 		while (!eventCorrect)
         {   
-			if(!timerPaused)
+			if(!timerStopped)
 			{
 				curTime -= Time.deltaTime;
 				int integer = (int)curTime;
@@ -54,7 +54,8 @@ public abstract class Event : MonoBehaviour {
 				else
 				{
 					timeLeft.text = "Time's Up";
-					yield return HandleIncorrect();
+					timerStopped = true;
+					yield return HandleIncorrectEvent();
 					break;
 				}
 			}
@@ -65,7 +66,7 @@ public abstract class Event : MonoBehaviour {
 	
 	public IEnumerator StartEvent() 
 	{
-		timerPaused = false;
+		timerStopped = false;
 		eventCorrect = false;
 		SetUpEvent();
 		if (SelectedPlayer.current_difficulty != "easy")
@@ -73,7 +74,10 @@ public abstract class Event : MonoBehaviour {
 		yield return StartCoroutine("StartTimer");
 	}
 
-	protected abstract IEnumerator HandleIncorrect();
+	protected abstract IEnumerator HandleIncorrectEvent();
 	protected abstract IEnumerator MakeTextBlink();
 	protected abstract void SetUpEvent();
+	protected abstract void HandleCorrectEvent();
+	protected abstract void Event_Initializer();
+	protected abstract void HandleCorrectAction();
 }

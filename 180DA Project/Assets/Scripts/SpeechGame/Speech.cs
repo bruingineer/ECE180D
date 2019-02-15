@@ -29,10 +29,8 @@ public class Speech : Event
 
     private DictationRecognizer m_DictationRecognizer;
 
-    protected override void Initialize(){
-        WDisplay = new WordDisplay();
+    protected override void Event_Initializer(){
         triviaText = GameObject.FindWithTag("trivia").GetComponent<TextMeshProUGUI>();
-        WDisplay.WordText = GameObject.FindWithTag("trivia").GetComponent<TextMeshProUGUI>();
         triviaText.text = "";
         answer = GameObject.FindWithTag("answer").GetComponent<TextMeshProUGUI>();
         answer.text = "";
@@ -43,29 +41,37 @@ public class Speech : Event
 
 
     protected override IEnumerator MakeTextBlink(){
-            while(triviaORScrabmle == 1 && !timerPaused){
+            while(triviaORScrabmle == 1 && !timerStopped){
             //Debug.Log("making word blink");
             WDisplay.MakeWordBlink();
 			yield return new WaitForSeconds(repeatRate/1.5f);
         }
+    }
+
+    protected override void HandleCorrectEvent()
+    {
+        Debug.Log("Answer Corect, Total Corect: " + correct);
+                timerStopped = true;
+                HandleCorrectAction();
+                triviaText.text = "Correct!";
+                StopRecognizer();
+                SelectedPlayer.current_speech_pass++;
+                StartCoroutine("Reset");
+    }
+
+    protected override void HandleCorrectAction()
+    {
+        m_player.MovePlayer();
     }
     protected override void SetUpEvent(){
         m_DictationRecognizer = new DictationRecognizer();
 
         m_DictationRecognizer.DictationResult += (text, confidence) =>
         {
-            //Debug.LogFormat("Dictatiaon result: {0}", text);
             answer.text = "";
             answer.text = text;
-            Debug.Log(text);
             if (answer.text == ans){
-                Debug.Log("Answer Corect, Total Corect: " + correct);
-                timerPaused = true;
-                m_player.MovePlayer();
-                triviaText.text = "Correct!";
-                StopRecognizer();
-                SelectedPlayer.current_speech_pass++;
-                StartCoroutine("Reset");
+                HandleCorrectEvent();
             }
         };
 
@@ -122,8 +128,8 @@ public class Speech : Event
         eventCorrect = true;
     }
 
-    protected override IEnumerator HandleIncorrect(){
-        timerPaused = true;
+    protected override IEnumerator HandleIncorrectEvent(){
+        timerStopped = true;
         StopRecognizer();
         SelectedPlayer.current_speech_fail++;
         answer.text = "";
