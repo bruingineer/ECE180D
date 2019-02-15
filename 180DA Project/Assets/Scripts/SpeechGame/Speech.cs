@@ -10,20 +10,10 @@ using TMPro;
 public class Speech : Event
 {
     WordDisplay WDisplay;
-    bool GotCorrect;
     static int correct = 0;
-    static int failed = 0;
-    
-    // [SerializeField]
-    // private Text m_Hypotheses;
-
-    // [SerializeField]
-    // private Text m_Recognitions;
     private TextMeshProUGUI triviaText;
     private TextMeshProUGUI answer;
-    
     private int triviaORScrabmle;
-    public Text Question;
     private string ques = "";
     private string ans = "";
 
@@ -34,29 +24,25 @@ public class Speech : Event
         triviaText.text = "";
         answer = GameObject.FindWithTag("answer").GetComponent<TextMeshProUGUI>();
         answer.text = "";
-        // Msg = GameObject.FindWithTag("msg").GetComponent<TextMeshProUGUI>();
-        // Msg.text = "";
-        SetUp();
     }
 
 
     protected override IEnumerator MakeTextBlink(){
             while(triviaORScrabmle == 1 && !timerStopped){
-            //Debug.Log("making word blink");
             WDisplay.MakeWordBlink();
 			yield return new WaitForSeconds(repeatRate/1.5f);
         }
     }
 
-    protected override void HandleCorrectEvent()
+    protected override IEnumerator HandleCorrectEvent()
     {
-        Debug.Log("Answer Corect, Total Corect: " + correct);
+        Debug.Log("Answer Correct, Total Correct: " + correct);
                 timerStopped = true;
                 HandleCorrectAction();
                 triviaText.text = "Correct!";
                 StopRecognizer();
                 SelectedPlayer.current_speech_pass++;
-                StartCoroutine("Reset");
+                yield return Reset();
     }
 
     protected override void HandleCorrectAction()
@@ -65,7 +51,6 @@ public class Speech : Event
     }
     protected override void SetUpEvent(){
         m_DictationRecognizer = new DictationRecognizer();
-
         m_DictationRecognizer.DictationResult += (text, confidence) =>
         {
             answer.text = "";
@@ -93,7 +78,6 @@ public class Speech : Event
         };
 
         m_DictationRecognizer.InitialSilenceTimeoutSeconds = 14f;
-        GotCorrect = false;
         m_DictationRecognizer.Start();
         
 
@@ -114,34 +98,33 @@ public class Speech : Event
             Debug.Log(ans);
             Debug.Log(WDisplay.WordText.text);
         }
-        // if (m_DictationRecognizer.Status != UnityEngine.Windows.Speech.SpeechSystemStatus.Running)
-        //     Debug.Log("not running");
     }
 
     private float endDisplayTime = 1.1f;
     
     IEnumerator Reset(){
         yield return new WaitForSeconds(endDisplayTime);
-        triviaText.text = "";
-        answer.text = "";
-        yield return StartCoroutine(Delay());
+        yield return Delay();
         eventCorrect = true;
+    }
+
+    protected override IEnumerator Delay()
+    {
+        answer.text = "";
+        triviaText.text = "";
+        yield return base.Delay();
     }
 
     protected override IEnumerator HandleIncorrectEvent(){
         timerStopped = true;
         StopRecognizer();
         SelectedPlayer.current_speech_fail++;
-        answer.text = "";
-        triviaText.text = "";
-        yield return StartCoroutine(Delay());
+        yield return Delay();
     }
 
     private void StopRecognizer(){
-        //Debug.Log("app quit");
         if (m_DictationRecognizer != null && (m_DictationRecognizer.Status == UnityEngine.Windows.Speech.SpeechSystemStatus.Running))
         {
-            //Debug.Log("Closing Dictation Recognizer");
             m_DictationRecognizer.Dispose();
             m_DictationRecognizer.Stop();
         }

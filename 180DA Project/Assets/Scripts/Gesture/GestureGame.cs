@@ -10,6 +10,11 @@ using System;
 using UnityEngine.UI;
 using TMPro;
 
+/*
+	This class is used to handle the Gesture Game,
+	in which a player must match a gesture given to them.
+	The gesture is analyzed using OpenPose.
+*/
 public class GestureGame : Event {
 	// Objects
 
@@ -109,7 +114,7 @@ public class GestureGame : Event {
 	*/
 	protected override IEnumerator HandleIncorrectEvent()
 	{
-		yield return StartCoroutine(Delay());
+		yield return Delay();
 		// incremement field for SelectedPlayer database
 		SelectedPlayer.current_gesture_fail++;
 		// reset based on if minigame or not
@@ -118,13 +123,14 @@ public class GestureGame : Event {
 	// function called when event is correct
 	protected override IEnumerator HandleCorrectEvent()
 	{
+		timerStopped = true;
 		// set to true as to not repeat the function
 		handledCorrect = true;
 		// increment SelectedPlayer database
 		SelectedPlayer.current_gesture_pass++;
 		Msg.text = "Correct!";
 		HandleCorrectAction();
-		yield return StartCoroutine(Delay());
+		yield return Delay();
 		// reset variables
 		eventCorrect = true;
 		gestureCorrect = false;
