@@ -50,8 +50,6 @@ public class Speech : Event
         }
     }
     protected override void SetUpEvent(){
-        //Debug.Log("list length: " + TriviaList.size);
-
         m_DictationRecognizer = new DictationRecognizer();
 
         m_DictationRecognizer.DictationResult += (text, confidence) =>
@@ -97,7 +95,7 @@ public class Speech : Event
         if (triviaORScrabmle == 0)
         {
             Debug.Log("Starting trivia");
-            TriviaList.getQuestion(ref ques, ref ans);
+            SpeechList.getQuestion(ref ques, ref ans);
             Debug.Log("Question: " + ques);
             Debug.Log("Answer: " + ans);
             triviaText.text = ques;
@@ -105,7 +103,7 @@ public class Speech : Event
         }
         else{
             Debug.Log("Starting Scramble");
-            ans = TriviaList.getWord();
+            ans = SpeechList.getWord();
             WDisplay.SetWordDisplay(ans);
             Debug.Log(ans);
             Debug.Log(WDisplay.WordText.text);

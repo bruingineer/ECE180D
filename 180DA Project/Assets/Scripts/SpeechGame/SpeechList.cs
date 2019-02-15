@@ -4,7 +4,7 @@ using UnityEngine;
 using System.Linq;
 
 
-public class TriviaList : MonoBehaviour
+public class SpeechList : MonoBehaviour
 {
     
     public static IDictionary <string, string> triviaDictionay = new Dictionary<string, string>()
@@ -29,11 +29,11 @@ public class TriviaList : MonoBehaviour
         "crime",
         "fame",
         "apple",
-        //"mouse", hard to detect
+    //         //"mouse", hard to detect
         "lime",
         "kid",
         "make",
-        "pot", // may not work
+    //     //"pot", // may not work
         "pick",
         "bit",
         "luck",
@@ -44,10 +44,12 @@ public class TriviaList : MonoBehaviour
         "national",
         "week",
 
-        //"lake", ambiguous
-        "snake",
-        //"nap" ambiguous
-        //"slime" ambiguous
+    //     //"lake", ambiguous
+        "snake"
+    //     "nap" ambiguous
+    //     "slime" ambiguous
+
+    // "en<uppercase><color=\"blue\">g</color=\"blue\"><uppercase>ineer"
     };
 
     public static int ListSize = WordList_.Count();
@@ -74,3 +76,5 @@ public class TriviaList : MonoBehaviour
         }
     }
 }
+
+
