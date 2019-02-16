@@ -7,10 +7,10 @@ Located in Game Scripts is the source code necessary to generate the obstacles d
 # Lasers
 Located in Lasers is the source code that deals with the lasers that can harm the player.
 
-# Obstacle.cs
+# Obstacle.cs & Obstacle_Laser_Minigame.cs
 
 ## Overview
-The main job of this source code is to provide the framework to generate the obstacles. As of now, there are two obstacles: a Big Laser Obstacle and a Small Laser Obstacle. Its job is to start events for the game. 
+The main job of this source code is to provide the framework to generate the obstacles. As of now, there are two obstacles: a Big Laser Obstacle and a Small Laser Obstacle. Its job is to start events for the game. For the Laser Minigame, it adds the obstacles that are needed to make the minigame work.
  
 # Where code came from
 All the code was through Unity functions.
