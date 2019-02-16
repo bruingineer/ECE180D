@@ -123,13 +123,13 @@ public class StatsProcess : MonoBehaviour
             died = SelectedPlayer.died;
 
             /////////////////HARDCODED test values///////////////
-            g = 0.3f;
-            s = 0.3f;
-            died = false;
+            //g = 0.77f;
+            //s = 0.77f;
+            //died = false;
             ////////////////////////////////////////////////////
 
-            gesture_acc.text += ("  " + g);
-            speech_acc.text += ("  " + s);
+            gesture_acc.text += ("  " + g.ToString("0.##"));
+            speech_acc.text += ("  " + s.ToString("0.##"));
             if (died)
             {
                 survived.text += ("  No");
@@ -269,7 +269,10 @@ public class StatsProcess : MonoBehaviour
                 {
                     if (avg_gesture_acc >= 0.69 && avg_speech_acc >= 0.69 && n_deaths < 2)
                     {
-                        suggestion = "Suggestion: Great Work! Consider increasing the difficulty for a challenge!";
+                        if (SelectedPlayer.suggested_difficulty != "hard")
+                            suggestion = "Suggestion: Great Work! Keep it up to unlock the next difficulty!";
+                        else
+                            suggestion = "Suggestion: Great Work! Keep it up!";
                         training_query_done = true;
                         return;
                     }
