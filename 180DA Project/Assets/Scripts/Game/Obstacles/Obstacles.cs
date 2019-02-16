@@ -24,9 +24,7 @@ public class Obstacles : Moving_Object {
 		while(GameState_Base.gamePlaying)
 		{	
 			yield return obstacles[Random.Range(0, obstacles.Count)].StartObstacle();
-			Handle_Minigame();
 		}
 	}
 
-	protected virtual void Handle_Minigame() {}
 }
