@@ -1,7 +1,9 @@
 # ECE180D 
+## Synchro
 
 ## 180DA Project
 * Unity Source Code
+### READMEs for Unity will be found in 180DA Project -> Assets -> Scripts
 
 ## gestures
 
