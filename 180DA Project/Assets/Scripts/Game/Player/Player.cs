@@ -6,7 +6,6 @@ public class Player : Moving_Object {
 	// Player Time Parameters
 	private float movementTimeY = .2f;
 	private float secondsToMoveX = 0.1f;
-	private float playerRecoveryTime = 2.5f;
 	private float recoveryStepTime = 0.5f;
 	// must be odd
 	private float numberOfChanges = 5;
