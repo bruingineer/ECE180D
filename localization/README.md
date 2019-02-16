@@ -1,4 +1,4 @@
-#Localization
+# Localization
 
 # Overview
 Our localization script uses image processing to determine an x-coordinate corresponding to the user’s position in the frame. This x-coordinate is then sent to our Unity application via an MQTT so that the game avatar can mirror the user's movement.
