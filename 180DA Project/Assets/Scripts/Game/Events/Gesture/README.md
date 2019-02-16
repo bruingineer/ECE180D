@@ -1,16 +1,15 @@
-## GestureClient.cs
+## Overview
+This code includes the functions to implement the Gesture task. GestureClinet does the publishing and recieving via MQTT. GestureGame is responsible for intiaizing and updating the text on the screen for a gesture task. GestureGame updates a player's status based on whether the player completed a task succesfully or not.
 
-* Publishes and Recives Messages via MQTT for gesture recognition
+## Where the code came from
+Most of the MQTT code came from the MQTT APIs. By sending a message to the gesture recognition server running OpenPose, we can start and stop the gesture that the server looks for. 
 
-## GestureGame.cs
+## Decisions Made
+The main decision that we made was to check establish the relationship between the GesturClient and the Openpose server. We decided to have the server look for the pose the clinet told it to look for. We choose to have an server running openpose, so that it could run on a host with a dedicated GPU in order to increase the frame rate for looking for gesture.
 
-* Initalzes all the Textobjects needed for the game
-* Selects a gesture at random and initlizes corresponding text on the screen
-* Removes text from gamescreen
-* Recieves messages via MQTT when a player completes a task correctly
-* Updates Gesture Metric 
-* Updates player position
+## Bugs
+Currently there are no bugs to report. <br/>
+In the past we need to debug the intial setup via MQTT. Once we figured that out it was simple to implement.
 
-## Design 
-
-* Although simple we found it more intuitve to keep the publisher of MQTT message on a seprate script so. This way Gesture Game only need to keep track of maintaing the game scren text and updating player status.
+## Improvements
+One of the improvement we want to make is to increase the number of gestures and poses that we can look for. Adding more gestures will make it a bit harder for the player as they will now have to know more gestures, thus increasing the probababilty of failing to succesful make a gesture. 
