@@ -4,13 +4,14 @@ using UnityEngine;
 
 public class Big_Laser_Obstacle : Laser_Obstacle {
 
-	// Sounds
+	// Sound strings to load from
     private string countdownEasy = "Easy";
     public string countdownMedium = "Medium";
     private string countdownHard = "Hard";
 	private string soundsPath = "Sounds/";
 	private string lasersPath = "Prefabs/Lasers/";
-	// use this to assign to the others TODO
+	
+	// Variables
 	private string laserCountdown_str;
 	private string laserSound = "Big_Laser_Sound";
 	private AudioClip laserFire;
@@ -19,84 +20,97 @@ public class Big_Laser_Obstacle : Laser_Obstacle {
 	// Time Parameters
 	private float cooldown = 0.75f;
 
-	// Objects
-	private GameObject laserWarning;
-	private List<GameObject> laserWarnings;
-
 	// Extra Parameters
-	// change these parameters based on difficulty TODO
-	private int minLasers = 6;
-	private int maxLasers = 9;
+	private int minLasers;
+	private int maxLasers;
 	
 	void Awake () {
-        //Choose # of lasers to fire based on difficulty selected
-        if (SelectedPlayer.current_difficulty == "easy") laserCountdown_str = countdownEasy;
-        else if (SelectedPlayer.current_difficulty == "medium") laserCountdown_str = countdownMedium;
-        else if (SelectedPlayer.current_difficulty == "hard") laserCountdown_str = countdownHard;
+        // Choose # of lasers to fire based on difficulty selected
+		// Choose countdown time based on difficulty
+        if (SelectedPlayer.current_difficulty == "easy") 
+		{ 
+			laserCountdown_str = countdownEasy;
+			minLasers = 4;
+			maxLasers = 7;
+		}
+        else if (SelectedPlayer.current_difficulty == "medium") 
+		{
+			laserCountdown_str = countdownMedium;
+			minLasers = 5;
+			maxLasers = 8;
+		}
+        else if (SelectedPlayer.current_difficulty == "hard") 
+		{
+			laserCountdown_str = countdownHard;
+			minLasers = 6;
+			maxLasers = 9;
+		}
+		// Load sounds from Resources
 		laserCountdown = Resources.Load<AudioClip>(soundsPath + laserCountdown_str + "_Big_Laser");
 		laserFire = Resources.Load<AudioClip>(soundsPath + laserSound);
+		// how long the lasers take to get to desired location
 		laserDuration = 0.005f;
 		// Adding times for lasers
 		laserTimes = new Laser_Times(laserDuration, cooldown);
-        laserWarnings = new List<GameObject>();
-		// Finish loading sounds
-		laserWarning = (Resources.Load("Prefabs/Lasers/Laser_Warning") as GameObject);
+		// Load Prefab
 		laserPrefab = (Resources.Load(lasersPath + "BigLaser") as GameObject);
-	}
-
-	void Update()
-	{
-		// CheckGamePlaying();
 	}
 
 	protected override IEnumerator FireLasers() 
 	{
-		List<int> lanesToFireLasers = GetRandomLanes();
+		List<GameObject> lasers = new List<GameObject>();
+		CreateLasers(ref lasers);
 		// Play warm up clip
 		GameState_Base.PlayClip(laserCountdown);
 		// Instantiate warnings at the lanes acquired
-		CreateWarnings(lanesToFireLasers, laserCountdown.length);
+		CreateWarnings(lasers, laserCountdown.length);
 		// waits the length of the warmup track
 		yield return new WaitForSeconds(laserCountdown.length);
 		// plays audio to fire lasers
 		GameState_Base.PlayClip(laserFire);
 		// creates lasers at locations and then moves them
-		CreateLasers(lanesToFireLasers);
-		// destroys all laser warnings
-		while(laserWarnings.Count > 0) {
-			Destroy(laserWarnings[0]);
-			laserWarnings.RemoveAt(0);
-		}
+		MoveLasers(lasers);
 		// waits for cooldown until a new obstacle can turn on
 		yield return new WaitForSeconds(obstacleWaitTime + cooldown);
 	}
 
-	protected virtual void Handle_MiniGame() {}
-
 	// add laser prefab component to laser later
-	protected void CreateLasers(List<int> lanesToFireLasers)
+	protected void CreateLasers(ref List<GameObject> lasers)
 	{
+		// reset variable for big laser
 		Big_Laser.playerHit = false;
+		List<int> lanesToFireLasers = GetRandomLanes();
 		int list_count = lanesToFireLasers.Count;
 		for(int i = 0; i < list_count; i++)
 		{
+			// create laser prefab
 			GameObject prefab = Instantiate(laserPrefab, new Vector3(lanesToFireLasers[i] + 0.5f, GameState_Base.end_row), Quaternion.identity) as GameObject;
-			Big_Laser bigLaser = AddComponentToLaser(prefab).GetComponent<Big_Laser>();
-			bigLaser.MoveLaser(new Vector3(bigLaser.transform.position.x, 0), laserTimes);
+			// add component based on whether it is a Minigame or maingame
+			AddComponentToLaser(prefab);
+			lasers.Add(prefab);
 		}
 	}
 
-	private void CreateWarnings(List<int> lanesToFireLasers, float laserWarmUpTime)
+	// Play the laser warning on the laser prefab
+	private void CreateWarnings(List<GameObject> lasers, float laserWarmUpTime)
 	{
-		int list_count = lanesToFireLasers.Count;
-		for(int i = 0; i < list_count; i++)
+		int laser_count = lasers.Count;
+		for(int i = 0; i < laser_count; i++)
 		{
-			GameObject laserParticle = Instantiate(laserWarning, new Vector3(lanesToFireLasers[i] + 0.5f, GameState_Base.end_row), Quaternion.Euler(0, 0, 90));
-			ParticleSystem ps = laserParticle.GetComponent<ParticleSystem>();
+			ParticleSystem ps = lasers[i].GetComponent<ParticleSystem>();
 			var main = ps.main;
 			main.duration = laserWarmUpTime;
 			ps.Play();
-			laserWarnings.Add(laserParticle);
+		}
+	}
+
+	// Move laser to other side of the screen
+	private void MoveLasers(List<GameObject> lasers)
+	{
+		int laser_count = lasers.Count;
+		for (int i = 0; i < laser_count; i++)
+		{
+			lasers[i].GetComponent<Big_Laser>().MoveLaser(new Vector3(lasers[i].transform.position.x, 0), laserTimes);
 		}
 	}
 

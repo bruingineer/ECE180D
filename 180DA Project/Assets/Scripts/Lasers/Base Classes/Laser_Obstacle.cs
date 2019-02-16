@@ -2,7 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// This base class is used for both the Small Laser and Big Laser classes
 public abstract class Laser_Obstacle : Obstacle {
+	
+	// This represents the gambeobject used by the laser obstacle
+	protected GameObject laserPrefab;
+	// object representing the times used by the laser obstacle
+	protected Laser_Times laserTimes;
+	// how long the laser is shown for
+	protected float laserDuration;
+
 	// struct is used to pass in the correct times to the obstacle times
 	public struct Laser_Times
 	{
@@ -14,18 +23,13 @@ public abstract class Laser_Obstacle : Obstacle {
         	cooldown = cool;
     	}
 	}
+
+	// starts the laser obstacle
 	public override IEnumerator StartObstacle()
 	{
 		yield return FireLasers();
 	}
 
-	protected IEnumerator WaitandFreeObstacle(float timeToWait)
-	{
-		yield return new WaitForSeconds(timeToWait);
-	}
-
-	protected GameObject laserPrefab;
-	protected Laser_Times laserTimes;
-	protected float laserDuration;
+	// function to be implemented by laser obstacle that fires the lasers
 	protected abstract IEnumerator FireLasers();
 }

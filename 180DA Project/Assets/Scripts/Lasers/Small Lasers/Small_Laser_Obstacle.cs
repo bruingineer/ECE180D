@@ -12,11 +12,6 @@ public class Small_Laser_Obstacle : Laser_Obstacle {
 	// changed based on difficulty in the future
 	private int lasersToFire;
 	private float waitForNextLaser;
-
-	void Update()
-	{
-		// CheckGamePlaying();
-	}
 	
 	void Awake()
 	{
