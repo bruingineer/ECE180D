@@ -4,13 +4,13 @@
 Our localization script uses image processing to determine an x-coordinate corresponding to the user’s position in the frame. This x-coordinate is then sent to our Unity application via an MQTT so that the game avatar can mirror the user's movement.
 
 2 Options implemented
-...1. Face recognition using Haar Cascade classifier
-...2. Object tracking (color based)
+1. Face recognition using Haar Cascade classifier
+2. Object tracking (color based)
  
 ## Where code came from
 OpenSource code used:
-...1. OpenCV
-...2. MQTT
+1. OpenCV
+2. MQTT
  
 ## Decisions Made
 Currently, localization is being handled by our OpenPose process.
