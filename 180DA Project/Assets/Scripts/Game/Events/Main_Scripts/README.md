@@ -7,5 +7,5 @@ Most of this code was written by our group. We got some of the API information f
 ## Design
 We moved from constantly loading and destorying objects, to starting and stopping events. We moved the common functionality of some tasks into the Event class to simpliy implementaion and helping with adding new tasks.
 
-##Improvements
+## Improvements
 We want to thorughly test our game to see if there are any changes that need to be made.
