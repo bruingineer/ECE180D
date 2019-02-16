@@ -1,24 +1,17 @@
-## Speech.cs
+## Overview
+ This code included the source code needed to Implement the speech recogniton tasks of the game. Speech uses Unity's Dicatation Recognizer in order to recogznize speech input from the player. By use an instance of WordDisplay Speech keeps track of the word that is on display as well as making the word blink during harder levels. Speech chooses a word scrabmle or trivia task at random. It updates the player's status based on whether a task was completed succcesfully or failed. Speech selects a word or trivia question from SpeechList.
 
-* Handles the Speech Recognition event.
-* Uses a the Dictation Recognizer provided by Unity
-* Calls funtions to Display and Remove Text from the Gamescreen
-* Initalizes a word scrabmle or trivia task, selected at random
-* Updates Speech Metric
-* Updates Player Position
+## Where the code came from
+The code for how to use Dictation Recognizer came from the 
+[Unity's documentation.](https://docs.unity3d.com/ScriptReference/Windows.Speech.DictationRecognizer.html)
 
-## SpeechList.cs
+## Decisons Made
+The biggest improvement made from last quarter is the we are now using a Dictation Recognizer rather than a Phrase Recognizer. This allows use to display the word the player says, where as before the gamescreen would only show the word upon saying the correct word. Speech handles both the word scrable and triva in order to keep both tasks in the same class.
 
-* List of all the words for word scramble and the questions for trivia
-* implements function to return a word or question
+## Bugs
+As of now there are no bugs. <br/>
+In the past, we were using both a Phrase and Dictionation Recoginzer, which pasued the game due to the sharing and freeing of the same resources. 
 
-## WordDisplay.cs
-
-* Maintains track the Text Gameobject on the gamescreen
-* Displays and Removes text from the Game
-* Implements a funtion to make text blink
-
-## Problems Encountered
-
-* Initally the word scrambler and trivia tasks were handled by seprate scripts. One of the scripts used a Phrase Recognizer and the other used a Dication Recognizer. We found that both use the same resources on the machine therefore, we need to stop the Phrase Recogizer every time we finished the task. After testing we found that the game pause for a small but significant amount of time. After debugging we found that using only one of the speeech recognizer tools the game flowed without delays. Because the Dictation Recognizer allows use to display every phrase that a player speak, therefore gives some feedback, we decieded to use the Dictation Recognizer. 
-* This moduler design allows use to add an indefinite amount of words and trivia questions. Speech List only need to mange the Dication Recognizing and called function to an instance of WordDisplay to handle word display on the game screen.
+## Future Improvements
+One of the improvements we want to do is make seperate the trivia and word scrabmle task as a derived class of common tasks. <br/>
+Additionally, we can add a hint mechanism to WordDisplay to aid the player by highlighting the first letter, when the player is consistenly bad at word scrabmles.
