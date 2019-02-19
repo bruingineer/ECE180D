@@ -236,7 +236,7 @@ class controller:
         return (self.game_clients[0].connection_status == 'ready' and self.game_clients[1].connection_status == 'ready')
 
     def startGame(self):
-        self.mqtt_client.publish(topic='game/state', payload=)
+        self.mqtt_client.publish(topic='game/state', payload='start')
 
     def initTopics(self):
         """
@@ -302,7 +302,7 @@ def main():
                 c.state = 'start'
 
         elif c.state == 'start':
-            #more code
+            c.startGame()
             c.state = 'running'
 
         elif c.state == 'running':
