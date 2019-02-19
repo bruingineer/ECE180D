@@ -1,0 +1,36 @@
+# mp server client model
+
+## init
+1. server script starts
+
+Clients:
+1. subscribe to topic 'server/{client id}'
+2. send a {client id} to the topic 'server/player_connected'
+3. server will send 'player1' or 'player2' to the server/{client id} topic
+4. this is the prefix for all mqtt topics for that player
+5. subscribe to 'player#/challenge' and 'game/state' and 'player#/winner_notification'
+6. send 'ready' to 'player#/connection_status' when ready to start game
+
+## running game
+server
+1. waits for 2 clients to connect
+2. sends 'start' message on topic 'game/state'
+3. sends challenges when reqeusted
+
+client
+1. receive 'start' message on topic 'game/state'
+2. to request challenge send 'requested' to 'player#/challenge_request'
+3. challenge will be sent in JSON on 'player#/challenge'
+JSON will contain the challenge type and data (listed in mp_server.py)
+4. when timer is done, or challenge was completed, send another request
+
+## end game
+clients
+1. send 'I WON' to 'player#/connection_status'
+2. server will send 'winner' or 'loser' to 'player#/winner_notification'
+
+server
+1. receives I WON message
+2. sends notifications
+3. cleans up
+4. waits for clients to be ready again
