@@ -84,7 +84,7 @@ public class Player : Moving_Object {
 
 	private IEnumerator PlayerHitRoutine() 
 	{
-		SelectedPlayer.current_hits++;
+		SelectedPlayer.current_lives_left--;
 		isRecovering = true;
 		if (playerLives > 1) {
 			playerLives--;

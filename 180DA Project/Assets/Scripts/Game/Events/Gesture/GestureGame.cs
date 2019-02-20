@@ -126,11 +126,16 @@ public class GestureGame : Event {
 		timerStopped = true;
 		// set to true as to not repeat the function
 		handledCorrect = true;
-		// increment SelectedPlayer database
+
+		// increment SelectedPlayer's gesture pass counter
+        // and add the time left on the timer to the timer avg counter
 		SelectedPlayer.current_gesture_pass++;
+        SelectedPlayer.current_g_timer_avg += float.Parse(timeLeft.text);
+
 		Msg.text = "Correct!";
 		HandleCorrectAction();
 		yield return Delay();
+
 		// reset variables
 		eventCorrect = true;
 		gestureCorrect = false;

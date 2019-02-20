@@ -37,6 +37,7 @@ public class Speech : Event
     protected override IEnumerator HandleCorrectEvent()
     {
         Debug.Log("Answer Correct, Total Correct: " + correct);
+                SelectedPlayer.current_s_timer_avg += float.Parse(timeLeft.text);
                 timerStopped = true;
                 HandleCorrectAction();
                 triviaText.text = "Correct!";
