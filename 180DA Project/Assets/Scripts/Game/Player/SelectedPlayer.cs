@@ -11,23 +11,28 @@ public static class SelectedPlayer{
     public static bool laser_training, gesture_training, speech_training;
 
     //current game info
-    public static int current_hits = 0;
+    public static string current_difficulty = "easy";
+    
     public static float current_gesture_pass = 0;
     public static float current_gesture_fail = 0;
-    public static float current_speech_pass = 0;
+    public static float current_g_timer_avg = 0; //avg time left on timer for gestures 
+
+    public static float current_speech_pass = 0;  
     public static float current_speech_fail = 0;
-    public static int bigLaserctr = 0;
+    public static float current_s_timer_avg = 0; //avg time left on timer for speech
+
     public static bool died = false;
-    public static string current_difficulty = "easy";
+    public static int current_lives_left = 3;
 
     public static void resetGameStats()
     {
-        current_hits = 0;
+        current_lives_left = 3;
         current_gesture_pass = 0;
         current_gesture_fail = 0;
+        current_g_timer_avg = -1;
         current_speech_pass = 0;
         current_speech_fail = 0;
-        bigLaserctr = 0;
+        current_s_timer_avg = -1;
         died = false;
     }
 }
