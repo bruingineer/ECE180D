@@ -40,7 +40,7 @@ public class PlayerEvents_Gesture_Minigame : PlayerEvents_Minigame {
 public class PlayerEvents_Speech_Minigame : PlayerEvents_Minigame {
 	public override void Awake()
 	{
-		speechRecognizerGame = gameObject.AddComponent<SpeechRecognitionEngine_Minigame>();
+		speechRecognizerGame = gameObject.AddComponent<Speech>();
 		playerEvents = new List<Event> {speechRecognizerGame};
 	}
 }

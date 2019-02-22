@@ -15,13 +15,11 @@ public abstract class GameState_Base : MonoBehaviour {
 	public static int numLanes;
 	public static int end_row;
 	public static List<int> laneNums;
-
-	// Audio
-	// fix later, by having an audio source for objects that make noise
+	public static AudioSource gameSounds;
 	public AudioSource gameMusic;
-	public static AudioSource m_audio_source;
-	public AudioClip gameLost;
-	public AudioClip gameWon;
+	protected AudioClip gameLost;
+	protected AudioClip gameWon;
+	private const string SoundsPath = "Sounds/";
 
 	// Objects
 	protected Canvas canvas;
@@ -32,7 +30,9 @@ public abstract class GameState_Base : MonoBehaviour {
 	void Awake () {
 		numLanes = 10;
 		end_row = 14;
-		m_audio_source = GetComponent<AudioSource>();
+		gameLost = Resources.Load<AudioClip>(SoundsPath + "Game_Lost");
+		gameWon = Resources.Load<AudioClip>(SoundsPath + "Game_Won");
+		gameSounds = new AudioSource();
 		gamePlaying = false;
 		canvas = GameObject.Find("Canvas").GetComponent<Canvas>();
 		SetUp();
@@ -60,7 +60,7 @@ public abstract class GameState_Base : MonoBehaviour {
 	protected virtual void SetUp() {}
 
 	public static void PlayClip(AudioClip clip) {
-		m_audio_source.PlayOneShot(clip);
+		gameSounds.PlayOneShot(clip);
 	}
 
 	public IEnumerator GameTimer() 
@@ -140,7 +140,6 @@ public abstract class GameState_with_Player : GameState_Base {
 			laneNums.Add(i);
 	}
 
-	// change later
 	public void ChangePitch(int playerLives)
 	{
 		gameMusic.pitch = playerLives > 1 ? 1 : 1.25f;

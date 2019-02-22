@@ -7,8 +7,12 @@ using uPLibrary.Networking.M2Mqtt.Utility;
 using uPLibrary.Networking.M2Mqtt.Exceptions;
 using System;
 
+/*
+	This class is responsible for abstracting the
+	creation of an MQTT client.
+ */
 public abstract class MQTT_Class {
-	protected string topic;
+
     protected int portNum = 1883;
 	protected string ip = "127.0.0.1";
 	protected MqttClient client;
@@ -33,10 +37,11 @@ public abstract class MQTT_Class {
 		client.Subscribe(new string[] { topic }, new byte[] { MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE }); 
 	}
 
+	// allows client to send a message at the specified topic
 	public void SendMessage(string topic, string message)
 	{
 		client.Publish(topic, System.Text.Encoding.UTF8.GetBytes(message), MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE, false);
 	}
 
-	protected virtual void client_MqttMsgPublishReceived(object sender, MqttMsgPublishEventArgs e) {}
+	protected abstract void client_MqttMsgPublishReceived(object sender, MqttMsgPublishEventArgs e);
 }
