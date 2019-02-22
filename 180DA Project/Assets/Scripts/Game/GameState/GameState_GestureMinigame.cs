@@ -10,4 +10,13 @@ public class GameState_GestureMinigame : GameState_Event_Minigame {
 		gameObject.AddComponent<PlayerEvents_Gesture_Minigame>().StartEvents();
 	}
 
+	protected override void SetUp()
+	{
+		gameMode = "Gesture_Minigame";
+	}
+
+	protected override void HandlePostGameScene()
+	{
+		
+	}
 }

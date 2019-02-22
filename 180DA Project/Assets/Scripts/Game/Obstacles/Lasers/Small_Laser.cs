@@ -40,8 +40,6 @@ public class Small_Laser : Laser {
 		Destroy(gameObject);
 	}
 
-	protected virtual void Handle_Minigame() {}
-
 }
 
 public class Small_Laser_Minigame : Small_Laser {

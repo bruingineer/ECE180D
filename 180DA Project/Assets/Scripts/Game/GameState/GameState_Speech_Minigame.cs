@@ -10,4 +10,9 @@ public class GameState_Speech_Minigame : GameState_Event_Minigame
 		gameObject.AddComponent<PlayerEvents_Speech_Minigame>().StartEvents();
 	}
 
+	protected override void HandlePostGameScene()
+	{
+		SetUpButtons();
+	}
+
 }

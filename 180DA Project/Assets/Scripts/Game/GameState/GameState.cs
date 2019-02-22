@@ -20,6 +20,7 @@ public abstract class GameState_Base : MonoBehaviour {
 	protected AudioClip gameLost;
 	protected AudioClip gameWon;
 	private const string SoundsPath = "Sounds/";
+	protected string gameMode;
 
 	// Objects
 	protected Canvas canvas;
@@ -39,8 +40,6 @@ public abstract class GameState_Base : MonoBehaviour {
 		StartCoroutine(StartGame());
 	}
 
-	protected abstract void SetUp_Events_Obstacles();
-
 	private IEnumerator StartGame()
 	{
 		yield return StartCoroutine(GameTimer());
@@ -57,7 +56,7 @@ public abstract class GameState_Base : MonoBehaviour {
 		}
 	}
 
-	protected virtual void SetUp() {}
+	protected abstract void SetUp();
 
 	public static void PlayClip(AudioClip clip) {
 		gameSounds.PlayOneShot(clip);
@@ -114,9 +113,10 @@ public abstract class GameState_Base : MonoBehaviour {
 		HandlePostGameScene();
 	}
 
+	protected abstract void SetUp_Events_Obstacles();
 	protected abstract void HandlePostGameScene();
 	protected abstract void HandleWin();
-	protected abstract void HandleLose();
+	protected virtual void HandleLose() {}
 
 }
 
@@ -201,13 +201,4 @@ public abstract class GameState_Event_Minigame : GameState_Base {
 		}
 	}
 
-	protected override void HandlePostGameScene()
-	{
-		SetUpButtons();
-	}
-
-	protected override void HandleLose()
-	{
-		// Handle loss later lol
-	}
 }

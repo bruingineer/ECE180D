@@ -19,5 +19,7 @@ public abstract class Laser : Moving_Object {
 		if (!GameState_Base.gamePlaying)
 			Destroy(gameObject);
 	}
+
+	protected virtual void Handle_Minigame() {}
 	
 }
