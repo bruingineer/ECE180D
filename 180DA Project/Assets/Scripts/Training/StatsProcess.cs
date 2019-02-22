@@ -10,6 +10,7 @@ using uPLibrary.Networking.M2Mqtt.Exceptions;
 using System;
 using System.Text;
 
+//Classes to populate game data upon database query
 [Serializable]
 public class GameData
 {
@@ -25,12 +26,24 @@ public class GameData
 [Serializable]
 public class GameItem
 {
+    //player data
     public int game_id;
     public int player;
     public int player_game_idx;
+
+    //performance data
     public float gestures_acc;
-    public float speech_acc;
+    public float gesture_timer_avg;
+
+    public float unscramble_acc;
+    public float unscramble_timer_avg;
+
+    public float trivia_acc;
+    public float trivia_timer_avg;
+
     public bool died;
+    public int lives_left;
+    public float total_score;
 }
 
 public class StatsProcess : MonoBehaviour
@@ -49,15 +62,14 @@ public class StatsProcess : MonoBehaviour
     public Text training_suggestion;
     string suggestion;
 
-    //Capture first training suggestion before difficulty change suggestion replaces it
+    //Capture first 'training suggestion' before 'difficulty change suggestion' replaces it
     //used to fix dropdown menu not populating
     public Text temp_text; 
     string first_suggestion;
 
     bool training_query_done = false;
     bool difficulty_query_done = false;
-
-    // Use this for initialization
+    
     void Start()
     {
         // create client instance 
@@ -98,30 +110,67 @@ public class StatsProcess : MonoBehaviour
     void CalculateResults()
     {
         //current game stats to push to database
-        float g;
-        float s;
+        float g; //gestures
+        float u; //unscramble
+        float t; //trivia
+        float g_tleft_avg;
+        float u_tleft_avg;
+        float t_tleft_avg;
         bool died;
-        int d;
+        int lives_left;
 
         //calculate accuracies for the game that just ended and call UpdateDatabase() 
         if (SelectedPlayer.name != null)
         {
             //Debug.Log("current_gesture_fail: " + SelectedPlayer.current_gesture_fail);
             //Debug.Log("current_gesture_pass: " + SelectedPlayer.current_gesture_pass);
-            //Debug.Log("current_speech_fail: " + SelectedPlayer.current_speech_fail);
-            //Debug.Log("current_speech_pass: " + SelectedPlayer.current_speech_pass);
+            //Debug.Log("current_unscramble_fail: " + SelectedPlayer.current_unscramble_fail);
+            //Debug.Log("current_unscramble_pass: " + SelectedPlayer.current_unscramble_pass);
+            //Debug.Log("current_trivia_fail: " + SelectedPlayer.current_trivia_fail);
+            //Debug.Log("current_trivia_pass: " + SelectedPlayer.current_trivia_pass);
 
             float tot_gestures = (SelectedPlayer.current_gesture_fail + SelectedPlayer.current_gesture_pass);
-            float tot_speech = (SelectedPlayer.current_speech_fail + SelectedPlayer.current_speech_pass);
+            float tot_unscramble = (SelectedPlayer.current_unscramble_fail + SelectedPlayer.current_unscramble_pass);
+            float tot_trivia = (SelectedPlayer.current_trivia_fail + SelectedPlayer.current_trivia_pass);
 
-            if (tot_gestures == 0) g = -1;  //-1 represents 'NULL'
-            else g = SelectedPlayer.current_gesture_pass / tot_gestures;
+            //gesture averages
+            if (tot_gestures == 0) {
+                g = -1;
+                g_tleft_avg = -1;
+            }
+            else {
+                g = SelectedPlayer.current_gesture_pass / tot_gestures;
+                g_tleft_avg = SelectedPlayer.current_g_timer_avg / tot_gestures;
+            }
 
-            if (tot_speech == 0) s = -1;
-            else s = SelectedPlayer.current_speech_pass / tot_speech;
+            //unscramble averages
+            if (tot_unscramble == 0) {
+                u = -1;
+                u_tleft_avg = -1;
+            }
+            else {
+                u = SelectedPlayer.current_unscramble_pass / tot_unscramble;
+                u_tleft_avg = SelectedPlayer.current_unscramble_timer_avg / tot_unscramble;
+            }
+
+            //trivia averages
+            if (tot_trivia == 0)
+            {
+                t = -1;
+                t_tleft_avg = -1;
+            }
+            else
+            {
+                t = SelectedPlayer.current_trivia_pass / tot_trivia;
+                t_tleft_avg = SelectedPlayer.current_trivia_timer_avg / tot_trivia;
+            }
+
+            Debug.Log("g_tleft_avg" + g_tleft_avg);
+            Debug.Log("u_tleft_avg" + u_tleft_avg);
+            Debug.Log("t_tleft_avg" + t_tleft_avg);
 
             died = SelectedPlayer.died;
-
+            lives_left = SelectedPlayer.current_lives_left;
             /////////////////HARDCODED test values///////////////
             //g = 0.77f;
             //s = 0.77f;
@@ -129,29 +178,29 @@ public class StatsProcess : MonoBehaviour
             ////////////////////////////////////////////////////
 
             gesture_acc.text += ("  " + g.ToString("0.##"));
-            speech_acc.text += ("  " + s.ToString("0.##"));
-            if (died)
-            {
-                survived.text += ("  No");
-                d = 1;
-            }
-            else
-            {
-                survived.text += ("  Yes");
-                d = 0;
-            }
+            speech_acc.text += ("  " + u.ToString("0.##"));
+            speech_acc.text += ("  " + t.ToString("0.##"));
+            if (died) survived.text += ("  No");
+            else survived.text += ("  Yes");
+               
 
             //Input game data into database
-            UpdateDatabase(g, s, d);
+            UpdateDatabase(g, u, t, Convert.ToInt32(died), g_tleft_avg, u_tleft_avg, t_tleft_avg, lives_left);
         }
     }
 
-    void UpdateDatabase(float g, float s, int d)
+    //TODO: test if boolean d works
+    void UpdateDatabase(float g, float u, float t, int d, float g_tleft_avg, float u_tleft_avg, 
+                        float t_tleft_avg, int lives_left)
     {
         //Insert game data into db
-        string values = string.Format("({0}, {1}, \"{2}\", {3}, {4}, {5})",
-                                    SelectedPlayer.id, ++SelectedPlayer.games_played, SelectedPlayer.current_difficulty, g, s, d);
-        string str_command = "INSERT INTO games (player, player_game_idx, difficulty, gestures_acc, speech_acc, died) VALUES  " + values;
+        string values = string.Format("({0}, {1}, \"{2}\", {3}, {4}, {5}, {6}, {7}, {8}, {9})",
+                                    SelectedPlayer.id, ++SelectedPlayer.games_played, SelectedPlayer.current_difficulty,
+                                    g,u,t,d, u_tleft_avg, t_tleft_avg, lives_left);
+
+        string str_command = "INSERT INTO games (player, player_game_idx, difficulty, gestures_acc, unscramble_acc," +
+                                                " trivia_acc, died, unscramble_timer_avg, trivia_timer_avg, lives_left)" +
+                             "VALUES  " + values;
         byte[] command = Encoding.ASCII.GetBytes(str_command);
         client.Publish("database", command);
 
@@ -161,11 +210,17 @@ public class StatsProcess : MonoBehaviour
             SelectedPlayer.difficulty_ctr++;
         }
 
+
+        //NICO
+        /*
+         str_command = string.Format("UPDATE players SET gesture_training={1} WHERE id = {2}",
+                                     1, SelectedPlayer.id);
+        */
+
         str_command = string.Format("UPDATE players SET games_played={0}, difficulty_ctr={1} WHERE id = {2}",
                                     SelectedPlayer.games_played, SelectedPlayer.difficulty_ctr, SelectedPlayer.id);
         command = Encoding.ASCII.GetBytes(str_command);
         client.Publish("database", command);
-        
     }
 
     void QueryDB()
@@ -321,7 +376,7 @@ public class StatsProcess : MonoBehaviour
             Debug.Log(gamesResult);
             gd = GameData.CreateFromJSON(gamesResult);
         
-            //Call iterative learning fxn once game data is loaded
+            //Call iterative learning func. once game data is loaded
             PredictTraining();
         }
 
