@@ -61,19 +61,6 @@ public abstract class Speech : Event
             m_DictationRecognizer.DictationResult += (text, confidence) =>
             {
                 handleSpeechTask(text);
-                //Debug.LogFormat("Dictatiaon result: {0}", text);
-                // answer.text = "";
-                // answer.text = text;
-                // Debug.Log(text);
-                // if (answer.text == ans){
-                //     Debug.Log("Answer Corect, Total Corect: " + correct);
-                //     timerPaused = true;
-                //     m_player.MovePlayer();
-                //     triviaText.text = "Correct!";
-                //     StopRecognizer();
-                //     SelectedPlayer.current_speech_pass++;
-                //     StartCoroutine("Reset");
-                // }
             };
 
             m_DictationRecognizer.DictationHypothesis += (text) =>
@@ -98,35 +85,7 @@ public abstract class Speech : Event
         }
     }
 
-    
-    // protected override void SetUpEvent(){       
-
-    //     // triviaORScrabmle = UnityEngine.Random.Range(0,2);
-    //     // triviaORScrabmle = 1;
-    //     if (triviaORScrabmle == 0)
-    //     {
-    //         // Debug.Log("Starting trivia");
-    //         // SpeechList.getQuestion(ref ques, ref ans);
-    //         // Debug.Log("Question: " + ques);
-    //         // Debug.Log("Answer: " + ans);
-    //         // triviaText.text = ques;
-    //         // Debug.Log(triviaText.text);
-    //     }
-    //     else{
-    //         Debug.Log("Starting Scramble");
-    //         ans = SpeechList.getWord();
-    //         WDisplay.SetWordDisplay(ans);
-    //         WDisplay.SetFirstLetterClue();
-    //         Debug.Log(ans);
-    //         Debug.Log(WDisplay.WordText.text);
-    //     }
-    //     // if (m_DictationRecognizer.Status != UnityEngine.Windows.Speech.SpeechSystemStatus.Running)
-    //     //     Debug.Log("not running");
-    // }
-
     protected float endDisplayTime = 1.1f;
-    
-    protected abstract IEnumerator Reset();
 
     protected void StopRecognizer(){
         //Debug.Log("app quit");
@@ -136,6 +95,17 @@ public abstract class Speech : Event
             m_DictationRecognizer.Dispose();
             m_DictationRecognizer.Stop();
         }
+    }
+
+    protected override void Reset()
+	{	
+		StartCoroutine(Reset_Speech_Correct());
+	}
+
+    protected virtual IEnumerator Reset_Speech_Correct()
+    {
+        yield return new WaitForSeconds(endDisplayTime);
+        eventCorrect = true;
     }
 
     private void OnApplicationQuit()

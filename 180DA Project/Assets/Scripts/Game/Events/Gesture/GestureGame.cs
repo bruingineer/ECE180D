@@ -72,7 +72,7 @@ public class GestureGame : Event {
 	void Update()
 	{
 		if (gestureCorrect && !handledCorrect)
-			StartCoroutine(HandleCorrectEvent());
+			HandleCorrectEvent();
 	}
 
 	// This function is overridden from the Event base class,
@@ -112,30 +112,27 @@ public class GestureGame : Event {
 		This gets called whenever the timer runs out, signifying an
 		incorrect event.
 	*/
-	protected override IEnumerator HandleIncorrectEvent()
+	protected override void HandleIncorrectEvent()
 	{
-		yield return Delay();
 		// incremement field for SelectedPlayer database
 		SelectedPlayer.current_gesture_fail++;
 		// reset based on if minigame or not
 	}
 
 	// function called when event is correct
-	protected override IEnumerator HandleCorrectEvent()
+	protected override void HandleCorrectEvent()
 	{
-		timerStopped = true;
 		// set to true as to not repeat the function
 		handledCorrect = true;
-
+		timerStopped = true;
+		
 		// increment SelectedPlayer's gesture pass counter
         // and add the time left on the timer to the timer avg counter
 		SelectedPlayer.current_gesture_pass++;
-        SelectedPlayer.current_g_timer_avg += float.Parse(timeLeft.text);
-
+        SelectedPlayer.current_g_timer_avg += Event.curTime;
 		Msg.text = "Correct!";
 		HandleCorrectAction();
-		yield return Delay();
-
+		Reset();
 		// reset variables
 		eventCorrect = true;
 		gestureCorrect = false;
@@ -147,23 +144,16 @@ public class GestureGame : Event {
 		from continuing to recognize gesture, and delay by specified amount
 		of time
 	*/
-	protected override IEnumerator Delay()
+	protected override void Reset()
 	{
 		Msg.text = "";
 		gestureText.text = "";
 		// send a stop message to OpenPose to stop looking at messages
 		gestureClient.SendMessage(topicGestureSent, stopMessage);
-		yield return base.Delay();
 	}
 
-	// The correct action here moves the player (for the main game)
-	protected override void HandleCorrectAction() 
-	{
-		m_player.MovePlayer();
-	}
 }
 
-// potentially change
 public class GestureMiniGame : GestureGame {
 
 	// number of current gestures correct increments when it is a minigame
@@ -173,9 +163,8 @@ public class GestureMiniGame : GestureGame {
 	}
 
 	// number of correct gestures resets to 0 when incorrect
-	protected override IEnumerator HandleIncorrectEvent()
+	protected override void HandleIncorrectEvent()
 	{
 		GameState_Event_Minigame.curCorrect = 0;
-		yield return base.HandleIncorrectEvent();
 	}
 }

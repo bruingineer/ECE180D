@@ -15,25 +15,29 @@ public class Trivia : Speech {
 	private string ques = "";
 	private string ans = "";
 
-	protected override void Initialize(){
+	protected override void Event_Initializer(){
         triviaText = GameObject.FindWithTag("trivia").GetComponent<TextMeshProUGUI>();
         triviaText.text = "";
         answer = GameObject.FindWithTag("answer").GetComponent<TextMeshProUGUI>();
         answer.text = "";
-        SetUp();
     }
 
+	// ask jose if it can be called multiple times
 	protected override void handleSpeechTask(string text){
 		answer.text = "";
 		answer.text = text;
-		if (answer.text == ans){
-			timerPaused = true;
-			m_player.MovePlayer();
-			triviaText.text = "Correct!";
-			StopRecognizer();
-			SelectedPlayer.current_trivia_pass++; //need to change
-			StartCoroutine("Reset");
-		}
+		if (answer.text == ans)
+			HandleCorrectEvent();
+	}
+
+	protected override void HandleCorrectEvent()
+	{
+		timerStopped = true;
+		HandleCorrectAction();
+		triviaText.text = "Correct!";
+		StopRecognizer();
+		Reset();
+		SelectedPlayer.current_trivia_pass++; //need to change
 	}
 
 	protected override void SetUpEvent(){
@@ -47,24 +51,36 @@ public class Trivia : Speech {
 		m_DictationRecognizer.Start();
 	}
 
-	protected override IEnumerator Reset(){
-	    yield return new WaitForSeconds(endDisplayTime);
+	protected override IEnumerator Reset_Speech_Correct(){
+	    yield return base.Reset_Speech_Correct();
         triviaText.text = "";
         answer.text = "";
-        yield return StartCoroutine("Delay");
-        eventCorrect = true;
 	}
 
-	protected override IEnumerator HandleIncorrect(){
-        timerPaused = true;
+	protected override void HandleIncorrectEvent(){
+        timerStopped = true;
         StopRecognizer();
         SelectedPlayer.current_trivia_fail++;
         answer.text = "";
         triviaText.text = "";
-        yield return StartCoroutine("Delay");
     }
 
 	protected override IEnumerator MakeTextBlink(){
 		return null;
 	}	
+}
+
+public class TriviaMiniGame : Trivia {
+
+	// number of current gestures correct increments when it is a minigame
+	protected override void HandleCorrectAction()
+	{
+		GameState_Event_Minigame.curCorrect++;
+	}
+
+	// number of correct gestures resets to 0 when incorrect
+	protected override void HandleIncorrectEvent()
+	{
+		GameState_Event_Minigame.curCorrect = 0;
+	}
 }

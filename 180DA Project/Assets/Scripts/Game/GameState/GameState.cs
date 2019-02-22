@@ -17,8 +17,8 @@ public abstract class GameState_Base : MonoBehaviour {
 	public static List<int> laneNums;
 	public static AudioSource gameSounds;
 	public AudioSource gameMusic;
-	protected AudioClip gameLost;
-	protected AudioClip gameWon;
+	protected AudioClip gameLostMusic;
+	protected AudioClip gameWonMusic;
 	private const string SoundsPath = "Sounds/";
 	protected string gameMode;
 
@@ -31,8 +31,8 @@ public abstract class GameState_Base : MonoBehaviour {
 	void Awake () {
 		numLanes = 10;
 		end_row = 14;
-		gameLost = Resources.Load<AudioClip>(SoundsPath + "Game_Lost");
-		gameWon = Resources.Load<AudioClip>(SoundsPath + "Game_Won");
+		gameLostMusic = Resources.Load<AudioClip>(SoundsPath + "Game_Lost");
+		gameWonMusic = Resources.Load<AudioClip>(SoundsPath + "Game_Won");
 		gameSounds = new AudioSource();
 		gamePlaying = false;
 		canvas = GameObject.Find("Canvas").GetComponent<Canvas>();
@@ -55,8 +55,6 @@ public abstract class GameState_Base : MonoBehaviour {
 			HandleLose();
 		}
 	}
-
-	protected abstract void SetUp();
 
 	public static void PlayClip(AudioClip clip) {
 		gameSounds.PlayOneShot(clip);
@@ -113,6 +111,15 @@ public abstract class GameState_Base : MonoBehaviour {
 		HandlePostGameScene();
 	}
 
+	protected void GameWon()
+	{
+		gamePlaying = false;
+		result.text = "You win!";
+		PlayClip(gameWonMusic);
+		StartCoroutine(HandlePostGame(gameWonMusic.length));
+	}
+
+	protected abstract void SetUp();
 	protected abstract void SetUp_Events_Obstacles();
 	protected abstract void HandlePostGameScene();
 	protected abstract void HandleWin();
@@ -154,12 +161,7 @@ public abstract class GameState_with_Player : GameState_Base {
 	protected override void HandleWin() 
 	{
 		if (player.transform.position.y == (end_row - 0.5f))
-		{
-			gamePlaying = false;
-			result.text = "You win!";
-			PlayClip(gameWon);
-			StartCoroutine(HandlePostGame(gameWon.length));
-		}
+			GameWon();
 	}
 
 	protected override void HandleLose() 
@@ -170,8 +172,8 @@ public abstract class GameState_with_Player : GameState_Base {
 			result.text = "Game Over!";
 			ParticleSystem explosion = Instantiate(playerExplosion, player.transform.position, Quaternion.identity).GetComponent<ParticleSystem>();
 			Destroy(player.gameObject);
-			PlayClip(gameLost);
-			float explosionDuration = gameLost.length;
+			PlayClip(gameLostMusic);
+			float explosionDuration = gameLostMusic.length;
 			var main = explosion.main;
 			main.duration = explosionDuration;
 			explosion.Play();
@@ -193,12 +195,13 @@ public abstract class GameState_Event_Minigame : GameState_Base {
 	protected override void HandleWin()
 	{
 		if(curCorrect == numCorrect)
-		{
-			gamePlaying = false;
-			result.text = "You win!";
-			PlayClip(gameWon);
-			StartCoroutine(HandlePostGame(gameWon.length));
-		}
+			GameWon();
+	}
+
+	protected override void HandlePostGameScene()
+	{
+		StatsProcess.CheckIfTrainingComplete(gameMode);
+		SetUpButtons();
 	}
 
 }

@@ -12,6 +12,13 @@ public class GameState_LaserMiniGame : GameState_with_Player
 
 	protected override void HandlePostGameScene()
 	{
-		SetUpButtons();	
+		SetUpButtons();
+		StatsProcess.CheckIfTrainingComplete(gameMode);
+	}
+
+	protected override void SetUp()
+	{
+		base.SetUp();
+		gameMode = "laser_training";
 	}
 }

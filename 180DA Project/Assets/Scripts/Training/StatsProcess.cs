@@ -49,7 +49,7 @@ public class GameItem
 public class StatsProcess : MonoBehaviour
 {
     //MQTT stuff
-    private MqttClient client;
+    private static MqttClient client;
     GameData gd;
     private const string str_IP = "127.0.0.1";
     private const int int_Port = 1883;
@@ -210,16 +210,40 @@ public class StatsProcess : MonoBehaviour
             SelectedPlayer.difficulty_ctr++;
         }
 
-
-        //NICO
-        /*
-         str_command = string.Format("UPDATE players SET gesture_training={1} WHERE id = {2}",
-                                     1, SelectedPlayer.id);
-        */
-
         str_command = string.Format("UPDATE players SET games_played={0}, difficulty_ctr={1} WHERE id = {2}",
                                     SelectedPlayer.games_played, SelectedPlayer.difficulty_ctr, SelectedPlayer.id);
         command = Encoding.ASCII.GetBytes(str_command);
+        client.Publish("database", command);
+    }
+    
+    public static void CheckIfTrainingComplete(string training)
+    {
+        bool selectedTrainingComplete;
+        switch(training)
+        {
+            case "gesture_training":
+                selectedTrainingComplete = SelectedPlayer.gesture_training;
+                break;
+            case "laser_training":
+                selectedTrainingComplete = SelectedPlayer.laser_training;
+                break;
+            case "unscramble_training":
+                selectedTrainingComplete = SelectedPlayer.unscramble_training;
+                break;
+            case "trivia_training":
+                selectedTrainingComplete = SelectedPlayer.unscramble_training;
+                break;
+            // error
+            default:
+                return;
+        }
+
+        if (selectedTrainingComplete)
+            return;
+        
+        string str_command = string.Format("UPDATE players SET {1}=1 WHERE id = {2}",
+            selectedTrainingComplete, SelectedPlayer.id);
+        byte[] command = Encoding.ASCII.GetBytes(str_command);
         client.Publish("database", command);
     }
 
