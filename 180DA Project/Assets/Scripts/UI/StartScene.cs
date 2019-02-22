@@ -27,7 +27,7 @@ public class PlayerItem
 {
     public string name, suggested_difficulty;
     public int id, games_played, difficulty_ctr;
-    public bool laser_training, gesture_training, speech_training;
+    public bool laser_training, gesture_training, unscramble_training, trivia_training;
 }
 
 public class StartScene : MonoBehaviour {
@@ -89,7 +89,8 @@ public class StartScene : MonoBehaviour {
                 SelectedPlayer.difficulty_ctr = selectedPlayer.difficulty_ctr;
                 SelectedPlayer.laser_training = selectedPlayer.laser_training;
                 SelectedPlayer.gesture_training = selectedPlayer.gesture_training;
-                SelectedPlayer.speech_training = selectedPlayer.speech_training;
+                SelectedPlayer.unscramble_training = selectedPlayer.unscramble_training;
+                SelectedPlayer.trivia_training = selectedPlayer.trivia_training;
                 SelectedPlayer.resetGameStats();
             }
         }

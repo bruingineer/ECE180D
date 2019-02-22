@@ -23,7 +23,8 @@ public class CheckTraining : MonoBehaviour {
 
         if (!SelectedPlayer.laser_training) message += "Laser Training\n";
         if (!SelectedPlayer.gesture_training) message += "Gesture Training\n";
-        if (!SelectedPlayer.speech_training) message += "Speech Training";
+        if (!SelectedPlayer.unscramble_training) message += "Unscramble Training";
+        if (!SelectedPlayer.trivia_training) message += "Trivia Training";
 
         //if player has completed all training, change to main level scene,
         //else give instructions

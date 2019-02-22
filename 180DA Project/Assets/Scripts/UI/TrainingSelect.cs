@@ -31,15 +31,22 @@ public class TrainingSelect : MonoBehaviour {
                 m_DropOptions.Add("Laser Training");
             }
 
-            if (txt.Contains("Speech Training"))
-            {
-                m_DropOptions.Add("Speech Training");
-            }
-
             if (txt.Contains("Gestures"))
             {
                 m_DropOptions.Add("Gesture Training");
             }
+
+            if (txt.Contains("Unscrambler"))
+            {
+                m_DropOptions.Add("Unscrambler Training");
+            }
+
+            if (txt.Contains("Trivia"))
+            {
+                m_DropOptions.Add("Trivia Training");
+            }
+
+            
 
             m_Dropdown.AddOptions(m_DropOptions);
             populated = true;
