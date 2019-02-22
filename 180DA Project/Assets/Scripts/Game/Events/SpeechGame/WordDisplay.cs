@@ -52,6 +52,15 @@ public class WordDisplay
             WordText.text = "";
     }
 
+    public void SetFirstLetterClue(){
+        char firstLetter = word_str[0];
+        //Debug.Log(firstLetter);
+        string beg = orginal_scramble.Substring(0, orginal_scramble.IndexOf(firstLetter));
+        string end = orginal_scramble.Substring(orginal_scramble.IndexOf(firstLetter)+1);
+        //Debug.Log(beg); Debug.Log(end);
+        //Debug.Log("setting modified word");
+        WordText.text = beg + "<color=\"blue\">" + firstLetter + "</color>" + end;
+    }
 }
 
 
