@@ -14,4 +14,10 @@ public class GameState_MainGame : GameState_with_Player {
 	{
 		LoadStatsMenu();
 	}
+
+	protected override void SetUp()
+	{
+		base.SetUp();
+		gameMode = "main_game";
+	}
 }

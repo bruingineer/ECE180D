@@ -116,6 +116,7 @@ public abstract class GameState_Base : MonoBehaviour {
 		gamePlaying = false;
 		result.text = "You win!";
 		PlayClip(gameWonMusic);
+		StatsProcess.CheckIfTrainingComplete(gameMode);
 		StartCoroutine(HandlePostGame(gameWonMusic.length));
 	}
 
@@ -200,7 +201,6 @@ public abstract class GameState_Event_Minigame : GameState_Base {
 
 	protected override void HandlePostGameScene()
 	{
-		StatsProcess.CheckIfTrainingComplete(gameMode);
 		SetUpButtons();
 	}
 
