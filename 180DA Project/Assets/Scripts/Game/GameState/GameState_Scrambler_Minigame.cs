@@ -2,17 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameState_GestureMinigame : GameState_Event_Minigame {
-
+public class GameState_Scrambler_Minigame : GameState_Event_Minigame
+ {
 	 // add title with selected difficulty
 	protected override void SetUp_Events_Obstacles()
 	{
-		gameObject.AddComponent<PlayerEvents_Gesture_Minigame>().StartEvents();
+		// change to pass in gameobject and add to that component
+		gameObject.AddComponent<PlayerEvents_Scrambler_Minigame>().StartEvents();
 	}
 
 	protected override void SetUp()
 	{
 		base.SetUp();
-		gameMode = "gesture_training";
+		gameMode = "unscramble_training";
 	}
 }

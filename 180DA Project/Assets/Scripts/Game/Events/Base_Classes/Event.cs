@@ -13,9 +13,9 @@ public abstract class Event : MonoBehaviour {
 	protected Player m_player;
 	protected float timerDuration;
 	protected float repeatRate;
-	private float delay;
 	protected bool timerStopped;
 	protected bool eventCorrect;
+	public static float curTime;
 
 	void Awake()
     {
@@ -34,8 +34,7 @@ public abstract class Event : MonoBehaviour {
 			timerDuration = 5f;
 			repeatRate = .25f; 
 		} 
-		// value used to set delay after correct/incorrect events
-		delay = 2f;
+		
 		// used to stop the timer immediately after correct or when time runs out
 		timerStopped = false;
 		// text object to show the timer
@@ -47,13 +46,6 @@ public abstract class Event : MonoBehaviour {
 		if(playerPresent)
 			m_player = GameObject.FindWithTag("Player").GetComponent<Player>();
     }
-
-	// delay function, delays for the specified amount of time with delay variable
-	protected virtual IEnumerator Delay()
-	{
-		yield return new WaitForSeconds(delay);
-	}
-
 	/*
 		Timer used to start the event. When the timer runs out of time, each events
 		HandleIncorrectEvent gets called, and then exits the loop, thus ending the event.
@@ -63,7 +55,7 @@ public abstract class Event : MonoBehaviour {
 	protected IEnumerator StartTimer()
 	{
 		// used to reset the time each the event is called
-		float curTime = timerDuration;
+		curTime = timerDuration;
 		while (!eventCorrect)
         {   
 			if(!timerStopped)
@@ -77,7 +69,7 @@ public abstract class Event : MonoBehaviour {
 				else
 				{
 					timeLeft.text = "Time's Up";
-					yield return HandleIncorrectEvent();
+					HandleIncorrectEvent();
 					break;
 				}
 			}
@@ -100,10 +92,16 @@ public abstract class Event : MonoBehaviour {
 		yield return StartCoroutine(StartTimer());
 	}
 
-	protected abstract IEnumerator HandleIncorrectEvent();
+	// The correct action here moves the player (for the main game)
+	protected virtual void HandleCorrectAction() 
+	{
+		m_player.MovePlayer();
+	}
+
+	protected abstract void HandleIncorrectEvent();
 	protected abstract IEnumerator MakeTextBlink();
 	protected abstract void SetUpEvent();
-	protected abstract IEnumerator HandleCorrectEvent();
+	protected abstract void HandleCorrectEvent();
 	protected abstract void Event_Initializer();
-	protected abstract void HandleCorrectAction();
+	protected abstract void Reset();
 }

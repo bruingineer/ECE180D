@@ -48,7 +48,6 @@ public class Big_Laser : Laser {
 		Destroy(gameObject, laserTimes.cooldown);
 		yield return null;
     }
-	protected virtual void Handle_Minigame() {}
 }
 
 public class Big_Laser_Minigame : Big_Laser {
