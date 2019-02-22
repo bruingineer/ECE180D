@@ -65,12 +65,12 @@ public class StatsProcess : MonoBehaviour
 
     //Capture first 'training suggestion' before 'difficulty change suggestion' replaces it
     //used to fix dropdown menu not populating
-    public Text temp_text; 
+    public Text temp_text;
     string first_suggestion;
 
     bool training_query_done = false;
     bool difficulty_query_done = false;
-    
+
     void Start()
     {
         // create client instance 
@@ -91,7 +91,6 @@ public class StatsProcess : MonoBehaviour
         //Query game data for iterative learning model
         QueryDB();
     }
-    
 
     //Update training suggestion on screen based on iterative learning results
     void Update()
@@ -135,31 +134,37 @@ public class StatsProcess : MonoBehaviour
             float tot_trivia = (SelectedPlayer.current_trivia_fail + SelectedPlayer.current_trivia_pass);
 
             //gesture averages
-            if (tot_gestures == 0) {
+            if (tot_gestures == 0)
+            {
                 g = -1;
                 g_tleft_avg = -1;
             }
-            else {
+            else
+            {
                 g = SelectedPlayer.current_gesture_pass / tot_gestures;
                 g_tleft_avg = SelectedPlayer.current_g_timer_avg / tot_gestures;
             }
 
             //unscramble averages
-            if (tot_unscramble == 0) {
+            if (tot_unscramble == 0)
+            {
                 u = -1;
                 u_tleft_avg = -1;
             }
-            else {
+            else
+            {
                 u = SelectedPlayer.current_unscramble_pass / tot_unscramble;
                 u_tleft_avg = SelectedPlayer.current_unscramble_timer_avg / tot_unscramble;
             }
 
             //trivia averages
-            if (tot_trivia == 0) {
+            if (tot_trivia == 0)
+            {
                 t = -1;
                 t_tleft_avg = -1;
             }
-            else {
+            else
+            {
                 t = SelectedPlayer.current_trivia_pass / tot_trivia;
                 t_tleft_avg = SelectedPlayer.current_trivia_timer_avg / tot_trivia;
             }
@@ -182,21 +187,20 @@ public class StatsProcess : MonoBehaviour
             trivia_acc.text += ("  " + t.ToString("0.##"));
             if (died) survived.text += ("  No");
             else survived.text += ("  Yes");
-               
+
 
             //Input game data into database
             UpdateDatabase(g, u, t, Convert.ToInt32(died), g_tleft_avg, u_tleft_avg, t_tleft_avg, lives_left);
         }
     }
-
-    //TODO: test if boolean d works
-    void UpdateDatabase(float g, float u, float t, int d, float g_tleft_avg, float u_tleft_avg, 
+    
+    void UpdateDatabase(float g, float u, float t, int d, float g_tleft_avg, float u_tleft_avg,
                         float t_tleft_avg, int lives_left)
     {
         //Insert game data into db
         string values = string.Format("({0}, {1}, \"{2}\", {3}, {4}, {5}, {6}, {7}, {8}, {9})",
                                     SelectedPlayer.id, ++SelectedPlayer.games_played, SelectedPlayer.current_difficulty,
-                                    g,u,t,d, u_tleft_avg, t_tleft_avg, lives_left);
+                                    g, u, t, d, u_tleft_avg, t_tleft_avg, lives_left);
 
         string str_command = "INSERT INTO games (player, player_game_idx, difficulty, gestures_acc, unscramble_acc," +
                                                 " trivia_acc, died, unscramble_timer_avg, trivia_timer_avg, lives_left)" +
@@ -215,11 +219,11 @@ public class StatsProcess : MonoBehaviour
         command = Encoding.ASCII.GetBytes(str_command);
         client.Publish("database", command);
     }
-    
+
     public static void CheckIfTrainingComplete(string training)
     {
         bool selectedTrainingComplete;
-        switch(training)
+        switch (training)
         {
             case "gesture_training":
                 selectedTrainingComplete = SelectedPlayer.gesture_training;
@@ -240,8 +244,8 @@ public class StatsProcess : MonoBehaviour
 
         if (selectedTrainingComplete)
             return;
-        
-        string str_command = string.Format("UPDATE players SET {1}=1 WHERE id = {2}",
+
+        string str_command = string.Format("UPDATE players SET {0}=1 WHERE id = {1}",
             selectedTrainingComplete, SelectedPlayer.id);
         byte[] command = Encoding.ASCII.GetBytes(str_command);
         client.Publish("database", command);
@@ -323,10 +327,10 @@ public class StatsProcess : MonoBehaviour
             // ctrs tracks # games that contained the type of event 
             int gesture_ctr, unscramble_ctr, trivia_ctr;
             gesture_ctr = unscramble_ctr = trivia_ctr = gd.count;
-            
+
             //iterative learning 
             if (gd != null && gd.count != 0)
-            {   
+            {
                 //calculate averages over queried games 
                 foreach (GameItem game in gd.items)
                 {
@@ -385,7 +389,7 @@ public class StatsProcess : MonoBehaviour
                             suggestion = "Suggestion: Great Work! Keep it up to unlock the next difficulty!";
                         else
                             suggestion = "Suggestion: Great Work! Keep it up!";
-                    }   
+                    }
 
                     else
                     {
@@ -417,13 +421,13 @@ public class StatsProcess : MonoBehaviour
                 {
                     Debug.Log("Checking for difficulty change!");
                     if (n_deaths <= 1 && avg_gesture_acc >= 0.69 && avg_unscramble_acc >= 0.69 && avg_trivia_acc >= 0.69)
-                         ChangeDifficulty("higher");
+                        ChangeDifficulty("higher");
                     else if (n_deaths >= 4 || (avg_gesture_acc <= 0.39 && avg_unscramble_acc <= 0.39 && avg_trivia_acc <= 0.39))
-                         ChangeDifficulty("lower");
+                        ChangeDifficulty("lower");
                     else Debug.Log("Difficulty staying the same");
                 }
                 difficulty_query_done = true;
-                
+
             }
         }
     }
@@ -437,7 +441,7 @@ public class StatsProcess : MonoBehaviour
             //Unpack JSON
             Debug.Log(gamesResult);
             gd = GameData.CreateFromJSON(gamesResult);
-        
+
             //Call iterative learning func. once game data is loaded
             PredictTraining();
         }
