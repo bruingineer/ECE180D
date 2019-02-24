@@ -6,6 +6,7 @@ public class Big_Laser : Laser {
 
 	// Objects 
 	private LineRenderer lineRenderer;
+	private bool laserStart = false;
 	// States
 	static public bool playerHit = false;
 
@@ -25,7 +26,7 @@ public class Big_Laser : Laser {
 	{
 		// RaycastHit returns information regarding the hit from the LineRenderer (you can access it's transform)
 		RaycastHit hit;
-        if (Physics.Raycast(transform.position, Vector3.down, out hit) && !playerHit)
+        if (Physics.Raycast(transform.position, Vector3.down, out hit) && !playerHit && laserStart)
 		{
 			playerHit = true;
 			Handle_Minigame();
@@ -37,6 +38,8 @@ public class Big_Laser : Laser {
 
 	protected override IEnumerator MoveLaserToPosition(Vector3 endPosition, Laser_Obstacle.Laser_Times laserTimes)
    	{
+		laserStart = true;
+		lineRenderer.enabled = true;
 		var initialPos = transform.position;
 		float t = 0f;
 		while(t < 1)

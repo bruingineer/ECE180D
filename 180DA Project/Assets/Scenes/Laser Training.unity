@@ -391,6 +391,7 @@ Prefab:
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 114340158667787706, guid: d78defd6cd2f245f8bf556e9fc610325, type: 2}
+    - {fileID: 82402646971904474, guid: d78defd6cd2f245f8bf556e9fc610325, type: 2}
   m_SourcePrefab: {fileID: 100100000, guid: d78defd6cd2f245f8bf556e9fc610325, type: 2}
   m_IsPrefabAsset: 0
 --- !u!1 &1063897375 stripped
@@ -408,11 +409,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 1297742544021376, guid: d78defd6cd2f245f8bf556e9fc610325,
     type: 2}
   m_PrefabInternal: {fileID: 1063897374}
---- !u!82 &1063897378 stripped
-AudioSource:
-  m_CorrespondingSourceObject: {fileID: 82032330296052340, guid: d78defd6cd2f245f8bf556e9fc610325,
-    type: 2}
-  m_PrefabInternal: {fileID: 1063897374}
 --- !u!114 &1063897379
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -424,9 +420,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 625df8e1ea9fa423d99eedd1206f3c3f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameMusic: {fileID: 1063897378}
-  gameLost: {fileID: 8300000, guid: 9177a4c4d14e64b6dbc643acfad31593, type: 3}
-  gameWon: {fileID: 8300000, guid: f4bc97da2b5ce49da807bf2a6b0a42ad, type: 3}
   result: {fileID: 231384738}
   countdown: {fileID: 456050957}
   playerExplosion: {fileID: 1930362069647888, guid: 0fc2a53664375441a9bac3adc653c04d,
