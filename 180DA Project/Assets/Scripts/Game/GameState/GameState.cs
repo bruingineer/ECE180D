@@ -15,8 +15,7 @@ public abstract class GameState_Base : MonoBehaviour {
 	public static int numLanes;
 	public static int end_row;
 	public static List<int> laneNums;
-	public static AudioSource gameSounds;
-	public AudioSource gameMusic;
+	public static AudioSource gameMusic;
 	protected AudioClip gameLostMusic;
 	protected AudioClip gameWonMusic;
 	private const string SoundsPath = "Sounds/";
@@ -33,9 +32,9 @@ public abstract class GameState_Base : MonoBehaviour {
 		end_row = 14;
 		gameLostMusic = Resources.Load<AudioClip>(SoundsPath + "Game_Lost");
 		gameWonMusic = Resources.Load<AudioClip>(SoundsPath + "Game_Won");
-		gameSounds = new AudioSource();
 		gamePlaying = false;
 		canvas = GameObject.Find("Canvas").GetComponent<Canvas>();
+		gameMusic = GetComponent<AudioSource>();
 		SetUp();
 		StartCoroutine(StartGame());
 	}
@@ -43,6 +42,7 @@ public abstract class GameState_Base : MonoBehaviour {
 	private IEnumerator StartGame()
 	{
 		yield return StartCoroutine(GameTimer());
+		gameMusic.Play();
 		gamePlaying = true;
 		SetUp_Events_Obstacles();
 	}
@@ -57,7 +57,7 @@ public abstract class GameState_Base : MonoBehaviour {
 	}
 
 	public static void PlayClip(AudioClip clip) {
-		gameSounds.PlayOneShot(clip);
+		gameMusic.PlayOneShot(clip);
 	}
 
 	public IEnumerator GameTimer() 
