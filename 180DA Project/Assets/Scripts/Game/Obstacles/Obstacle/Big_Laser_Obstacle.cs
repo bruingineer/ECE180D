@@ -8,7 +8,7 @@ public class Big_Laser_Obstacle : Laser_Obstacle {
     private string countdownEasy = "Easy";
     public string countdownMedium = "Medium";
     private string countdownHard = "Hard";
-	private string soundsPath = "Sounds/";
+	private string soundsPath = "Sounds/Laser/";
 	private string lasersPath = "Prefabs/Lasers/";
 	
 	// Variables
