@@ -6,27 +6,27 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/Start Scene.unity
+    path: Assets/Scenes/Start/Start Scene.unity
     guid: ad1c1d5da2b8ab9498c1ac4caae2821f
   - enabled: 1
-    path: Assets/Scenes/Game Menu.unity
+    path: Assets/Scenes/Start/Game Menu.unity
     guid: f3b177772c10b624994513b83d2e7efb
   - enabled: 1
-    path: Assets/Scenes/Main Level.unity
+    path: Assets/Scenes/Game/Main Level.unity
     guid: 2cda990e2423bbf4892e6590ba056729
   - enabled: 1
-    path: Assets/Scenes/Gesture Training.unity
+    path: Assets/Scenes/Game/Minigames/Gesture Training.unity
     guid: f0694a2e5c67cba4182693fe12aaec1a
   - enabled: 1
-    path: Assets/Scenes/Laser Training.unity
+    path: Assets/Scenes/Game/Minigames/Laser Training.unity
     guid: 0b00d702129e1f64f9e875ef506941cb
   - enabled: 1
-    path: Assets/Scenes/Scrambler Training.unity
+    path: Assets/Scenes/Game/Minigames/Scrambler Training.unity
     guid: 6fb6f2eed6a8e4b47a0c8cb9c3a03804
   - enabled: 1
-    path: Assets/Scenes/Trivia Training.unity
+    path: Assets/Scenes/Game/Minigames/Trivia Training.unity
     guid: 0fce29f50cb8446c99c545236679429a
   - enabled: 1
-    path: Assets/Scenes/End Game.unity
+    path: Assets/Scenes/End/End Game.unity
     guid: d5caef2cadd43b04ab98c483523427b4
   m_configObjects: {}
