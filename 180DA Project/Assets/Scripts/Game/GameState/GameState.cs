@@ -25,9 +25,11 @@ public abstract class GameState_Base : MonoBehaviour {
 	protected Canvas canvas;
 	public Text result;
 	public Text countdown;
+	static Button retry, menu;
 	public static bool gamePlaying;
 
 	void Awake () {
+		Time.timeScale = 1;
 		numLanes = 10;
 		end_row = 14;
 		gameLostMusic = Resources.Load<AudioClip>(SoundsPath + "Game_Lost");
@@ -35,6 +37,11 @@ public abstract class GameState_Base : MonoBehaviour {
 		gamePlaying = false;
 		canvas = GameObject.Find("Canvas").GetComponent<Canvas>();
 		gameMusic = GetComponent<AudioSource>();
+		retry = Instantiate((Resources.Load("Prefabs/WorldSpace/Retry") as GameObject), canvas.transform).GetComponent<Button>();
+		retry.onClick.AddListener(RetryLevel);
+		menu = Instantiate((Resources.Load("Prefabs/WorldSpace/Menu") as GameObject), canvas.transform).GetComponent<Button>();
+		menu.onClick.AddListener(LoadGameMenu);
+		DisableButtons();
 		SetUp();
 		StartCoroutine(StartGame());
 	}
@@ -87,22 +94,25 @@ public abstract class GameState_Base : MonoBehaviour {
 	// change to just one static function and constants for scenes
 	public void LoadGameMenu()
 	{
-		SceneManager.LoadScene(5);
+		SceneManager.LoadScene("Game Menu");
 	}
 
 	protected void LoadStatsMenu()
 	{
-		SceneManager.LoadScene(2);
+		SceneManager.LoadScene("End Game");
 	}
 
 	// create function to set up button
-	protected void SetUpButtons()
+	public static void SetUpButtons()
 	{
-		Button retry, menu;
-		retry = Instantiate((Resources.Load("Prefabs/WorldSpace/Retry") as GameObject), canvas.transform).GetComponent<Button>();
-		retry.onClick.AddListener(RetryLevel);
-		menu = Instantiate((Resources.Load("Prefabs/WorldSpace/Menu") as GameObject), canvas.transform).GetComponent<Button>();
-		menu.onClick.AddListener(LoadGameMenu);
+		retry.gameObject.SetActive(true);
+		menu.gameObject.SetActive(true);
+	}
+
+	public static void DisableButtons()
+	{
+		retry.gameObject.SetActive(false);
+		menu.gameObject.SetActive(false);
 	}
 
 	protected IEnumerator HandlePostGame(float length)
