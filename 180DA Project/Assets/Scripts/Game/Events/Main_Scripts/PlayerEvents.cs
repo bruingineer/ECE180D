@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public abstract class PlayerEvents : Moving_Object {
-	protected Event gestureGame, speechRecognizerGame, triviaGame;
 
 	private float delay = 2f;
 
@@ -32,25 +31,28 @@ public abstract class PlayerEvents_Minigame: PlayerEvents {
 }
 
 public class PlayerEvents_Gesture_Minigame : PlayerEvents_Minigame {
+	Event gestureMiniGame;
 	public override void Awake()
 	{
-		gestureGame = gameObject.AddComponent<GestureMiniGame>();
-		playerEvents = new List<Event> {gestureGame};
+		gestureMiniGame = gameObject.AddComponent<GestureMiniGame>();
+		playerEvents = new List<Event> {gestureMiniGame};
 	}
 }
 
 public class PlayerEvents_Scrambler_Minigame : PlayerEvents_Minigame {
+	Event scramblerMiniGame;
 	public override void Awake()
 	{
-		speechRecognizerGame = gameObject.AddComponent<WordScrambleMiniGame>();
-		playerEvents = new List<Event> {speechRecognizerGame};
+		scramblerMiniGame = gameObject.AddComponent<WordScrambleMiniGame>();
+		playerEvents = new List<Event> {scramblerMiniGame};
 	}
 }
 
 public class PlayerEvents_Trivia_Minigame : PlayerEvents_Minigame {
+	Event triviaMiniGame;
 	public override void Awake()
 	{
-		triviaGame = gameObject.AddComponent<TriviaMiniGame>();
-		playerEvents = new List<Event> {triviaGame};
+		triviaMiniGame = gameObject.AddComponent<TriviaMiniGame>();
+		playerEvents = new List<Event> {triviaMiniGame};
 	}
 }

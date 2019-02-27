@@ -221,7 +221,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8614426b274e245949225b227f0bbd19, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameMusic: {fileID: 0}
   result: {fileID: 23202972}
   countdown: {fileID: 2050853184}
 --- !u!82 &74427408
@@ -1256,7 +1255,7 @@ GameObject:
   - component: {fileID: 1628488731}
   - component: {fileID: 1628488730}
   m_Layer: 5
-  m_Name: Scrambler_Title
+  m_Name: Trivia_Title
   m_TagString: timer
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1314,7 +1313,9 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "Scrambler\n Mini-Game"
+  m_Text: 'Trivia
+
+    Mini-Game'
 --- !u!222 &1628488731
 CanvasRenderer:
   m_ObjectHideFlags: 0
