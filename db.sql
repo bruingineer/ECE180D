@@ -10,7 +10,8 @@ CREATE TABLE IF NOT EXISTS players (
     difficulty_ctr INT DEFAULT 0,
     laser_training BOOLEAN DEFAULT False,
     gesture_training BOOLEAN DEFAULT False,
-    speech_training BOOLEAN DEFAULT False,
+    unscramble_training BOOLEAN DEFAULT False,
+    trivia_training BOOLEAN DEFAULT False,
     PRIMARY KEY(id)
 );
 
@@ -20,8 +21,14 @@ CREATE TABLE IF NOT EXISTS games (
     player_game_idx INT unsigned DEFAULT 0,
     difficulty varchar(10) NOT NULL,
     gestures_acc FLOAT(4,3) DEFAULT -1,
-    speech_acc FLOAT(4,3) DEFAULT -1,
+    gestures_timer_avg FLOAT(4,2) DEFAULT -1,
+    unscramble_acc FLOAT(4,3) DEFAULT -1,
+    unscramble_timer_avg FLOAT(4,2) DEFAULT -1,
+    trivia_acc FLOAT(4,3) DEFAULT -1,
+    trivia_timer_avg FLOAT(4,2) DEFAULT -1,
+    lives_left INT unsigned Default 3,
     died BOOLEAN DEFAULT False,
+    total_score FLOAT(6,2) DEFAULT 0,
     PRIMARY KEY(game_id),
     FOREIGN KEY (player) REFERENCES players(id)
 );

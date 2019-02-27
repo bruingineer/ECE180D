@@ -33,7 +33,7 @@ public class GameItem
 
     //performance data
     public float gestures_acc;
-    public float gesture_timer_avg;
+    public float gestures_timer_avg;
 
     public float unscramble_acc;
     public float unscramble_timer_avg;
@@ -59,8 +59,9 @@ public class StatsProcess : MonoBehaviour
     public Text gesture_acc;
     public Text unscramble_acc;
     public Text trivia_acc;
-    public Text survived;
+    public Text lives_left_txt;
     public Text training_suggestion;
+    public Text score_txt;
     string suggestion;
 
     //Capture first 'training suggestion' before 'difficulty change suggestion' replaces it
@@ -89,7 +90,7 @@ public class StatsProcess : MonoBehaviour
         SelectedPlayer.resetGameStats();
 
         //Query game data for iterative learning model
-        QueryDB();
+        QueryDB("Training");
     }
 
     //Update training suggestion on screen based on iterative learning results
@@ -103,6 +104,11 @@ public class StatsProcess : MonoBehaviour
         if (first_suggestion != null)
         {
             temp_text.text = first_suggestion;
+        }
+
+        if (training_query_done && !difficulty_query_done)
+        {
+            QueryDB("difficulty");
         }
     }
 
@@ -118,6 +124,7 @@ public class StatsProcess : MonoBehaviour
         float t_tleft_avg;
         bool died;
         int lives_left;
+        float total_score = 0;
 
         //calculate accuracies for the game that just ended and call UpdateDatabase() 
         if (SelectedPlayer.name != null)
@@ -134,6 +141,7 @@ public class StatsProcess : MonoBehaviour
             float tot_trivia = (SelectedPlayer.current_trivia_fail + SelectedPlayer.current_trivia_pass);
 
             //gesture averages
+            //out of 50 pts
             if (tot_gestures == 0)
             {
                 g = -1;
@@ -142,10 +150,14 @@ public class StatsProcess : MonoBehaviour
             else
             {
                 g = SelectedPlayer.current_gesture_pass / tot_gestures;
+                total_score += g * 50; 
+
                 g_tleft_avg = SelectedPlayer.current_g_timer_avg / tot_gestures;
+                total_score += g_tleft_avg * 5; 
             }
 
             //unscramble averages
+            //out of 50 points
             if (tot_unscramble == 0)
             {
                 u = -1;
@@ -154,10 +166,14 @@ public class StatsProcess : MonoBehaviour
             else
             {
                 u = SelectedPlayer.current_unscramble_pass / tot_unscramble;
+                total_score += u * 50; 
+
                 u_tleft_avg = SelectedPlayer.current_unscramble_timer_avg / tot_unscramble;
+                total_score += u_tleft_avg * 5; 
             }
 
             //trivia averages
+            //out of 50 points
             if (tot_trivia == 0)
             {
                 t = -1;
@@ -166,44 +182,69 @@ public class StatsProcess : MonoBehaviour
             else
             {
                 t = SelectedPlayer.current_trivia_pass / tot_trivia;
+                total_score += t * 50;
+
                 t_tleft_avg = SelectedPlayer.current_trivia_timer_avg / tot_trivia;
+                total_score += t_tleft_avg * 5;
             }
 
             Debug.Log("g_tleft_avg" + g_tleft_avg);
             Debug.Log("u_tleft_avg" + u_tleft_avg);
             Debug.Log("t_tleft_avg" + t_tleft_avg);
 
-            died = SelectedPlayer.died;
+          
+
+            //lives left out of 50 pts
             lives_left = SelectedPlayer.current_lives_left;
+            total_score += lives_left/3 * 50 ;
+
+            if (lives_left == 0) died = true;
+            else {
+                //surviving worth 100 pts
+                died = false;
+                total_score += 100;
+            }
+
             /////////////////HARDCODED test values///////////////
-            //g = 0.77f;
-            //u = 0.77f;
-            //t = 0.77f;
-            //died = false;
+            g = 0.77f;
+            u = 0.77f;
+            t = 0.77f;
+            g_tleft_avg = 8;
+            u_tleft_avg = 8;
+            t_tleft_avg = 8;
+            died = false;
+            lives_left = 1;
+            total_score = 50 * (g + u + t + g_tleft_avg/10 + u_tleft_avg/10 + t_tleft_avg/10 + lives_left/3);
+            total_score += 100;
             ////////////////////////////////////////////////////
 
-            gesture_acc.text += ("  " + g.ToString("0.##"));
-            unscramble_acc.text += ("  " + u.ToString("0.##"));
-            trivia_acc.text += ("  " + t.ToString("0.##"));
-            if (died) survived.text += ("  No");
-            else survived.text += ("  Yes");
+            //Populate Results in End Game scene
+            gesture_acc.text += string.Format("\t{0}% accuracy, {1}s time average" , 
+                                            (100*g).ToString("0.##"), g_tleft_avg.ToString());
+            unscramble_acc.text += string.Format("\t{0}% accuracy, {1}s time average",
+                                            (100 * u).ToString("0.##"), u_tleft_avg.ToString());
+            trivia_acc.text += string.Format("\t{0}% accuracy, {1}s time average",
+                                            (100 * t).ToString("0.##"), t_tleft_avg.ToString());
 
+            lives_left_txt.text += lives_left.ToString();
+            score_txt.text += total_score.ToString("0.##");
 
             //Input game data into database
-            UpdateDatabase(g, u, t, Convert.ToInt32(died), g_tleft_avg, u_tleft_avg, t_tleft_avg, lives_left);
+            UpdateDatabase(g, u, t, Convert.ToInt32(died), g_tleft_avg, u_tleft_avg, t_tleft_avg, lives_left, total_score);
         }
     }
     
     void UpdateDatabase(float g, float u, float t, int d, float g_tleft_avg, float u_tleft_avg,
-                        float t_tleft_avg, int lives_left)
+                        float t_tleft_avg, int lives_left, float total_score)
     {
         //Insert game data into db
-        string values = string.Format("({0}, {1}, \"{2}\", {3}, {4}, {5}, {6}, {7}, {8}, {9})",
+        string values = string.Format("({0}, {1}, \"{2}\", {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10}, {11})",
                                     SelectedPlayer.id, ++SelectedPlayer.games_played, SelectedPlayer.current_difficulty,
-                                    g, u, t, d, u_tleft_avg, t_tleft_avg, lives_left);
+                                    g, u, t, d, g_tleft_avg, u_tleft_avg, t_tleft_avg, lives_left, total_score);
 
         string str_command = "INSERT INTO games (player, player_game_idx, difficulty, gestures_acc, unscramble_acc," +
-                                                " trivia_acc, died, unscramble_timer_avg, trivia_timer_avg, lives_left)" +
+                                                " trivia_acc, died, gestures_timer_avg, unscramble_timer_avg, trivia_timer_avg, " +
+                                                "lives_left, total_score)" +
                              "VALUES  " + values;
         byte[] command = Encoding.ASCII.GetBytes(str_command);
         client.Publish("database", command);
@@ -251,19 +292,25 @@ public class StatsProcess : MonoBehaviour
         client.Publish("database", command);
     }
 
-    void QueryDB()
+    void QueryDB(string query)
     {
+        string str_command;
         //Perform the query for selected player's last three game data for Training Suggestion
-        string str_command = string.Format("SELECT * FROM (SELECT * FROM games WHERE player={0}) sub ", SelectedPlayer.id) +
-                                            "ORDER BY game_id DESC LIMIT 3";
-        byte[] command = Encoding.ASCII.GetBytes(str_command);
-        client.Publish("database", command);
+        if (query == "Training")
+        {
+            str_command = string.Format("SELECT * FROM (SELECT * FROM games WHERE player={0}) sub ", SelectedPlayer.id) +
+                                                "ORDER BY game_id DESC LIMIT 3";
+        }
 
         //Perform the query for selected player's last five game data for Difficulty Suggesion
-        str_command = string.Format("SELECT * FROM (SELECT * FROM games WHERE player={0} AND difficulty=\"{1}\") sub ",
-                                    SelectedPlayer.id, SelectedPlayer.suggested_difficulty) +
-                                    "ORDER BY game_id DESC LIMIT 5";
-        command = Encoding.ASCII.GetBytes(str_command);
+        else
+        {
+            str_command = string.Format("SELECT * FROM (SELECT * FROM games WHERE player={0} AND difficulty=\"{1}\") sub ",
+                                        SelectedPlayer.id, SelectedPlayer.suggested_difficulty) +
+                                        "ORDER BY game_id DESC LIMIT 5";
+        }
+
+        byte [] command = Encoding.ASCII.GetBytes(str_command);
         client.Publish("database", command);
     }
 
@@ -316,13 +363,13 @@ public class StatsProcess : MonoBehaviour
         {
             //learning model features
             float avg_gesture_acc = 0;
+            float avg_unscramble_acc = 0;
+            float avg_trivia_acc = 0;
             float avg_g_timeleft = 0;
             float avg_u_timeleft = 0;
             float avg_t_timeleft = 0;
-            float avg_unscramble_acc = 0;
-            float avg_trivia_acc = 0;
+            float total_score_avg = 0;
             int lives_left = 0;
-            int n_deaths = 0;
 
             // ctrs tracks # games that contained the type of event 
             int gesture_ctr, unscramble_ctr, trivia_ctr;
@@ -337,13 +384,15 @@ public class StatsProcess : MonoBehaviour
                     //Add accuracies from queried games
                     //if there were no events of a type, do not count toward average
 
+                    //gesture stats sum
                     if (game.gestures_acc != -1)
                     {
                         avg_gesture_acc += game.gestures_acc;
-                        avg_g_timeleft += game.gesture_timer_avg;
+                        avg_g_timeleft += game.gestures_timer_avg;
                     }
                     else gesture_ctr--;
 
+                    //unscrambler stats sum
                     if (game.unscramble_acc != -1)
                     {
                         avg_unscramble_acc += game.unscramble_acc;
@@ -351,6 +400,7 @@ public class StatsProcess : MonoBehaviour
                     }
                     else unscramble_ctr--;
 
+                    //trivia stats sum
                     if (game.trivia_acc != -1)
                     {
                         avg_trivia_acc += game.trivia_acc;
@@ -359,17 +409,31 @@ public class StatsProcess : MonoBehaviour
                     else trivia_ctr--;
 
                     lives_left += game.lives_left;
-                    if (game.died) n_deaths++;
+                    total_score_avg += game.total_score;
                 }
 
-                if (gesture_ctr != 0) avg_gesture_acc = avg_gesture_acc / gesture_ctr;
+                //gesture averages
+                if (gesture_ctr != 0) {
+                    avg_gesture_acc = avg_gesture_acc / gesture_ctr;
+                    avg_g_timeleft = avg_g_timeleft / gesture_ctr;
+                }
                 else avg_gesture_acc = -1;
 
-                if (unscramble_ctr != 0) avg_unscramble_acc = avg_unscramble_acc / unscramble_ctr;
+                //unscramble averages
+                if (unscramble_ctr != 0) {
+                    avg_unscramble_acc = avg_unscramble_acc / unscramble_ctr;
+                    avg_u_timeleft = avg_u_timeleft / unscramble_ctr;
+                }
                 else avg_unscramble_acc = -1;
 
-                if (trivia_ctr != 0) avg_trivia_acc = avg_trivia_acc / trivia_ctr;
+                //trivia averages
+                if (trivia_ctr != 0) {
+                    avg_trivia_acc = avg_trivia_acc / trivia_ctr;
+                    avg_t_timeleft = avg_t_timeleft / trivia_ctr;
+                }
                 else avg_trivia_acc = -1;
+
+                total_score_avg = total_score_avg / gd.count;
 
                 //Debug.Log("avg_gesture_acc " + avg_gesture_acc);
                 //Debug.Log("avg_unscramble_acc " + avg_unscramble_acc);
@@ -380,10 +444,9 @@ public class StatsProcess : MonoBehaviour
                 //First query is for training suggestion (3 games)
                 if (!training_query_done)
                 {
-                    training_query_done = true;
-
                     //Performing well in all categories
-                    if (avg_gesture_acc >= 0.69 && avg_unscramble_acc >= 0.69 && avg_trivia_acc >= 0.69 && n_deaths < 2)
+                    if (avg_gesture_acc >= 0.69 && avg_unscramble_acc >= 0.69 && avg_trivia_acc >= 0.69 && lives_left >= 4
+                        && avg_g_timeleft > 3 && avg_u_timeleft > 3 && avg_t_timeleft > 3)
                     {
                         if (SelectedPlayer.suggested_difficulty != "hard")
                             suggestion = "Suggestion: Great Work! Keep it up to unlock the next difficulty!";
@@ -394,40 +457,46 @@ public class StatsProcess : MonoBehaviour
                     else
                     {
                         suggestion = "Suggestion:\nImprove your performance by playing the following mini-games:";
-                        if (n_deaths >= 2)
+                        if (lives_left < 4)
                         {
                             suggestion += "\n\tLasers Training";
                         }
-                        if (avg_gesture_acc < .69)
+                        if (avg_gesture_acc < .69 || avg_g_timeleft <= 3)
                         {
                             suggestion += "\n\tGestures Training";
                         }
-                        if (avg_unscramble_acc < .69)
+                        if (avg_unscramble_acc < .69 || avg_u_timeleft <= 3)
                         {
                             suggestion += "\n\tUnscramble Training";
                         }
-                        if (avg_trivia_acc < .69)
+                        if (avg_trivia_acc < .69 || avg_t_timeleft <= 3)
                         {
                             suggestion += "\n\tTrivia Training";
                         }
                         first_suggestion = suggestion;
                     }
+
+                    training_query_done = true;
                 }
 
                 //Second Query is to determine difficulty eligibility
-                //Only consider difficulty change when at least 5 games have
-                //been played in currently suggested difficulty
-                else if (SelectedPlayer.difficulty_ctr >= 5)
+                else 
                 {
-                    Debug.Log("Checking for difficulty change!");
-                    if (n_deaths <= 1 && avg_gesture_acc >= 0.69 && avg_unscramble_acc >= 0.69 && avg_trivia_acc >= 0.69)
-                        ChangeDifficulty("higher");
-                    else if (n_deaths >= 4 || (avg_gesture_acc <= 0.39 && avg_unscramble_acc <= 0.39 && avg_trivia_acc <= 0.39))
-                        ChangeDifficulty("lower");
-                    else Debug.Log("Difficulty staying the same");
+                    //Only consider difficulty change when at least 5 games have
+                    //been played in currently suggested difficulty
+                    if (SelectedPlayer.difficulty_ctr >= 5)
+                    {
+                        Debug.Log("Checking for difficulty change!");
+                        //if (n_deaths <= 1 && avg_gesture_acc >= 0.69 && avg_unscramble_acc >= 0.69 && avg_trivia_acc >= 0.69)
+                        if (total_score_avg >= 300)
+                            ChangeDifficulty("higher");
+                        //else if (n_deaths >= 4 || (avg_gesture_acc <= 0.39 && avg_unscramble_acc <= 0.39 && avg_trivia_acc <= 0.39))
+                        else if (total_score_avg < 200)
+                            ChangeDifficulty("lower");
+                        else Debug.Log("Difficulty staying the same");
+                    }
+                    difficulty_query_done = true;
                 }
-                difficulty_query_done = true;
-
             }
         }
     }

@@ -23,7 +23,7 @@ public class TrainingSelect : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (training_suggestion.text != "" && !populated)
+        if (training_suggestion.text != "" && !populated)
         {
             string txt = training_suggestion.text;
             if (txt.Contains("Lasers"))
@@ -45,8 +45,6 @@ public class TrainingSelect : MonoBehaviour {
             {
                 m_DropOptions.Add("Trivia Training");
             }
-
-            
 
             m_Dropdown.AddOptions(m_DropOptions);
             populated = true;

@@ -21,10 +21,10 @@ public class CheckTraining : MonoBehaviour {
         string message = "To unlock the Main Level, please complete the following:\n";
         string orig = message;
 
-        if (!SelectedPlayer.laser_training) message += "Laser Training\n";
-        if (!SelectedPlayer.gesture_training) message += "Gesture Training\n";
-        if (!SelectedPlayer.unscramble_training) message += "Unscramble Training";
-        if (!SelectedPlayer.trivia_training) message += "Trivia Training";
+        if (!SelectedPlayer.laser_training) message += "\tLaser Training\n";
+        if (!SelectedPlayer.gesture_training) message += "\tGesture Training\n";
+        if (!SelectedPlayer.unscramble_training) message += "\tUnscramble Training\n";
+        if (!SelectedPlayer.trivia_training) message += "\tTrivia Training";
 
         //if player has completed all training, change to main level scene,
         //else give instructions
