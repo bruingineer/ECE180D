@@ -22,7 +22,6 @@ public class GameState_MainGame : GameState_with_Lives {
 		base.SetUp();
 		gameMode = "main_game";
 		player_MainGame = player.AddComponent<Player_Main>();
-		StartGame();
 	}
 
 }

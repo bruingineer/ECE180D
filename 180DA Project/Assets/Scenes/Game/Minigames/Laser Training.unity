@@ -429,8 +429,7 @@ MonoBehaviour:
   countdown: {fileID: 456050957}
   playerExplosion: {fileID: 1930362069647888, guid: 0fc2a53664375441a9bac3adc653c04d,
     type: 2}
-  playerIcons: []
-  playerLives:
+  playerIcons:
   - {fileID: 1063897376}
   - {fileID: 1063897377}
 --- !u!1 &1386505965
