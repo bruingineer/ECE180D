@@ -19,7 +19,8 @@ public abstract class GameState_Base : MonoBehaviour {
 	protected AudioClip gameLostMusic;
 	protected AudioClip gameWonMusic;
 	private const string SoundsPath = "Sounds/";
-	protected string gameMode;
+	public static string gameMode;
+	protected bool startGame;
 
 	// Objects
 	protected Canvas canvas;
@@ -43,7 +44,8 @@ public abstract class GameState_Base : MonoBehaviour {
 		menu.onClick.AddListener(LoadGameMenu);
 		DisableButtons();
 		SetUp();
-		StartCoroutine(StartGame());
+		if(startGame)	
+			StartCoroutine(StartGame());
 	}
 
 	private IEnumerator StartGame()
@@ -140,16 +142,15 @@ public abstract class GameState_Base : MonoBehaviour {
 
 public abstract class GameState_with_Player : GameState_Base {
 	public GameObject playerExplosion;
-	private Player player;
+	protected GameObject player;
 	private bool handledPlayer;
-	public List<GameObject> playerLives;
 
 	protected override void SetUp()
 	{
 		handledPlayer = false;
-		player = (Resources.Load("Prefabs/Player/Player") as GameObject).GetComponent<Player>();
-		player = Instantiate(player, new Vector3(numLanes / 2 + 0.5f, 0.5f), Quaternion.identity);
 		InitializeLaneList();
+		player = (Resources.Load("Prefabs/Player/Player") as GameObject);
+		player = Instantiate(player, new Vector3(numLanes / 2 + 0.5f, 0.5f), Quaternion.identity);
 	}
 
 	private void InitializeLaneList() {
@@ -158,38 +159,11 @@ public abstract class GameState_with_Player : GameState_Base {
 			laneNums.Add(i);
 	}
 
-	public void ChangePitch(int playerLives)
-	{
-		gameMusic.pitch = playerLives > 1 ? 1 : 1.25f;
-	}
-
-	public void RemoveLife(int curLives)
-	{
-		playerLives[curLives - 1].SetActive(false);
-		ChangePitch(curLives);
-	}
 
 	protected override void HandleWin() 
 	{
 		if (player.transform.position.y == (end_row - 0.5f))
 			GameWon();
-	}
-
-	protected override void HandleLose() 
-	{
-		if (player.isDead) {
-			gamePlaying = false;
-			SelectedPlayer.died = true;
-			result.text = "Game Over!";
-			ParticleSystem explosion = Instantiate(playerExplosion, player.transform.position, Quaternion.identity).GetComponent<ParticleSystem>();
-			Destroy(player.gameObject);
-			PlayClip(gameLostMusic);
-			float explosionDuration = gameLostMusic.length;
-			var main = explosion.main;
-			main.duration = explosionDuration;
-			explosion.Play();
-			StartCoroutine(HandlePostGame(explosionDuration));
-		}
 	}
 
 }
@@ -200,6 +174,7 @@ public abstract class GameState_Event_Minigame : GameState_Base {
 
 	protected override void SetUp()
 	{
+		startGame = true;
 		curCorrect = 0;
 	}
 

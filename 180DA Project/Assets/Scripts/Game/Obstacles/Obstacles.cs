@@ -11,7 +11,7 @@ public class Obstacles : Moving_Object {
 	{
 		bigLaserObstacle = gameObject.AddComponent<Big_Laser_Obstacle>();
 		smallLaserObstacle = gameObject.AddComponent<Small_Laser_Obstacle>();
-		obstacles = new List<Laser_Obstacle>{bigLaserObstacle, smallLaserObstacle};
+		obstacles = new List<Laser_Obstacle>{smallLaserObstacle, bigLaserObstacle};
 	}
 
 	public void StartObstacles()
@@ -26,5 +26,4 @@ public class Obstacles : Moving_Object {
 			yield return obstacles[Random.Range(0, obstacles.Count)].StartObstacle();
 		}
 	}
-
 }

@@ -29,10 +29,7 @@ public class Big_Laser : Laser {
         if (Physics.Raycast(transform.position, Vector3.down, out hit) && !playerHit && laserStart)
 		{
 			playerHit = true;
-			Handle_Minigame();
-			Player m_player = hit.transform.GetComponent<Player>();
-			if (m_player)
-				m_player.PlayerHit();
+			PlayerHit(hit.transform);
 		}
 	}
 

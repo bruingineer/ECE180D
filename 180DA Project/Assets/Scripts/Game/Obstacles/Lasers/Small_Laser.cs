@@ -9,7 +9,7 @@ public class Small_Laser : Laser {
 	private GameObject player;
 	void Awake () {
 		player = GameObject.FindGameObjectWithTag("Player");
-		smallLaserSound = Resources.Load<AudioClip>("Sounds/Small_Laser_Sound");
+		smallLaserSound = Resources.Load<AudioClip>("Sounds/Laser/Small_Laser_Sound");
 		GameState_Base.PlayClip(smallLaserSound);
   }
 
@@ -31,12 +31,7 @@ public class Small_Laser : Laser {
 	private void OnTriggerEnter(Collider other)
 	{
 		// gets component of the object, if player, it will return true, and the player will get hit
-		Player m_player = other.GetComponent<Player>();
-		if (m_player)
-			{
-				m_player.PlayerHit();
-				Handle_Minigame();
-			}
+		PlayerHit(other.transform);
 		Destroy(gameObject);
 	}
 

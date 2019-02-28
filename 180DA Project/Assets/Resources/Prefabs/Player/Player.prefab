@@ -21,7 +21,6 @@ GameObject:
   - component: {fileID: 4516669853708412}
   - component: {fileID: 212141957400926488}
   - component: {fileID: 95906932683166516}
-  - component: {fileID: 114668686060887338}
   - component: {fileID: 65298560620663310}
   - component: {fileID: 54080474229236074}
   m_Layer: 0
@@ -89,22 +88,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &114668686060887338
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1164852439685396}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0128de6d87c5f4d47a362fa4c9b25513, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  X_movement: {fileID: 8300000, guid: 4ebb2990efe004f40983156d52beab54, type: 3}
-  Y_movement: {fileID: 8300000, guid: 25f8452b7463642c88764b19d5a6a95b, type: 3}
-  playerHitByLaser: {fileID: 8300000, guid: d4ad8c13e9846451c9a4af22e05d1c65, type: 3}
-  playerRecovered: {fileID: 8300000, guid: aadb72d7667ce425abd3f114ee2ebc61, type: 3}
-  isDead: 0
 --- !u!212 &212141957400926488
 SpriteRenderer:
   m_ObjectHideFlags: 1

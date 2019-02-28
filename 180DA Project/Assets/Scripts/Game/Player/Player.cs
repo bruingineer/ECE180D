@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player : Moving_Object {
+public abstract class Player : Moving_Object {
 	// Player Time Parameters
 	private float movementTimeY = .2f;
 	private float secondsToMoveX = 0.1f;
@@ -12,21 +12,20 @@ public class Player : Moving_Object {
 	private bool facingRight = true;
 	
 	// Player Audio Clips
-	public AudioClip X_movement;
-	public AudioClip Y_movement;
-	public AudioClip playerHitByLaser;
-	public AudioClip playerRecovered;
+	private AudioClip X_movement;
+	private AudioClip Y_movement;
+	protected AudioClip playerHitByLaser;
+	protected AudioClip playerRecovered;
+	private string playerSoundsPath = "Sounds/Player/";
 
 	// Player States
 	private bool isPlayerMoving = false;
-	private bool isRecovering = false;
-	public bool isDead = false;
+	protected bool isRecovering = false;
 
 	// Player Objects
 	PlayerMQTT_Y m_playerMQTT_Y;
 	PlayerMQTT_X m_playerMQTT_X;
 	private int playerLaneNum;
-	private int playerLives;
 	SpriteRenderer sr;
 
 	// MQTT
@@ -37,8 +36,11 @@ public class Player : Moving_Object {
 		m_playerMQTT_Y = new PlayerMQTT_Y(playerMQTT_Y_topic);
 		playerLaneNum = (int)transform.position.y;
 		m_playerMQTT_X = new PlayerMQTT_X(playerMQTT_X_topic, playerLaneNum);
-		playerLives = 3;
 		sr = gameObject.GetComponent<SpriteRenderer>();
+		X_movement = Resources.Load<AudioClip>(playerSoundsPath + "X_Movement");
+		Y_movement = Resources.Load<AudioClip>(playerSoundsPath + "Y_Movement");
+		playerHitByLaser = Resources.Load<AudioClip>(playerSoundsPath + "Player_Hit");
+		playerRecovered = Resources.Load<AudioClip>(playerSoundsPath + "Recover");
 	}
 
 	void Update()
@@ -82,36 +84,16 @@ public class Player : Moving_Object {
 			}
     } 
 
-	private IEnumerator PlayerHitRoutine() 
-	{
-		SelectedPlayer.current_lives_left--;
-		isRecovering = true;
-		if (playerLives > 1) {
-			playerLives--;
-			// create object for game_manager
-			GameObject.Find("Game_Manager").GetComponent<GameState_with_Player>().RemoveLife(playerLives);
-			isRecovering = true;
-			GameState_Base.PlayClip(playerHitByLaser);
-			yield return ChangeColor();
-			GameState_Base.PlayClip(playerRecovered);
-			isRecovering = false;
-			yield return null;
-		}
-		else 
-			isDead = true;
-	}
+	protected abstract IEnumerator PlayerHitRoutine();
 
 	// function used by lasers when it hits the player
-	public void PlayerHit()
-	{
-		if(!isRecovering && GameState_Base.gamePlaying)
-			StartCoroutine(PlayerHitRoutine());
-	}
+	public abstract void PlayerHit();
 
 	// used to change the color when the player is in recovery mode
 	public IEnumerator ChangeColor()
 	{
 		bool playerNormal = false;
+		GameState_Base.PlayClip(playerHitByLaser);
 		for (int i = 0; i < numberOfChanges; i++) {
 				if (playerNormal) {
 					sr.color = new Color(1f, 1f, 1f, 1f);
@@ -122,6 +104,7 @@ public class Player : Moving_Object {
 				yield return new WaitForSeconds(recoveryStepTime);
 			}
 			sr.color = new Color(1f, 1f, 1f, 1f);
+			GameState_Base.PlayClip(playerRecovered);
 		yield return null;
 	}
 
@@ -129,6 +112,8 @@ public class Player : Moving_Object {
 	{
 		m_playerMQTT_Y.PlayerMoved = true;
 	}
+
+	protected abstract IEnumerator HandlePlayerHit();
 }
 
 

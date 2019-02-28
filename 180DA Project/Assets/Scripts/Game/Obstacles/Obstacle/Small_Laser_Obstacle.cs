@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 public class Small_Laser_Obstacle : Laser_Obstacle {
 
 	// Objects
-	private Player player;
+	private GameObject player;
 
 	// Parameters
 	// changed based on difficulty in the future
@@ -32,7 +32,7 @@ public class Small_Laser_Obstacle : Laser_Obstacle {
 			lasersToFire = 20;
 			waitForNextLaser = 0.3f;
 		}
-		player = GameObject.FindWithTag("Player").GetComponent<Player>();
+		player = GameObject.FindWithTag("Player");
 		laserTimes = new Laser_Times(laserDuration, waitForNextLaser);
 		laserPrefab = (Resources.Load("Prefabs/Lasers/Small_Laser") as GameObject);
 	}
