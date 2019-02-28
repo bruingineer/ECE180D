@@ -40,18 +40,20 @@ public class Small_Laser_Obstacle : Laser_Obstacle {
 	protected override IEnumerator FireLasers() 
 	{
 		// get initial and final x position
-		bool switchPosition = !(player.transform.position.y < GameState_Base.end_row / 2);
-		float start_Y_Position = switchPosition ? 0 : GameState_Base.end_row;
-		float end_Y_Position = switchPosition ? GameState_Base.end_row : 0;
-		// Create lasers
-		yield return CreateLasers(start_Y_Position, end_Y_Position);
+		
+		//tODO create list of lasers here
+		// Create lasers with parameter to pass in lasers to fire
+		yield return CreateLasers();
 		// wait until last laser ends plus waiting for the next obstacle time
 		yield return new WaitForSeconds(laserTimes.duration + obstacleWaitTime);
 		
 	}
 
-	private IEnumerator CreateLasers(float start_Y_Position, float end_Y_Position)
+	private IEnumerator CreateLasers()
 	{
+		bool switchPosition = !(player.transform.position.y < GameState_Base.end_row / 2);
+		float start_Y_Position = switchPosition ? 0 : GameState_Base.end_row;
+		float end_Y_Position = switchPosition ? GameState_Base.end_row : 0;
 		for(int i = 0; i < lasersToFire; i++) 
 		{
 			GameObject prefab = Instantiate(laserPrefab, new Vector3(GameState_Base.laneNums[Random.Range(0, GameState_Base.laneNums.Count)] + 0.5f, 

@@ -61,6 +61,8 @@ public class Big_Laser_Obstacle : Laser_Obstacle {
 		List<GameObject> lasers = new List<GameObject>();
 		CreateLasers(ref lasers);
 		// Play warm up clip
+
+		// TODO create function here that does stuff with lasers passed in, put it in base class
 		GameState_Base.PlayClip(laserCountdown);
 		// Instantiate warnings at the lanes acquired
 		CreateWarnings(lasers, laserCountdown.length);

@@ -32,6 +32,8 @@ public abstract class Laser_Obstacle : MonoBehaviour {
 		yield return FireLasers();
 	}
 
+	// create overloaded function TODO
+
 	// function to be implemented by laser obstacle that fires the lasers
 	protected abstract IEnumerator FireLasers();
 }
