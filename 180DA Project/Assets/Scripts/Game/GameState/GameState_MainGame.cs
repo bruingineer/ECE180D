@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameState_MainGame : GameState_with_Player {
+public class GameState_MainGame : GameState_with_Lives {
 
 	protected Player_Main player_MainGame;
 
@@ -25,23 +25,4 @@ public class GameState_MainGame : GameState_with_Player {
 		StartGame();
 	}
 
-	protected override void HandleLose() 
-	{
-		if (player_MainGame.isDead) {
-			gamePlaying = false;
-			SelectedPlayer.died = true;
-			result.text = "Game Over!";
-			// add for handle lose for multiplayer
-			ParticleSystem explosion = Instantiate(playerExplosion, player.transform.position, Quaternion.identity).GetComponent<ParticleSystem>();
-			Destroy(player.gameObject);
-			PlayClip(gameLostMusic);
-			float explosionDuration = gameLostMusic.length;
-			var main = explosion.main;
-			main.duration = explosionDuration;
-			explosion.Play();
-			StartCoroutine(HandlePostGame(explosionDuration));
-		}
-	}
-
-	
 }

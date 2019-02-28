@@ -150,16 +150,16 @@ public abstract class GameState_Base : MonoBehaviour {
 }
 
 public abstract class GameState_with_Player : GameState_Base {
-	public GameObject playerExplosion;
-	public List<GameObject> playerIcons;
+	
+	
 	protected GameObject player;
 
 	protected override void SetUp()
 	{
 		InitializeLaneList();
+		SelectedPlayer.resetGameStats();
 		player = (Resources.Load("Prefabs/Player/Player") as GameObject);
 		player = Instantiate(player, new Vector3(numLanes / 2 + 0.5f, 0.5f), Quaternion.identity);
-		SelectedPlayer.resetGameStats();
 	}
 
 	private void InitializeLaneList() {
@@ -175,8 +175,23 @@ public abstract class GameState_with_Player : GameState_Base {
 			GameWon();
 	}
 
+}
+
+public abstract class GameState_with_Lives : GameState_with_Player {
+	protected Player_Main player_Main;
+	public GameObject playerExplosion;
+	public List<GameObject> playerIcons;
+
+	protected override void SetUp()
+	{
+		base.SetUp();
+		player_Main = player.AddComponent<Player_Main>();
+		StartGame();
+	}
+
 	public void RemoveLife(int curLives)
 	{
+		Debug.Log(curLives);
 		playerIcons[curLives - 1].SetActive(false);
 		ChangePitch(curLives);
 	}
@@ -186,7 +201,26 @@ public abstract class GameState_with_Player : GameState_Base {
 		gameMusic.pitch = playerLives > 1 ? 1 : 1.25f;
 	}
 
+	protected override void HandleLose() 
+	{
+		if (player_Main.isDead) {
+			gamePlaying = false;
+			SelectedPlayer.died = true;
+			result.text = "Game Over!";
+			// add for handle lose for multiplayer
+			ParticleSystem explosion = Instantiate(playerExplosion, player.transform.position, Quaternion.identity).GetComponent<ParticleSystem>();
+			Destroy(player.gameObject);
+			PlayClip(gameLostMusic);
+			float explosionDuration = gameLostMusic.length;
+			var main = explosion.main;
+			main.duration = explosionDuration;
+			explosion.Play();
+			StartCoroutine(HandlePostGame(explosionDuration));
+		}
+	}
+
 }
+
 
 public abstract class GameState_Event_Minigame : GameState_Base {
 	private int numCorrect = 5;
@@ -208,5 +242,4 @@ public abstract class GameState_Event_Minigame : GameState_Base {
 	{
 		SetUpButtons();
 	}
-
 }
