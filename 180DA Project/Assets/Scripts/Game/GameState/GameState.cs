@@ -20,7 +20,6 @@ public abstract class GameState_Base : MonoBehaviour {
 	protected AudioClip gameWonMusic;
 	private const string SoundsPath = "Sounds/";
 	public static string gameMode;
-	protected bool startGame;
 
 	// Objects
 	protected Canvas canvas;
@@ -28,9 +27,11 @@ public abstract class GameState_Base : MonoBehaviour {
 	public Text countdown;
 	static Button retry, menu;
 	public static bool gamePlaying;
+	private static GameState_Base instance;
 
 	void Awake () {
 		Time.timeScale = 1;
+		instance = this;
 		numLanes = 10;
 		end_row = 14;
 		gameLostMusic = Resources.Load<AudioClip>(SoundsPath + "Game_Lost");
@@ -44,11 +45,9 @@ public abstract class GameState_Base : MonoBehaviour {
 		menu.onClick.AddListener(LoadGameMenu);
 		DisableButtons();
 		SetUp();
-		if(startGame)	
-			StartCoroutine(StartGame());
 	}
 
-	private IEnumerator StartGame()
+	private IEnumerator StartGameCoroutine()
 	{
 		yield return StartCoroutine(GameTimer());
 		gameMusic.Play();
@@ -63,6 +62,11 @@ public abstract class GameState_Base : MonoBehaviour {
 			HandleWin();
 			HandleLose();
 		}
+	}
+
+	public static void StartGame()
+	{
+		instance.StartCoroutine(instance.StartGameCoroutine());
 	}
 
 	public static void PlayClip(AudioClip clip) {
@@ -83,7 +87,7 @@ public abstract class GameState_Base : MonoBehaviour {
 				countdownText.text = "Start!";
           	yield return null;
       	}
-		Destroy(countdown);
+		HandleCountdown();
 		gameMusic.Play();
 	}
 
@@ -109,6 +113,11 @@ public abstract class GameState_Base : MonoBehaviour {
 	{
 		retry.gameObject.SetActive(true);
 		menu.gameObject.SetActive(true);
+	}
+
+	protected virtual void HandleCountdown()
+	{
+		Destroy(countdown);
 	}
 
 	public static void DisableButtons()
@@ -174,8 +183,8 @@ public abstract class GameState_Event_Minigame : GameState_Base {
 
 	protected override void SetUp()
 	{
-		startGame = true;
 		curCorrect = 0;
+		StartGame();
 	}
 
 	protected override void HandleWin()

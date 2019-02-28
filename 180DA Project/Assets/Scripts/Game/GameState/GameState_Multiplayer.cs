@@ -17,7 +17,11 @@ public class GameState_Multiplayer : GameState_with_Player {
 	protected override void SetUp()
 	{
 		base.SetUp();
-		startGame = false;
 		gameMode = "multiplayer_game";
+	}
+
+	protected override void HandleCountdown()
+	{
+		countdown.gameObject.SetActive(false);
 	}
 }

@@ -25,11 +25,7 @@ public abstract class Laser : Moving_Object {
 	protected void PlayerHit(Transform hit)
 	{
 		Player m_player;
-		if (GameState_Base.gameMode == "main_game")
-			m_player = hit.GetComponent<Player_Main>();
-		else
-			m_player = null;
-		
+		m_player = hit.GetComponent<Player>();
 		if (m_player)
 			{
 				m_player.PlayerHit();

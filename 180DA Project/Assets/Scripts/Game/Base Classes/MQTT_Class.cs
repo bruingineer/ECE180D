@@ -6,6 +6,7 @@ using uPLibrary.Networking.M2Mqtt.Messages;
 using uPLibrary.Networking.M2Mqtt.Utility;
 using uPLibrary.Networking.M2Mqtt.Exceptions;
 using System;
+using System.Collections.Generic;
 
 /*
 	This class is responsible for abstracting the
@@ -106,4 +107,44 @@ public class GestureClient : MQTT_Class {
 	{
 		GestureGame.gestureCorrect = true;
 	} 
+}
+
+public class MultiplayerClient : MQTT_Class {
+	public MultiplayerClient(string topic) : base(topic) {}
+
+	/*
+		This function gets called whenever this GestureClient class
+		receives a message by being described to the specified topic.
+		When it gets called, it accesses the gestureCorrect static variable
+		in the GestureGame class and sets it to true, indicating the gesture
+		was correct.
+	*/
+	protected override void client_MqttMsgPublishReceived(object sender, MqttMsgPublishEventArgs e) 
+	{
+		string message = System.Text.Encoding.UTF8.GetString(e.Message);
+		Debug.Log(e.Topic);
+		if(e.Topic == Multiplayer_Controller.serverTopic)
+		{
+			if ((message == "player0") || (message == "player1"))
+			{
+				Multiplayer_Controller.playerHeader = message;
+				Multiplayer_Controller.playerConnected = true;
+			}
+		} else if (e.Topic == Multiplayer_Controller.gameStateTopic)
+			Multiplayer_Controller.gameStarted = true;
+	} 
+
+	public void Subscribe(string[] topics)
+	{
+		Debug.Log("Subscribing to topics...");
+		client.Subscribe(topics, CreateQOSArray(topics.Length));
+	}
+
+	private byte[] CreateQOSArray(int size)
+	{
+		List<byte> qosArray = new List<byte>();
+		for(int i = 0; i < size; i++)
+			qosArray.Add(MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE);
+		return qosArray.ToArray();
+	}
 }

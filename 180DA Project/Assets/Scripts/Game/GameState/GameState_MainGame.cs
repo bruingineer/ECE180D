@@ -20,9 +20,9 @@ public class GameState_MainGame : GameState_with_Player {
 	protected override void SetUp()
 	{
 		base.SetUp();
-		startGame = true;
 		gameMode = "main_game";
 		player_MainGame = player.AddComponent<Player_Main>();
+		StartGame();
 	}
 
 	
