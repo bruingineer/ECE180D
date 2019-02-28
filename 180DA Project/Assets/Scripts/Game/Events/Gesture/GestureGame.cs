@@ -117,6 +117,7 @@ public class GestureGame : Event {
 		// incremement field for SelectedPlayer database
 		SelectedPlayer.current_gesture_fail++;
 		// reset based on if minigame or not
+		Reset();
 	}
 
 	// function called when event is correct
