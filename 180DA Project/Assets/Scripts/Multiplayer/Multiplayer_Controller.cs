@@ -18,6 +18,7 @@ public class Multiplayer_Controller : MonoBehaviour {
     public static string winnerTopic;
     public static bool gameStarted = false;
     public static Multiplayer_Controller instance;
+    private bool gamePlayed = false;
 
     // Use this for initialization
     void Awake () {
@@ -56,7 +57,12 @@ public class Multiplayer_Controller : MonoBehaviour {
     {
         Debug.Log("Player ready and waiting...");
         readyButton.transform.Find("Text").GetComponent<Text>().text = "Waiting to play...";
-        multiplayerClient.Subscribe(new string[] {gameStateTopic, challengeTopic, winnerTopic});
+        if (!gamePlayed)
+        {
+            multiplayerClient.Subscribe(new string[] {gameStateTopic, challengeTopic, winnerTopic});
+            gamePlayed = true;
+        }
+        
         multiplayerClient.SendMessage("ready", playerHeader + "/connection_status");
     }
 

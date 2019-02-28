@@ -18,7 +18,7 @@ public abstract class GameState_Base : MonoBehaviour {
 	public static AudioSource gameMusic;
 	protected AudioClip gameLostMusic;
 	protected AudioClip gameWonMusic;
-	private const string SoundsPath = "Sounds/";
+	private const string SoundsPath = "Sounds/Game Music/";
 	public static string gameMode;
 
 	// Objects
@@ -151,15 +151,15 @@ public abstract class GameState_Base : MonoBehaviour {
 
 public abstract class GameState_with_Player : GameState_Base {
 	public GameObject playerExplosion;
+	public List<GameObject> playerIcons;
 	protected GameObject player;
-	private bool handledPlayer;
 
 	protected override void SetUp()
 	{
-		handledPlayer = false;
 		InitializeLaneList();
 		player = (Resources.Load("Prefabs/Player/Player") as GameObject);
 		player = Instantiate(player, new Vector3(numLanes / 2 + 0.5f, 0.5f), Quaternion.identity);
+		SelectedPlayer.resetGameStats();
 	}
 
 	private void InitializeLaneList() {
@@ -173,6 +173,17 @@ public abstract class GameState_with_Player : GameState_Base {
 	{
 		if (player.transform.position.y == (end_row - 0.5f))
 			GameWon();
+	}
+
+	public void RemoveLife(int curLives)
+	{
+		playerIcons[curLives - 1].SetActive(false);
+		ChangePitch(curLives);
+	}
+
+	public void ChangePitch(int playerLives)
+	{
+		gameMusic.pitch = playerLives > 1 ? 1 : 1.25f;
 	}
 
 }

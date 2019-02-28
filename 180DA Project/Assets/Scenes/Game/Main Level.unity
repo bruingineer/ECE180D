@@ -113,6 +113,11 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &595776788 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1297742544021376, guid: d78defd6cd2f245f8bf556e9fc610325,
+    type: 2}
+  m_PrefabInternal: {fileID: 1472357411}
 --- !u!1001 &935064444
 Prefab:
   m_ObjectHideFlags: 0
@@ -226,6 +231,11 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 114340158667787706, guid: d78defd6cd2f245f8bf556e9fc610325,
+        type: 2}
+      propertyPath: playerIcons.Array.size
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 4072535850112516, guid: d78defd6cd2f245f8bf556e9fc610325, type: 2}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -278,7 +288,18 @@ Prefab:
       propertyPath: m_audioClip
       value: 
       objectReference: {fileID: 8300000, guid: 58aeb878c3eb44bd4a56b4d5ddc1ea45, type: 3}
-    m_RemovedComponents: []
+    - target: {fileID: 114340158667787706, guid: d78defd6cd2f245f8bf556e9fc610325,
+        type: 2}
+      propertyPath: playerIcons.Array.data[0]
+      value: 
+      objectReference: {fileID: 2047877615}
+    - target: {fileID: 114340158667787706, guid: d78defd6cd2f245f8bf556e9fc610325,
+        type: 2}
+      propertyPath: playerIcons.Array.data[1]
+      value: 
+      objectReference: {fileID: 595776788}
+    m_RemovedComponents:
+    - {fileID: 114340158667787706, guid: d78defd6cd2f245f8bf556e9fc610325, type: 2}
   m_SourcePrefab: {fileID: 100100000, guid: d78defd6cd2f245f8bf556e9fc610325, type: 2}
   m_IsPrefabAsset: 0
 --- !u!1001 &1545103948
@@ -686,6 +707,34 @@ MonoBehaviour:
     type: 2}
   m_PrefabInternal: {fileID: 1545103948}
   m_Script: {fileID: 708705254, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+--- !u!1 &1817033881 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1148255984264662, guid: d78defd6cd2f245f8bf556e9fc610325,
+    type: 2}
+  m_PrefabInternal: {fileID: 1472357411}
+--- !u!114 &1817033882
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1817033881}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91eb4adcdfde84d5bbe069205cf50130, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  result: {fileID: 1076679573}
+  countdown: {fileID: 1782858402}
+  playerExplosion: {fileID: 1930362069647888, guid: 0fc2a53664375441a9bac3adc653c04d,
+    type: 2}
+  playerIcons:
+  - {fileID: 2047877615}
+  - {fileID: 595776788}
+--- !u!1 &2047877615 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1837514303795164, guid: d78defd6cd2f245f8bf556e9fc610325,
+    type: 2}
+  m_PrefabInternal: {fileID: 1472357411}
 --- !u!1 &2063784778
 GameObject:
   m_ObjectHideFlags: 0

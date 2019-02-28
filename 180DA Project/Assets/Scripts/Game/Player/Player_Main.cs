@@ -6,6 +6,7 @@ public class Player_Main : Player {
 	public bool isDead = false;
 	private int playerLives = 3;
 	
+	
 	protected override IEnumerator PlayerHitRoutine() 
 	{
 		isRecovering = true;
@@ -24,7 +25,7 @@ public class Player_Main : Player {
 		SelectedPlayer.current_lives_left--;
 		if (playerLives > 1) {
 			playerLives--;
-			GameObject.Find("Game_Manager").GetComponent<GameState_MainGame>().RemoveLife(playerLives);
+			GameObject.Find("Game_Manager").GetComponent<GameState_with_Player>().RemoveLife(playerLives);
 			yield return ChangeColor();
 		}
 		else 

@@ -5,7 +5,7 @@ using UnityEngine;
 public class GameState_MainGame : GameState_with_Player {
 
 	protected Player_Main player_MainGame;
-	public List<GameObject> playerLives;
+
 	protected override void SetUp_Events_Obstacles()
 	{
 		gameObject.AddComponent<Obstacles>().StartObstacles();
@@ -25,24 +25,13 @@ public class GameState_MainGame : GameState_with_Player {
 		StartGame();
 	}
 
-	
-	public void ChangePitch(int playerLives)
-	{
-		gameMusic.pitch = playerLives > 1 ? 1 : 1.25f;
-	}
-
-	public void RemoveLife(int curLives)
-	{
-		playerLives[curLives - 1].SetActive(false);
-		ChangePitch(curLives);
-	}
-
 	protected override void HandleLose() 
 	{
 		if (player_MainGame.isDead) {
 			gamePlaying = false;
 			SelectedPlayer.died = true;
 			result.text = "Game Over!";
+			// add for handle lose for multiplayer
 			ParticleSystem explosion = Instantiate(playerExplosion, player.transform.position, Quaternion.identity).GetComponent<ParticleSystem>();
 			Destroy(player.gameObject);
 			PlayClip(gameLostMusic);
@@ -53,4 +42,6 @@ public class GameState_MainGame : GameState_with_Player {
 			StartCoroutine(HandlePostGame(explosionDuration));
 		}
 	}
+
+	
 }
