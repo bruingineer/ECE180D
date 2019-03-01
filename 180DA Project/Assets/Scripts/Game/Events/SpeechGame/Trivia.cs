@@ -85,5 +85,6 @@ public class TriviaMiniGame : Trivia {
 	protected override void HandleIncorrectEvent()
 	{
 		GameState_Event_Minigame.curCorrect = 0;
+		StopRecognizer();
 	}
 }

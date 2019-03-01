@@ -90,5 +90,6 @@ public class WordScrambleMiniGame : WordScramble {
 	protected override void HandleIncorrectEvent()
 	{
 		GameState_Event_Minigame.curCorrect = 0;
+		StopRecognizer();
 	}
 }
