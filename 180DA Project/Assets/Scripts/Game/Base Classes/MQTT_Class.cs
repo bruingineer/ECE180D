@@ -164,12 +164,12 @@ public class MultiplayerClient : MQTT_Class {
 	protected override void client_MqttMsgPublishReceived(object sender, MqttMsgPublishEventArgs e) 
 	{
 		string message = System.Text.Encoding.UTF8.GetString(e.Message);
-		Debug.Log(e.Topic);
+		Debug.Log(message);
 		if(e.Topic == Multiplayer_Controller.serverTopic)
 		{
-			if ((message == "player0") || (message == "player1"))
+			if ((message == "player1") || (message == "player2"))
 			{
-				Multiplayer_Controller.playerHeader = message;
+				Multiplayer_Controller.playerHeader = message + '/';
 				Multiplayer_Controller.playerConnected = true;
 			}
 		} else if (e.Topic == Multiplayer_Controller.gameStateTopic)
@@ -189,4 +189,16 @@ public class MultiplayerClient : MQTT_Class {
 			qosArray.Add(MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE);
 		return qosArray.ToArray();
 	}
+}
+
+public class ObstacleMultiplayerClient : MQTT_Class
+{
+	public ObstacleMultiplayerClient(string topic) : base(topic) {}
+
+	protected override void client_MqttMsgPublishReceived(object sender, MqttMsgPublishEventArgs e) 
+	{
+		string message = System.Text.Encoding.UTF8.GetString(e.Message);
+		
+	} 
+
 }

@@ -6,7 +6,7 @@ public class GameState_Multiplayer : GameState_with_Player {
 
 	protected override void SetUp_Events_Obstacles()
 	{
-		Debug.Log("Setting up obstacles and events");
+		gameObject.AddComponent<Obstacles_Multiplayer>();
 	}
 
 	protected override void HandlePostGameScene()

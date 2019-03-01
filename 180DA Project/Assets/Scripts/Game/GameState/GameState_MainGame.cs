@@ -8,7 +8,7 @@ public class GameState_MainGame : GameState_with_Lives {
 
 	protected override void SetUp_Events_Obstacles()
 	{
-		gameObject.AddComponent<Obstacles>().StartObstacles();
+		gameObject.AddComponent<Obstacles_Main>().StartObstacles();
 		gameObject.AddComponent<PlayerEvents_MainGame>().StartEvents();
 	}
 

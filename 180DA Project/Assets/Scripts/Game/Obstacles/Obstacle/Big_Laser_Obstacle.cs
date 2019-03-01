@@ -56,13 +56,10 @@ public class Big_Laser_Obstacle : Laser_Obstacle {
 		laserPrefab = (Resources.Load(lasersPath + "BigLaser") as GameObject);
 	}
 
-	protected override IEnumerator FireLasers() 
-	{
-		List<GameObject> lasers = new List<GameObject>();
-		CreateLasers(ref lasers);
-		// Play warm up clip
+	protected override IEnumerator FireLasers(List<int> laserPositions) 
+	{ 
+		List<GameObject> lasers = CreateLasers(laserPositions);
 
-		// TODO create function here that does stuff with lasers passed in, put it in base class
 		GameState_Base.PlayClip(laserCountdown);
 		// Instantiate warnings at the lanes acquired
 		CreateWarnings(lasers, laserCountdown.length);
@@ -76,22 +73,40 @@ public class Big_Laser_Obstacle : Laser_Obstacle {
 		yield return new WaitForSeconds(obstacleWaitTime + cooldown);
 	}
 
+	protected override List<int> RandomizeLanes()
+	{
+		List<int> laneNumsCopy = new List<int>(GameState_Base.laneNums);
+		List<int> lanesToFireLasers = new List<int>();
+		int numLasersToFire = Random.Range(minLasers, maxLasers);
+		for (int i = 0; i < numLasersToFire; i++)
+		{
+			int index = Random.Range(0, laneNumsCopy.Count);
+			lanesToFireLasers.Add(laneNumsCopy[index]);
+			laneNumsCopy.RemoveAt(index);
+		}
+		return lanesToFireLasers;
+	}
+
 	// add laser prefab component to laser later
-	protected void CreateLasers(ref List<GameObject> lasers)
+	protected List<GameObject> CreateLasers(List<int> laserPositions)
 	{
 		// reset variable for big laser
 		Big_Laser.playerHit = false;
-		List<int> lanesToFireLasers = GetRandomLanes();
+		List<GameObject> lasers = new List<GameObject>();
+		List<int> lanesToFireLasers = RandomizeLanes();
 		int list_count = lanesToFireLasers.Count;
 		for(int i = 0; i < list_count; i++)
 		{
 			// create laser prefab
-			GameObject prefab = Instantiate(laserPrefab, new Vector3(lanesToFireLasers[i] + 0.5f, GameState_Base.end_row), Quaternion.Euler(0, 0, 90)) as GameObject;
+			GameObject prefab = Instantiate(laserPrefab, new Vector3(laserPositions[i] + 0.5f, GameState_Base.end_row), Quaternion.Euler(0, 0, 90)) as GameObject;
 			// add component based on whether it is a Minigame or maingame
 			AddComponentToLaser(prefab);
 			lasers.Add(prefab);
 		}
+		return lasers;
 	}
+
+
 
 	// Play the laser warning on the laser prefab
 	private void CreateWarnings(List<GameObject> lasers, float laserWarmUpTime)
@@ -114,21 +129,6 @@ public class Big_Laser_Obstacle : Laser_Obstacle {
 		{
 			lasers[i].GetComponent<Big_Laser>().MoveLaser(new Vector3(lasers[i].transform.position.x, 0), laserTimes);
 		}
-	}
-
-	// get lanes to fire the lasers
-	private List<int> GetRandomLanes() 
-	{
-		List<int> laneNumsCopy = new List<int>(GameState_Base.laneNums);
-		List<int> lanesToFireLasers = new List<int>();
-		int numLasersToFire = Random.Range(minLasers, maxLasers);
-		for (int i = 0; i < numLasersToFire; i++)
-		{
-			int index = Random.Range(0, laneNumsCopy.Count);
-			lanesToFireLasers.Add(laneNumsCopy[index]);
-			laneNumsCopy.RemoveAt(index);
-		}
-		return lanesToFireLasers;
 	}
 
 	protected virtual GameObject AddComponentToLaser(GameObject prefab)

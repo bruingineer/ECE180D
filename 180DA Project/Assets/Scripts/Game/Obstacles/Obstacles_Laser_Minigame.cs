@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Obstacles_Laser_Minigame : Obstacles {
+public class Obstacles_Laser_Minigame : Obstacles_Main {
 
 	public static bool laserHit = false;
 	private Player m_player;
