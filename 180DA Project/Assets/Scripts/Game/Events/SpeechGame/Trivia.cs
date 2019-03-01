@@ -38,6 +38,8 @@ public class Trivia : Speech {
 		StopRecognizer();
 		Reset();
 		SelectedPlayer.current_trivia_pass++; //need to change
+        SelectedPlayer.current_trivia_timer_avg += Event.curTime;
+        Debug.Log("curTime: " + Event.curTime);
 	}
 
 	protected override void SetUpEvent(){
@@ -45,6 +47,7 @@ public class Trivia : Speech {
 		SpeechList.getQuestion(ref ques, ref ans);
 		Debug.Log("Question: " + ques);
 		Debug.Log("Answer: " + ans);
+        Debug.Log(SelectedPlayer.current_difficulty);
 		triviaText.text = ques;
 		Debug.Log(triviaText.text);
 		StartRecognizer();

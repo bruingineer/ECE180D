@@ -29,7 +29,9 @@ public class WordScramble : Speech {
 		StopRecognizer();
 		WDisplay.WordText.text = "Correct!";
 		SelectedPlayer.current_unscramble_pass++;
-		Reset();
+        SelectedPlayer.current_unscramble_timer_avg += Event.curTime;
+        Debug.Log("curTime: " + Event.curTime);
+        Reset();
 	}
 
 	protected override void Event_Initializer(){
