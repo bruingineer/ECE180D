@@ -5,6 +5,7 @@ Multiplayer server for Synchro
 import paho.mqtt.client as mqtt
 import random
 import logging
+import argparse
 from time import sleep
 from time import time
 import json
@@ -60,6 +61,10 @@ def on_message(client, _controller, msg):
     log.info("on_message - topic: "+msg.topic+" - message: "+str(msg.payload))
     unrecognized_message = False
     
+    if msg.payload == "":
+        log.info("empty string message")
+        return
+
     # request to join
     if mqtt.topic_matches_sub("server/player_connected", msg.topic):
         _controller.addGameClient(str(msg.payload))
@@ -84,15 +89,28 @@ def on_message(client, _controller, msg):
     #         unrecognized_message = True
 
     # challenge request
-    elif mqtt.topic_matches_sub('+/request_challenge', msg.topic):
+    elif mqtt.topic_matches_sub('+/request_event', msg.topic):
         if msg.payload == 'requested':
             if str(msg.topic).find('player1') != -1:
                 # send next challenge
-                _controller.sendChallengeTo(1)
+                _controller.sendChallengeTo(1, 'event')
 
             elif str(msg.topic).find('player2') != -1:
                 # send next challenge
-                _controller.sendChallengeTo(2) 
+                _controller.sendChallengeTo(2, 'event') 
+
+        else:
+            unrecognized_message = True
+
+    elif mqtt.topic_matches_sub('+/request_obstacle', msg.topic):
+        if msg.payload == 'requested':
+            if str(msg.topic).find('player1') != -1:
+                # send next challenge
+                _controller.sendChallengeTo(1, 'obstacle')
+
+            elif str(msg.topic).find('player2') != -1:
+                # send next challenge
+                _controller.sendChallengeTo(2, 'obstacle') 
 
         else:
             unrecognized_message = True
@@ -114,11 +132,14 @@ def on_message(client, _controller, msg):
 
 
 class challengeGenerator:
-    CHALLENGE_INDEX = ['big_lasers', 'small_lasers', 'word', 'gesture', 'trivia']
+    EVENTS_INDEX = ['word', 'gesture', 'trivia']
     GESTURES = ['tpose', 'rightHandRaise', 'leftHandRaise', 'fieldGoal', 'rightHandWave']
+    OBSTACLES_INDEX = ['big_lasers', 'small_lasers']
     NUMBER_OF_LANES = 10
-    NUMBER_OF_WORD_CHALLENGES = 17
-    NUMBER_OF_TRIVIA_CHALLENGES = 2
+    NUMBER_OF_WORD_CHALLENGES = 16
+    NUMBER_OF_TRIVIA_CHALLENGES = 9
+
+    CHALLENGE_INDEX = EVENTS_INDEX.append(OBSTACLES_INDEX)
 
     def __init__(self):
         self.challenges = []
@@ -129,6 +150,15 @@ class challengeGenerator:
     """
     def createChallenge(self, challengeType):
         challenge_data = None
+        log.info('chal: {}'.format(challengeType))
+
+        # pick from events or obstacles
+        if challengeType == 'event':
+            challengeType = challengeGenerator.EVENTS_INDEX[random.randint(0,len(challengeGenerator.EVENTS_INDEX)-1)]
+        elif challengeType == 'obstacle':
+            challengeType = challengeGenerator.OBSTACLES_INDEX[random.randint(0,len(challengeGenerator.OBSTACLES_INDEX)-1)]
+        log.info('chal type: {}'.format(challengeType))
+
         if challengeType == 'gesture':
             gesture = -1
             gesture = challengeGenerator.GESTURES[random.randint(0, len(challengeGenerator.GESTURES)-1)]
@@ -136,14 +166,14 @@ class challengeGenerator:
 
         elif challengeType == 'big_lasers':
             # lanes to populate with lasers
-            number_of_laser_lanes = 6
+            number_of_laser_lanes = random.randint(6,9)
             lasers = []
             lasers = random.sample(xrange(0,challengeGenerator.NUMBER_OF_LANES),number_of_laser_lanes)
             challenge_data = lasers 
 
         elif challengeType == 'small_lasers':
             # number_of_small_lasers_to_fire = 15
-            number_of_small_lasers_to_fire = random.randint(10,15)
+            number_of_small_lasers_to_fire = 12
             lasers = []
             for x in range(number_of_small_lasers_to_fire):
                 lasers.append(random.randint(0,challengeGenerator.NUMBER_OF_LANES-1))
@@ -157,11 +187,12 @@ class challengeGenerator:
         elif challengeType == 'trivia':
             trivia_index = -1
             trivia_index = random.randint(0,challengeGenerator.NUMBER_OF_TRIVIA_CHALLENGES-1)
-            challenge_data = word_index
+            challenge_data = trivia_index
 
         else:
             log.error("unrecognized challenge type.")
 
+        log.info('{}, {}'.format(challengeType, challenge_data))
         return (challengeType, challenge_data)
 
     def generate(self, number_of_challenges = 25):
@@ -184,7 +215,7 @@ class game_client:
 
 class controller:
 
-    def __init__(self):
+    def __init__(self, ip):
         self.challenge_generator = challengeGenerator()
 
         self.game_clients = []
@@ -195,7 +226,7 @@ class controller:
         self.mqtt_client = mqtt.Client(client_id = 'game_server')
         self.mqtt_client.on_connect = on_connect
         self.mqtt_client.on_message = on_message
-        self.mqtt_client.connect('localhost', '1883', 60)
+        self.mqtt_client.connect(ip, '1883', 60)
         self.subscribeToGameTopics()
         self.initTopics()
         self.mqtt_client.user_data_set(self)
@@ -206,8 +237,8 @@ class controller:
         self.mqtt_client.subscribe(topics)
         return 
 
-    def createChallenges(number):
-        self.challenge_generator.generate(50)
+    def createChallenges(self, number):
+        self.challenge_generator.generate(90)
         return
 
     def addGameClient(self, client_id):
@@ -221,18 +252,30 @@ class controller:
             self.game_clients.append(new_game_client)
         else:
             payload = '2 players connected already'
-
+        self.mqtt_client.subscribe(topic='server/{}'.format(client_id), qos=0)
         self.mqtt_client.publish(topic='server/{}'.format(client_id), payload=payload)
         return
 
-    def sendChallengeTo(self, player_id):
-        challenge_inx = self.game_clients[player_id-1].getNextChallengeNumber()
-        challenge_type, challenge_data = self.challenge_generator.challenges[challenge_inx]
+    def sendChallengeTo(self, player_id, event_or_obstacle):
+        # challenge_inx = self.game_clients[player_id-1].getNextChallengeNumber()
+        # challenge_type, challenge_data = self.challenge_generator.challenges[challenge_inx]
+
+        challenge_type, challenge_data = self.challenge_generator.createChallenge(event_or_obstacle)
         payload = json.dumps({challenge_type : challenge_data})
-        self.mqtt_client.publish(topic='player{}/challenge'.format(player_id), payload=payload)
-        self.mqtt_client.publish(topic='player{}/request_challenge'.format(player_id), payload='fulfilled')
+
+        if event_or_obstacle == 'event':
+            self.mqtt_client.publish(topic='player{}/event'.format(player_id), payload=payload)
+            self.mqtt_client.publish(topic='player{}/request_event'.format(player_id), payload='fulfilled')
+
+        elif event_or_obstacle == 'obstacle':
+            self.mqtt_client.publish(topic='player{}/obstacle'.format(player_id), payload=payload)
+            self.mqtt_client.publish(topic='player{}/request_obstacle'.format(player_id), payload='fulfilled')
 
     def readyToStart(self):
+        for gc in self.game_clients:
+            log.info("readyToStart - player{} is {}".format(gc.player_id, gc.connection_status))
+        if len(self.game_clients) != 2:
+            return False
         return (self.game_clients[0].connection_status == 'ready' and self.game_clients[1].connection_status == 'ready')
 
     def startGame(self):
@@ -278,25 +321,25 @@ class controller:
         self.challenge_generator.challenges = []
         self.initTopics()
 
-def main():
-    c = controller()
-    c.createChallenges(50)
+def main(args):
+    c = controller(args[0].ip)
+    # c.createChallenges(50)
 
 
     # game/state = {waiting for players, ready, start, running, pause, game over, finish}
     previous_state = c.state
 
     while(1):
-        print("{}: {}".format(time(), c.game_clients))
+        sleep(0.1)
+        # log.info("length of game clients: {}".format(len(c.game_clients)))
         if c.state != previous_state:
-            self.mqtt_client.publish(topic='game/state', payload=c.state, retain=True)
+            c.mqtt_client.publish(topic='game/state', payload=c.state, retain=True)
 
         previous_state = c.state
 
         # waiting for players
         if c.state == 'waiting for players':
             #code
-
             # if 2 clients connected, start game
             if c.readyToStart():
                 c.state = 'start'
@@ -315,6 +358,7 @@ def main():
 
         elif c.state == 'pause':
             #code 
+            pass
         elif c.state == 'game over':
             #more code
             # clients should send message
@@ -333,4 +377,8 @@ def main():
         # rest of logic is in message callback
 
 if __name__ == '__main__':
-    main()
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--ip", default=None, help="Set the ip of the Mqtt server.")
+
+    args = parser.parse_known_args()
+    main(args)
