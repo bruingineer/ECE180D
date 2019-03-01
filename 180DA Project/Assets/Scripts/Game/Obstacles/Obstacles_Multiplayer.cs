@@ -7,7 +7,7 @@ public class Obstacles_Multiplayer : Obstacles {
 	ObstacleMultiplayerClient obstacleMultiplayerClient;
 	private string publishTopic;
 	private bool messageOut;
-	public static bool obstacleReady = true;
+	public static bool obstacleReady;
 	public static int obstacleIndex;
 	public static List<int> laserPositions;
 
@@ -17,6 +17,7 @@ public class Obstacles_Multiplayer : Obstacles {
 		publishTopic = Multiplayer_Controller.playerHeader + "request_obstacle";
 		obstacleMultiplayerClient = new ObstacleMultiplayerClient(subscribeTopic);
 		messageOut = false;
+		obstacleReady = false;
 	}
 
 	void Update () {
@@ -24,14 +25,15 @@ public class Obstacles_Multiplayer : Obstacles {
 		{
 			if (!messageOut)
 			{
-				Debug.Log("Sending message to server!");
 				messageOut = true;
 				obstacleMultiplayerClient.SendMessage(publishTopic, "requested");
+				Debug.Log("Sending message to server!");
 			}
 			if (obstacleReady)
 			{
+				Debug.Log("Starting Obstacle...");
 				obstacleReady = false;
-				HandleObstacles();
+				StartObstacles();
 			}
 		}
 	}

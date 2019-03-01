@@ -141,7 +141,6 @@ public abstract class GameState_Base : MonoBehaviour {
 		gamePlaying = false;
 		result.text = "You win!";
 		PlayClip(gameWonMusic);
-        //StatsProcess.CheckIfTrainingComplete(gameMode);
         training_client.CheckIfTrainingComplete(gameMode);
 		StartCoroutine(HandlePostGame(gameWonMusic.length));
 	}

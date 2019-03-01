@@ -256,20 +256,15 @@ class controller:
         self.mqtt_client.publish(topic='server/{}'.format(client_id), payload=payload)
         return
 
-    def sendChallengeTo(self, player_id, event_or_obstacle):
+    def sendChallengeTo(self, player_id, challengeType):
         # challenge_inx = self.game_clients[player_id-1].getNextChallengeNumber()
         # challenge_type, challenge_data = self.challenge_generator.challenges[challenge_inx]
 
-        challenge_type, challenge_data = self.challenge_generator.createChallenge(event_or_obstacle)
-        payload = json.dumps({challenge_type : challenge_data})
+        challenge_type, challenge_data = self.challenge_generator.createChallenge(challengeType)
+        payload = json.dumps({"challenge" : challenge_type, "data" : challenge_data})
 
-        if event_or_obstacle == 'event':
-            self.mqtt_client.publish(topic='player{}/event'.format(player_id), payload=payload)
-            self.mqtt_client.publish(topic='player{}/request_event'.format(player_id), payload='fulfilled')
-
-        elif event_or_obstacle == 'obstacle':
-            self.mqtt_client.publish(topic='player{}/obstacle'.format(player_id), payload=payload)
-            self.mqtt_client.publish(topic='player{}/request_obstacle'.format(player_id), payload='fulfilled')
+        self.mqtt_client.publish(topic='player{}/{}'.format(player_id, challengeType), payload=payload)
+        self.mqtt_client.publish(topic='player{}/request_{}}'.format(player_id, challengeType), payload='fulfilled')
 
     def readyToStart(self):
         for gc in self.game_clients:

@@ -42,6 +42,7 @@ public abstract class MQTT_Class {
 	// allows client to send a message at the specified topic
 	public void SendMessage(string topic, string message)
 	{
+		Debug.Log("Sending " + message + " on " + topic);
 		client.Publish(topic, System.Text.Encoding.UTF8.GetBytes(message), MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE, false);
 	}
 
@@ -152,15 +153,9 @@ public class GestureClient : MQTT_Class {
 }
 
 public class MultiplayerClient : MQTT_Class {
+	private bool started = false;
 	public MultiplayerClient(string topic) : base(topic) {}
 
-	/*
-		This function gets called whenever this GestureClient class
-		receives a message by being described to the specified topic.
-		When it gets called, it accesses the gestureCorrect static variable
-		in the GestureGame class and sets it to true, indicating the gesture
-		was correct.
-	*/
 	protected override void client_MqttMsgPublishReceived(object sender, MqttMsgPublishEventArgs e) 
 	{
 		string message = System.Text.Encoding.UTF8.GetString(e.Message);
@@ -172,8 +167,11 @@ public class MultiplayerClient : MQTT_Class {
 				Multiplayer_Controller.playerHeader = message + '/';
 				Multiplayer_Controller.playerConnected = true;
 			}
-		} else if (e.Topic == Multiplayer_Controller.gameStateTopic)
+		} else if (e.Topic == Multiplayer_Controller.gameStateTopic && !started)
+		{
 			Multiplayer_Controller.gameStarted = true;
+			started = true;
+		}
 	} 
 
 	public void Subscribe(string[] topics)
@@ -191,14 +189,43 @@ public class MultiplayerClient : MQTT_Class {
 	}
 }
 
-public class ObstacleMultiplayerClient : MQTT_Class
+[Serializable]
+public abstract class GameMultiplayerClient : MQTT_Class
+{
+	protected ChallengeInfo challengeInfo;
+	public GameMultiplayerClient(string topic) : base(topic) {}
+
+	protected class ChallengeInfo 
+	{
+		public string challenge;
+		public List<int> data;
+	}
+}
+
+public class ObstacleMultiplayerClient : GameMultiplayerClient
 {
 	public ObstacleMultiplayerClient(string topic) : base(topic) {}
-
 	protected override void client_MqttMsgPublishReceived(object sender, MqttMsgPublishEventArgs e) 
 	{
 		string message = System.Text.Encoding.UTF8.GetString(e.Message);
-		
+		challengeInfo = JsonUtility.FromJson<ChallengeInfo>(message);
+		int index;
+		Debug.Log(challengeInfo.challenge);
+		Debug.Log(challengeInfo.data[0]);
+		switch (challengeInfo.challenge)
+		{
+			case "small_lasers":
+				index = 0;
+				break;
+			case "big_lasers":
+				index = 1;
+				break;
+			default:
+				index = -1;
+				break;
+		}
+		Obstacles_Multiplayer.obstacleIndex = index;
+		Obstacles_Multiplayer.laserPositions = challengeInfo.data;
+		Obstacles_Multiplayer.obstacleReady = true;
 	} 
-
 }
