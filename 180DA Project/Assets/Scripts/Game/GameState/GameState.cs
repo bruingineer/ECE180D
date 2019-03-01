@@ -29,7 +29,11 @@ public abstract class GameState_Base : MonoBehaviour {
 	public static bool gamePlaying;
 	private static GameState_Base instance;
 
-	void Awake () {
+    //MQTT Client to update db when training completed
+    MQTTHelper training_client;
+
+    void Awake () {
+        training_client = new MQTTHelper("database");
 		Time.timeScale = 1;
 		instance = this;
 		numLanes = 10;
@@ -137,7 +141,8 @@ public abstract class GameState_Base : MonoBehaviour {
 		gamePlaying = false;
 		result.text = "You win!";
 		PlayClip(gameWonMusic);
-		StatsProcess.CheckIfTrainingComplete(gameMode);
+        //StatsProcess.CheckIfTrainingComplete(gameMode);
+        training_client.CheckIfTrainingComplete(gameMode);
 		StartCoroutine(HandlePostGame(gameWonMusic.length));
 	}
 

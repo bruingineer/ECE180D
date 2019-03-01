@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Text;
 using System.Net;
 using uPLibrary.Networking.M2Mqtt;
 using uPLibrary.Networking.M2Mqtt.Messages;
@@ -45,6 +46,47 @@ public abstract class MQTT_Class {
 	}
 
 	protected abstract void client_MqttMsgPublishReceived(object sender, MqttMsgPublishEventArgs e);
+}
+
+public class MQTTHelper : MQTT_Class
+{
+    private string _topic;
+    //Class to be used for simple MQTT functions, often just requiring a message to publish 
+    public MQTTHelper(string topic) : base(topic) {
+         _topic = topic;
+    }
+
+    public void CheckIfTrainingComplete(string training)
+    {
+        bool selectedTrainingComplete;
+        switch (training)
+        {
+            case "gesture_training":
+                selectedTrainingComplete = SelectedPlayer.gesture_training;
+                break;
+            case "laser_training":
+                selectedTrainingComplete = SelectedPlayer.laser_training;
+                break;
+            case "unscramble_training":
+                selectedTrainingComplete = SelectedPlayer.unscramble_training;
+                break;
+            case "trivia_training":
+                selectedTrainingComplete = SelectedPlayer.unscramble_training;
+                break;
+            // error
+            default:
+                return;
+        }
+
+        if (selectedTrainingComplete)
+            return;
+
+        SendMessage(_topic, string.Format("UPDATE players SET {0}=1 WHERE id = {1}",
+                                     training, SelectedPlayer.id));
+    }
+
+    protected override void client_MqttMsgPublishReceived(object sender, MqttMsgPublishEventArgs e)
+    { }
 }
 
 public class PlayerMQTT_X : MQTT_Class {

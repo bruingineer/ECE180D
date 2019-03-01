@@ -50,11 +50,11 @@ public class StatsProcess : MonoBehaviour
 {
     //MQTT stuff
     private static MqttClient client;
-    GameData gd;
     private const string str_IP = "127.0.0.1";
     private const int int_Port = 1883;
     private const string topic = "database/games";
 
+    GameData gd;
     //Text objects to display game results and smart training suggestion
     public Text gesture_acc;
     public Text unscramble_acc;
@@ -97,19 +97,15 @@ public class StatsProcess : MonoBehaviour
     void Update()
     {
         if (suggestion != null)
-        {
             training_suggestion.text = suggestion;
-        }
 
         if (first_suggestion != null)
-        {
             temp_text.text = first_suggestion;
-        }
 
+        //Once training query and sugestion is determined,
+        //perform query for difficulty change 
         if (training_query_done && !difficulty_query_done)
-        {
             QueryDB("difficulty");
-        }
     }
 
 
@@ -192,30 +188,29 @@ public class StatsProcess : MonoBehaviour
             Debug.Log("u_tleft_avg" + u_tleft_avg);
             Debug.Log("t_tleft_avg" + t_tleft_avg);
 
-          
-
             //lives left out of 50 pts
             lives_left = SelectedPlayer.current_lives_left;
             total_score += lives_left/3 * 50 ;
 
             if (lives_left == 0) died = true;
+
+            //surviving worth 100 pts
             else {
-                //surviving worth 100 pts
                 died = false;
                 total_score += 100;
             }
 
             /////////////////HARDCODED test values///////////////
-            g = 0.77f;
-            u = 0.77f;
-            t = 0.77f;
-            g_tleft_avg = 8;
-            u_tleft_avg = 8;
-            t_tleft_avg = 8;
-            died = false;
-            lives_left = 1;
-            total_score = 50 * (g + u + t + g_tleft_avg/10 + u_tleft_avg/10 + t_tleft_avg/10 + lives_left/3);
-            total_score += 100;
+            //g = 0.77f;
+            //u = 0.77f;
+            //t = 0.77f;
+            //g_tleft_avg = 8;
+            //u_tleft_avg = 8;
+            //t_tleft_avg = 8;
+            //died = false;
+            //lives_left = 1;
+            //total_score = 50 * (g + u + t + g_tleft_avg/10 + u_tleft_avg/10 + t_tleft_avg/10 + lives_left/3);
+            //total_score += 100;
             ////////////////////////////////////////////////////
 
             //Populate Results in End Game scene
@@ -260,38 +255,7 @@ public class StatsProcess : MonoBehaviour
         command = Encoding.ASCII.GetBytes(str_command);
         client.Publish("database", command);
     }
-
-    public static void CheckIfTrainingComplete(string training)
-    {
-        bool selectedTrainingComplete;
-        switch (training)
-        {
-            case "gesture_training":
-                selectedTrainingComplete = SelectedPlayer.gesture_training;
-                break;
-            case "laser_training":
-                selectedTrainingComplete = SelectedPlayer.laser_training;
-                break;
-            case "unscramble_training":
-                selectedTrainingComplete = SelectedPlayer.unscramble_training;
-                break;
-            case "trivia_training":
-                selectedTrainingComplete = SelectedPlayer.unscramble_training;
-                break;
-            // error
-            default:
-                return;
-        }
-
-        if (selectedTrainingComplete)
-            return;
-
-        string str_command = string.Format("UPDATE players SET {0}=1 WHERE id = {1}",
-            selectedTrainingComplete, SelectedPlayer.id);
-        byte[] command = Encoding.ASCII.GetBytes(str_command);
-        client.Publish("database", command);
-    }
-
+    
     void QueryDB(string query)
     {
         string str_command;
