@@ -24,6 +24,10 @@ public class WordScramble : Speech {
 
 	protected override void HandleCorrectEvent()
 	{
+		if (timerDuration > timerDuration - 4){
+			Powerup.powerup_count++;
+		}
+		
 		timerStopped = true;
 		HandleCorrectAction();
 		StopRecognizer();
@@ -40,7 +44,8 @@ public class WordScramble : Speech {
         Answer.text = "";
     }
 
-	protected override void SetUpEvent(){       
+	protected override void SetUpEvent(){
+		WDisplay.WordText.characterSpacing = 1.25f;       
 		Debug.Log("Starting Scramble");
 		string w = "";
 		w = SpeechList.getWord();
@@ -68,6 +73,8 @@ public class WordScramble : Speech {
 
 	// ask jose if he can have one word shared by speech events
 	protected override void HandleIncorrectEvent(){
+		Debug.Log("word scrambler failed");
+		Powerup.powerup_count = 0;
         timerStopped = true;
         StopRecognizer();
         SelectedPlayer.current_unscramble_fail++;
@@ -88,5 +95,6 @@ public class WordScrambleMiniGame : WordScramble {
 	protected override void HandleIncorrectEvent()
 	{
 		GameState_Event_Minigame.curCorrect = 0;
+		StopRecognizer();
 	}
 }

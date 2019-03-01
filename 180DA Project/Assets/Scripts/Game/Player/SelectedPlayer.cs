@@ -9,7 +9,7 @@ public static class SelectedPlayer{
     public static int id, games_played, difficulty_ctr;
     public static string suggested_difficulty;
     public static bool laser_training, gesture_training, unscramble_training, trivia_training;
-
+    
     //current game info
     public static string current_difficulty = "easy";
     

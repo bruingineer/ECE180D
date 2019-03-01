@@ -12,49 +12,17 @@ public abstract class Speech : Event
     WordDisplay WDisplay;
     bool GotCorrect;
     static int correct = 0;
-    static int failed = 0;
-    
-    // [SerializeField]
-    // private Text m_Hypotheses;
-
-    // [SerializeField]
-    // private Text m_Recognitions;
-    //protected TextMeshProUGUI triviaText;
-    //protected TextMeshProUGUI answer;
-    
+    static int failed = 0;    
     private int triviaORScrabmle;
-    //protected Text Question;
-    //private string ques = "";
-    //private string ans = "";
     protected static bool recognizer_started = false;
 
     protected DictationRecognizer m_DictationRecognizer;
-
-    // protected override void Initialize(){
-    //     WDisplay = new WordDisplay();
-    //     triviaText = GameObject.FindWithTag("trivia").GetComponent<TextMeshProUGUI>();
-    //     WDisplay.WordText = GameObject.FindWithTag("trivia").GetComponent<TextMeshProUGUI>();
-    //     triviaText.text = "";
-    //     answer = GameObject.FindWithTag("answer").GetComponent<TextMeshProUGUI>();
-    //     answer.text = "";
-    //     // Msg = GameObject.FindWithTag("msg").GetComponent<TextMeshProUGUI>();
-    //     // Msg.text = "";
-    //     SetUp();
-    // }
-
-    // protected override IEnumerator MakeTextBlink(){
-    //         while(triviaORScrabmle == 1 && !timerPaused){
-    //         //Debug.Log("making word blink");
-    //         WDisplay.MakeWordBlink();
-	// 		yield return new WaitForSeconds(repeatRate/1.5f);
-    //     }
-    // }
-
 
     protected abstract void handleSpeechTask(string text);
 
 
     protected void StartRecognizer(){
+        Debug.Log(recognizer_started.ToString());
         if (!recognizer_started){
             m_DictationRecognizer = new DictationRecognizer();
 
@@ -89,9 +57,9 @@ public abstract class Speech : Event
 
     protected void StopRecognizer(){
         //Debug.Log("app quit");
-        if (m_DictationRecognizer != null && (m_DictationRecognizer.Status == UnityEngine.Windows.Speech.SpeechSystemStatus.Running))
+        if (m_DictationRecognizer != null)// && (m_DictationRecognizer.Status == UnityEngine.Windows.Speech.SpeechSystemStatus.Running))
         {
-            //Debug.Log("Closing Dictation Recognizer");
+            Debug.Log("Closing Dictation Recognizer");
             m_DictationRecognizer.Dispose();
             m_DictationRecognizer.Stop();
         }

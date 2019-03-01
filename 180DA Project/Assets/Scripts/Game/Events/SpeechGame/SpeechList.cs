@@ -21,6 +21,7 @@ public class SpeechList : MonoBehaviour
         {"circumference", "What is the distance around a circle called?" },
         {"exit", "What's the opposite of enter?" }
         //{"ohm's law", "What do you call: I = V / R"}
+        //total = 9
     };
 
     //public static string[] WordList_ = new string[] {
@@ -48,6 +49,7 @@ public class SpeechList : MonoBehaviour
         "snake"
     //     "nap" ambiguous
     //     "slime" ambiguous
+    //total 16
 
     // "en<uppercase><color=\"blue\">g</color=\"blue\"><uppercase>ineer"
     };

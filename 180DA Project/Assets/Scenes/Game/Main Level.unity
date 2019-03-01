@@ -730,6 +730,17 @@ MonoBehaviour:
   playerIcons:
   - {fileID: 2047877615}
   - {fileID: 595776788}
+--- !u!114 &1817033885
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1817033881}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b452659c0de8285468cb2ddb71e19f8b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2047877615 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1837514303795164, guid: d78defd6cd2f245f8bf556e9fc610325,

@@ -114,6 +114,7 @@ public class GestureGame : Event {
 	*/
 	protected override void HandleIncorrectEvent()
 	{
+		Powerup.powerup_count = 0;
 		// incremement field for SelectedPlayer database
 		SelectedPlayer.current_gesture_fail++;
 		// reset based on if minigame or not
@@ -123,6 +124,13 @@ public class GestureGame : Event {
 	// function called when event is correct
 	protected override void HandleCorrectEvent()
 	{
+		if (timerDuration > timerDuration-4){
+			Powerup.powerup_count++;
+		}
+		else{
+			Powerup.powerup_count = 0;
+		}
+
 		// set to true as to not repeat the function
 		handledCorrect = true;
 		timerStopped = true;

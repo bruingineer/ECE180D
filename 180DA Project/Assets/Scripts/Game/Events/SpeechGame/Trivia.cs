@@ -41,6 +41,7 @@ public class Trivia : Speech {
 	}
 
 	protected override void SetUpEvent(){
+		triviaText.characterSpacing = 1.0f;
 		Debug.Log("Starting trivia");
 		SpeechList.getQuestion(ref ques, ref ans);
 		Debug.Log("Question: " + ques);
@@ -58,6 +59,8 @@ public class Trivia : Speech {
 	}
 
 	protected override void HandleIncorrectEvent(){
+		Debug.Log("trivia incorrect");
+		Powerup.powerup_count = 0;
         timerStopped = true;
         StopRecognizer();
         SelectedPlayer.current_trivia_fail++;
@@ -82,5 +85,6 @@ public class TriviaMiniGame : Trivia {
 	protected override void HandleIncorrectEvent()
 	{
 		GameState_Event_Minigame.curCorrect = 0;
+		StopRecognizer();
 	}
 }
