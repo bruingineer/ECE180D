@@ -93,7 +93,7 @@ public class Big_Laser_Obstacle : Laser_Obstacle {
 		// reset variable for big laser
 		Big_Laser.playerHit = false;
 		List<GameObject> lasers = new List<GameObject>();
-		int list_count = laserPositions;
+		int list_count = laserPositions.Count;
 		for(int i = 0; i < list_count; i++)
 		{
 			// create laser prefab
