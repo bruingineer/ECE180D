@@ -50,7 +50,8 @@ public class Small_Laser_Obstacle : Laser_Obstacle {
 		bool switchPosition = !(player.transform.position.y < GameState_Base.end_row / 2);
 		float start_Y_Position = switchPosition ? 0 : GameState_Base.end_row;
 		float end_Y_Position = switchPosition ? GameState_Base.end_row : 0;
-		for(int i = 0; i < lasersToFire; i++) 
+		int list_count = laserPositions.Count;
+		for(int i = 0; i < list_count; i++) 
 		{
 			GameObject prefab = Instantiate(laserPrefab, new Vector3(laserPositions[i] + 0.5f, 
 					start_Y_Position), Quaternion.Euler(0, 0, 90));
