@@ -8,7 +8,8 @@ public class Multiplayer_Controller : MonoBehaviour {
     // Objects
 public static MultiplayerClient multiplayerClient;
 public static string serverTopic;
-public static string playerConnectedTopic = "server/player_connected";
+public static string serverConnectedTopic = "server/player_connected";
+public static string playerConnectionTopic;
 public static string wonMessage = "I WON";
 public static string playerHeader;
 public static GameObject connectedButton;
@@ -22,6 +23,7 @@ public static Multiplayer_Controller instance;
 private bool connectButtonPressed;
 private bool readyButtonPressed;
 public static bool lost = false;
+public static bool won = false;
 
     // Use this for initialization
     void Awake () {
@@ -51,7 +53,7 @@ public static bool lost = false;
                 string clientNumber_str = clientNumber_int.ToString();
                 serverTopic = "server/" + clientNumber_str;
                 multiplayerClient = new MultiplayerClient(serverTopic);
-                multiplayerClient.SendMessage(playerConnectedTopic, clientNumber_str);
+                multiplayerClient.SendMessage(serverConnectedTopic, clientNumber_str);
         }
     }
 
@@ -60,6 +62,7 @@ public static bool lost = false;
         playerConnected = false;
         challengeTopic = playerHeader + "challenge";
         winnerTopic = playerHeader + "winner_notification";
+        playerConnectionTopic = playerHeader + "connection_status";
         Debug.Log("Player connected to server...");
         connectedButton.SetActive(false);
     }
@@ -71,7 +74,7 @@ public static bool lost = false;
                 Debug.Log("Player ready and waiting...");
                 readyButton.transform.Find("Text").GetComponent<Text>().text = "Waiting to play...";
                 multiplayerClient.Subscribe(new string[] {gameStateTopic, challengeTopic, winnerTopic});
-                multiplayerClient.SendMessage(playerHeader + "connection_status", "ready");
+                multiplayerClient.SendMessage(playerConnectionTopic, "ready");
         }
     }
 
