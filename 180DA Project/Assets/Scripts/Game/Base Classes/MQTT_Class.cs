@@ -175,6 +175,8 @@ public class MultiplayerClient : MQTT_Class {
 		{
 			if (message == "loser")
 				Multiplayer_Controller.lost = true;
+			else if (message == "winner")
+				Multiplayer_Controller.won = true;
 		}
 	} 
 
@@ -253,7 +255,7 @@ public class EventMultiplayerClient : MQTT_Class
 		Debug.Log(eventInfo.challenge);
 		Debug.Log(index);
 		PlayerEvents_Multiplayer.eventIndex = index;
-		PlayerEvents_Multiplayer.phrase = eventInfo.challenge;
+		PlayerEvents_Multiplayer.phrase = eventInfo.data;
 		PlayerEvents_Multiplayer.eventReady = true;
 	} 
 

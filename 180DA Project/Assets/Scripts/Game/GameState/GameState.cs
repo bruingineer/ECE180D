@@ -33,7 +33,6 @@ public abstract class GameState_Base : MonoBehaviour {
     MQTTHelper training_client;
 
     protected virtual void Awake () {
-		Debug.Log("fuck");
         training_client = new MQTTHelper("database");
 		Time.timeScale = 1;
 		instance = this;
@@ -59,7 +58,7 @@ public abstract class GameState_Base : MonoBehaviour {
 		SetUp_Events_Obstacles();
 	}
 
-	void Update()
+	protected virtual void Update()
 	{
 		if (gamePlaying)
 		{

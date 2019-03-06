@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class GameState_Multiplayer : GameState_with_Player {
 	private bool loseHandled = false;
+	private bool winHandled = false;
 	protected override void SetUp_Events_Obstacles()
 	{
 		gameObject.AddComponent<Obstacles_Multiplayer>();
@@ -13,6 +14,16 @@ public class GameState_Multiplayer : GameState_with_Player {
 	protected override void HandlePostGameScene()
 	{
 		SetUpButtons();
+	}
+
+	protected override void Update()
+	{
+		base.Update();
+		if (Multiplayer_Controller.won && !winHandled)
+		{
+			winHandled = true;
+			base.GameWon();
+		}
 	}
 
 	protected override void HandleLose()
@@ -27,8 +38,7 @@ public class GameState_Multiplayer : GameState_with_Player {
 
 	protected override void GameWon()
 	{
-		base.GameWon();
-	 	Multiplayer_Controller.multiplayerClient.SendMessage(Multiplayer_Controller.playerConnectedTopic, Multiplayer_Controller.wonMessage);
+	 	Multiplayer_Controller.multiplayerClient.SendMessage(Multiplayer_Controller.playerConnectionTopic, Multiplayer_Controller.wonMessage);
 	}
 
 	protected override void Awake()
