@@ -139,7 +139,7 @@ class challengeGenerator:
     NUMBER_OF_WORD_CHALLENGES = 16
     NUMBER_OF_TRIVIA_CHALLENGES = 9
 
-    CHALLENGE_INDEX = EVENTS_INDEX.append(OBSTACLES_INDEX)
+    CHALLENGE_INDEX = EVENTS_INDEX+OBSTACLES_INDEX
 
     def __init__(self):
         self.challenges = []
