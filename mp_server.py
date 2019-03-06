@@ -67,7 +67,7 @@ def on_message(client, _controller, msg):
 
     # request to join
     if mqtt.topic_matches_sub("server/player_connected", msg.topic):
-        _controller.addGameClient(str(msg.payload))
+            _controller.addGameClient(str(msg.payload))
 
     # status of game clients
     elif mqtt.topic_matches_sub("+/connection_status", msg.topic):
@@ -154,7 +154,8 @@ class challengeGenerator:
 
         # pick from events or obstacles
         if challengeType == 'event':
-            challengeType = challengeGenerator.EVENTS_INDEX[random.randint(0,len(challengeGenerator.EVENTS_INDEX)-1)]
+            challengeType = 'trivia'
+            # challengeType = challengeGenerator.EVENTS_INDEX[random.randint(0,len(challengeGenerator.EVENTS_INDEX)-1)]
         elif challengeType == 'obstacle':
             challengeType = challengeGenerator.OBSTACLES_INDEX[random.randint(0,len(challengeGenerator.OBSTACLES_INDEX)-1)]
         log.info('chal type: {}'.format(challengeType))
@@ -233,7 +234,7 @@ class controller:
         self.mqtt_client.loop_start()
 
     def subscribeToGameTopics(self):
-        topics = [('test', 0), ('server/player_connected', 0), ('player1/#', 0), ('player2/#', 0)]
+        topics = [('test', 0), ('server/#', 0), ('player1/#', 0), ('player2/#', 0), ('game/#', 0)]
         self.mqtt_client.subscribe(topics)
         return 
 
