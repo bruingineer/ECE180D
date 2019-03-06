@@ -91,6 +91,7 @@ public void Ready()
             readyButtonPressed = false;
             Multiplayer_Controller.readyButton.transform.Find("Text").GetComponent<Text>().text = "Ready";
             readyButton.SetActive(true);
+            multiplayerClient.ResetStart();
     }
 
     private void StartGame()

@@ -181,6 +181,11 @@ public class MultiplayerClient : MQTT_Class {
 		}
 	} 
 
+	public void ResetStart()
+	{
+		started = false;
+	}
+
 	public void Subscribe(string[] topics)
 	{
 		Debug.Log("Subscribing to topics...");
