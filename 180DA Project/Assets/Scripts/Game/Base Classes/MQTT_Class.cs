@@ -202,7 +202,7 @@ public class ObstacleMultiplayerClient : MQTT_Class
 		string message = System.Text.Encoding.UTF8.GetString(e.Message);
 		obstacleInfo = JsonUtility.FromJson<ObstacleInfo>(message);
 		int index;
-		switch (obstacleInfo.obstacleName)
+		switch (obstacleInfo.challenge)
 		{
 			case "small_lasers":
 				index = 0;
@@ -215,14 +215,14 @@ public class ObstacleMultiplayerClient : MQTT_Class
 				break;
 		}
 		Obstacles_Multiplayer.obstacleIndex = index;
-		Obstacles_Multiplayer.laserPositions = obstacleInfo.laserPositions;
+		Obstacles_Multiplayer.laserPositions = obstacleInfo.data;
 		Obstacles_Multiplayer.obstacleReady = true;
 	} 
 
 	protected class ObstacleInfo
 	{
-		public string obstacleName;
-		public List<int> laserPositions;
+		public string challenge;
+		public List<int> data;
 	}
 }
 
@@ -235,7 +235,7 @@ public class EventMultiplayerClient : MQTT_Class
 		string message = System.Text.Encoding.UTF8.GetString(e.Message);
 		eventInfo = JsonUtility.FromJson<EventInfo>(message);
 		int index;
-		switch (eventInfo.eventName)
+		switch (eventInfo.challenge)
 		{
 			case "gesture":
 				index = 0;
@@ -250,16 +250,17 @@ public class EventMultiplayerClient : MQTT_Class
 				index = -1;
 				break;
 		}
-
+		Debug.Log(eventInfo.challenge);
+		Debug.Log(index);
 		PlayerEvents_Multiplayer.eventIndex = index;
-		PlayerEvents_Multiplayer.phrase = eventInfo.phrase;
+		PlayerEvents_Multiplayer.phrase = eventInfo.challenge;
 		PlayerEvents_Multiplayer.eventReady = true;
 	} 
 
 	protected class EventInfo
 	{
-		public string eventName;
-		public string phrase;
+		public string challenge;
+		public string data;
 	}
 }
 

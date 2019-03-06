@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerEvents_Multiplayer : PlayerEvents {
 	private string subscribeTopic; 
-	ObstacleMultiplayerClient playerEventMultiplayerClient;
+	EventMultiplayerClient playerEventMultiplayerClient;
 	private string publishTopic;
 	private bool messageOut;
 	public static bool eventReady;
@@ -16,7 +16,7 @@ public class PlayerEvents_Multiplayer : PlayerEvents {
 	{
 		subscribeTopic = Multiplayer_Controller.playerHeader + "event";
 		publishTopic = Multiplayer_Controller.playerHeader + "request_event";
-		playerEventMultiplayerClient = new ObstacleMultiplayerClient(subscribeTopic);
+		playerEventMultiplayerClient = new EventMultiplayerClient(subscribeTopic);
 		messageOut = false;
 		eventReady = false;
 		gestureGame = gameObject.AddComponent<GestureGame>();
@@ -36,8 +36,8 @@ public class PlayerEvents_Multiplayer : PlayerEvents {
 			}
 			if (eventReady)
 			{
-				Debug.Log("Starting Event...");
 				eventReady = false;
+				Debug.Log("Starting Event...");
 				StartEvents();
 			}
 		}
