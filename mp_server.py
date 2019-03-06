@@ -207,7 +207,7 @@ class game_client:
         self.player_id = id
         self.current_challenge = 0
         self.position = 0
-        self.connection_status = ''
+        self.connection_status = 'not ready'
         return
 
     def getNextChallengeNumber(self):
@@ -272,6 +272,7 @@ class controller:
             log.info("readyToStart - player{} is {}".format(gc.player_id, gc.connection_status))
         if len(self.game_clients) != 2:
             return False
+        log.error("help me: {}".format(len(self.game_clients)))
         return (self.game_clients[0].connection_status == 'ready' and self.game_clients[1].connection_status == 'ready')
 
     def startGame(self):
@@ -296,20 +297,22 @@ class controller:
         same as player1
 
         """
-        self.mqtt_client.publish(topic='game/state', payload='', retain=True)
-        self.mqtt_client.publish(topic='server/player_connected', payload='', retain=True)
+        # self.mqtt_client.publish(topic='game/state', payload='', retain=True)
+        # self.mqtt_client.publish(topic='server/player_connected', payload='', retain=True)
 
-        self.mqtt_client.publish(topic='player1/challenge', payload='', retain=True)
-        self.mqtt_client.publish(topic='player1/challenge_status', payload='', retain=True)
-        self.mqtt_client.publish(topic='player1/request_challenge', payload='', retain=True)
+        self.mqtt_client.publish(topic='player1/event', payload='', retain=True)
+        self.mqtt_client.publish(topic='player1/request_event', payload='', retain=True)
+        self.mqtt_client.publish(topic='player1/obstacle', payload='', retain=True)
+        self.mqtt_client.publish(topic='player1/request_obstacle', payload='', retain=True)
         self.mqtt_client.publish(topic='player1/position', payload='', retain=True)
-        self.mqtt_client.publish(topic='player1/connection_status', payload='', retain=True)
+        self.mqtt_client.publish(topic='player1/connection_status', payload='not ready', retain=True)
 
-        self.mqtt_client.publish(topic='player2/challenge', payload='', retain=True)
-        self.mqtt_client.publish(topic='player2/challenge_status', payload='', retain=True)
-        self.mqtt_client.publish(topic='player2/request_challenge', payload='', retain=True)
+        self.mqtt_client.publish(topic='player2/event', payload='', retain=True)
+        self.mqtt_client.publish(topic='player2/request_event', payload='', retain=True)
+        self.mqtt_client.publish(topic='player2/obstacle', payload='', retain=True)
+        self.mqtt_client.publish(topic='player2/request_obstacle', payload='', retain=True)
         self.mqtt_client.publish(topic='player2/position', payload='', retain=True)
-        self.mqtt_client.publish(topic='player2/connection_status', payload='', retain=True)
+        self.mqtt_client.publish(topic='player2/connection_status', payload='not ready', retain=True)
         return
 
     def cleanUp(self):
@@ -329,7 +332,7 @@ def main(args):
         sleep(0.1)
         # log.info("length of game clients: {}".format(len(c.game_clients)))
         if c.state != previous_state:
-            c.mqtt_client.publish(topic='game/state', payload=c.state, retain=True)
+            c.mqtt_client.publish(topic='game/state', payload=c.state, retain=False)
 
         previous_state = c.state
 
@@ -341,7 +344,7 @@ def main(args):
                 c.state = 'start'
 
         elif c.state == 'start':
-            c.startGame()
+            # c.startGame()
             c.state = 'running'
 
         elif c.state == 'running':
@@ -357,10 +360,8 @@ def main(args):
             pass
         elif c.state == 'game over':
             #more code
-            # clients should send message
-            for i in range(1, 3):
-                c.mqtt_client.publish(topic='player{}/connection_status'.format(i), payload='not ready')
-
+            # c.cleanUp()
+            c.initTopics()
             c.state = 'waiting for players'
         else:
             log.error('invalid state!')
