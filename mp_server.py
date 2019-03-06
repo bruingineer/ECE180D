@@ -253,8 +253,8 @@ class controller:
             self.game_clients.append(new_game_client)
         else:
             payload = '2 players connected already'
-        self.mqtt_client.subscribe(topic='server/{}'.format(client_id), qos=0)
-        self.mqtt_client.publish(topic='server/{}'.format(client_id), payload=payload)
+        self.mqtt_client.subscribe(topic='server/{}'.format(client_id), qos=2)
+        self.mqtt_client.publish(topic='server/{}'.format(client_id), payload=payload, qos=2)
         return
 
     def sendChallengeTo(self, player_id, challengeType):
@@ -264,8 +264,8 @@ class controller:
         challenge_type, challenge_data = self.challenge_generator.createChallenge(challengeType)
         payload = json.dumps({"challenge" : challenge_type, "data" : challenge_data})
 
-        self.mqtt_client.publish(topic='player{}/{}'.format(player_id, challengeType), payload=payload)
-        self.mqtt_client.publish(topic='player{}/request_{}}'.format(player_id, challengeType), payload='fulfilled')
+        self.mqtt_client.publish(topic='player{}/{}'.format(player_id, challengeType), payload=payload, qos=2)
+        self.mqtt_client.publish(topic='player{}/request_{}}'.format(player_id, challengeType), payload='fulfilled', qos=2)
 
     def readyToStart(self):
         for gc in self.game_clients:
@@ -276,7 +276,7 @@ class controller:
         return (self.game_clients[0].connection_status == 'ready' and self.game_clients[1].connection_status == 'ready')
 
     def startGame(self):
-        self.mqtt_client.publish(topic='game/state', payload='start')
+        self.mqtt_client.publish(topic='game/state', payload='start', qos=2)
 
     def initTopics(self):
         """
@@ -305,14 +305,14 @@ class controller:
         self.mqtt_client.publish(topic='player1/obstacle', payload='', retain=True)
         self.mqtt_client.publish(topic='player1/request_obstacle', payload='', retain=True)
         self.mqtt_client.publish(topic='player1/position', payload='', retain=True)
-        self.mqtt_client.publish(topic='player1/connection_status', payload='not ready', retain=True)
+        self.mqtt_client.publish(topic='player1/connection_status', payload='not ready', retain=False)
 
         self.mqtt_client.publish(topic='player2/event', payload='', retain=True)
         self.mqtt_client.publish(topic='player2/request_event', payload='', retain=True)
         self.mqtt_client.publish(topic='player2/obstacle', payload='', retain=True)
         self.mqtt_client.publish(topic='player2/request_obstacle', payload='', retain=True)
         self.mqtt_client.publish(topic='player2/position', payload='', retain=True)
-        self.mqtt_client.publish(topic='player2/connection_status', payload='not ready', retain=True)
+        self.mqtt_client.publish(topic='player2/connection_status', payload='not ready', retain=False)
         return
 
     def cleanUp(self):
@@ -332,7 +332,7 @@ def main(args):
         sleep(0.1)
         # log.info("length of game clients: {}".format(len(c.game_clients)))
         if c.state != previous_state:
-            c.mqtt_client.publish(topic='game/state', payload=c.state, retain=False)
+            c.mqtt_client.publish(topic='game/state', payload=c.state, retain=False, qos=2)
 
         previous_state = c.state
 
@@ -349,10 +349,10 @@ def main(args):
 
         elif c.state == 'running':
             #more more code
-            for i in range(1,len(c.game_clients)+1):
-                if c.game_clients[i-1].connection_status == 'I WON':
-                    c.mqtt_client.publish(topic='player{}/winner_notification'.format(i), payload='winner')
-                    c.mqtt_client.publish(topic='player{}/winner_notification'.format((i+1)%2), payload='loser')
+            for i in range(0,len(c.game_clients)):
+                if c.game_clients[i].connection_status == 'I WON':
+                    c.mqtt_client.publish(topic='player{}/winner_notification'.format(i+1), payload='winner', qos=2)
+                    c.mqtt_client.publish(topic='player{}/winner_notification'.format((i+1)%2+1), payload='loser', qos=2)
                     c.state = 'game over'
 
         elif c.state == 'pause':
