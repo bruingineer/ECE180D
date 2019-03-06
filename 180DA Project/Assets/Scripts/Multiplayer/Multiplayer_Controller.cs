@@ -24,6 +24,7 @@ private bool connectButtonPressed;
 public static bool readyButtonPressed;
 public static bool lost;
 public static bool won;
+private bool gamePlayedOnce = false;
 
     // Use this for initialization
     void Awake () {
@@ -70,20 +71,24 @@ public static bool won;
         connectedButton.SetActive(false);
     }
 
-    public void Ready()
-    {
+public void Ready()
+{
         if (!readyButtonPressed) {
                 readyButtonPressed = true;
                 Debug.Log("Player ready and waiting...");
                 readyButton.transform.Find("Text").GetComponent<Text>().text = "Waiting to play...";
+                if (!gamePlayedOnce)
+                {
                 multiplayerClient.Subscribe(new string[] {gameStateTopic, challengeTopic, winnerTopic});
                 multiplayerClient.SendMessage(playerConnectionTopic, "ready");
+                gamePlayedOnce = true;
+                }
         }
-    }
+}
 
     public static void ResetReadyButton()
     {
-            readyButtonPressed = true;
+            readyButtonPressed = false;
             Multiplayer_Controller.readyButton.transform.Find("Text").GetComponent<Text>().text = "Ready";
             readyButton.SetActive(true);
     }
