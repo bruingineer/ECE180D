@@ -159,6 +159,7 @@ public class MultiplayerClient : MQTT_Class {
 	protected override void client_MqttMsgPublishReceived(object sender, MqttMsgPublishEventArgs e) 
 	{
 		string message = System.Text.Encoding.UTF8.GetString(e.Message);
+		Debug.Log(e.Topic);
 		Debug.Log(message);
 		if(e.Topic == Multiplayer_Controller.serverTopic)
 		{
@@ -167,7 +168,7 @@ public class MultiplayerClient : MQTT_Class {
 				Multiplayer_Controller.playerHeader = message + '/';
 				Multiplayer_Controller.playerConnected = true;
 			}
-		} else if (e.Topic == Multiplayer_Controller.gameStateTopic && !started)
+		} else if (e.Topic == Multiplayer_Controller.gameStateTopic && (message == "start") && !started)
 		{
 			Multiplayer_Controller.gameStarted = true;
 			started = true;
