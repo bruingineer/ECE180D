@@ -33,6 +33,7 @@ public abstract class GameState_Base : MonoBehaviour {
     MQTTHelper training_client;
 
     protected virtual void Awake () {
+		Debug.Log("fuck");
         training_client = new MQTTHelper("database");
 		Time.timeScale = 1;
 		instance = this;
@@ -153,6 +154,7 @@ public abstract class GameState_with_Player : GameState_Base {
 
 	protected override void Awake()
 	{
+		base.Awake();
 		InitializeLaneList();
 		SelectedPlayer.resetGameStats();
 		player = (Resources.Load("Prefabs/Player/Player") as GameObject);
@@ -218,7 +220,6 @@ public abstract class GameState_with_Lives : GameState_with_Player {
 			DestroyPlayer();
 		}
 	}
-
 }
 
 

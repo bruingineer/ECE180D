@@ -33,6 +33,7 @@ public class GameState_Multiplayer : GameState_with_Player {
 
 	protected override void Awake()
 	{
+		Debug.Log("yo");
 		base.Awake();
 		gameMode = "multiplayer_game";
 	}
