@@ -80,9 +80,9 @@ public void Ready()
                 if (!gamePlayedOnce)
                 {
                 multiplayerClient.Subscribe(new string[] {gameStateTopic, challengeTopic, winnerTopic});
-                multiplayerClient.SendMessage(playerConnectionTopic, "ready");
                 gamePlayedOnce = true;
                 }
+                multiplayerClient.SendMessage(playerConnectionTopic, "ready");
         }
 }
 
