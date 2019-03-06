@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class GameState_Multiplayer : GameState_with_Player {
-
+	private bool loseHandled = false;
 	protected override void SetUp_Events_Obstacles()
 	{
 		gameObject.AddComponent<Obstacles_Multiplayer>();
@@ -17,7 +17,12 @@ public class GameState_Multiplayer : GameState_with_Player {
 
 	protected override void HandleLose()
 	{
-		
+		if (Multiplayer_Controller.lost && !loseHandled)
+		{
+			loseHandled = true;
+			result.text = "You Lose!";
+			DestroyPlayer();
+		}
 	}
 
 	protected override void GameWon()

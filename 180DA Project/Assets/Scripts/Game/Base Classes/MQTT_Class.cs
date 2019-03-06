@@ -171,6 +171,10 @@ public class MultiplayerClient : MQTT_Class {
 		{
 			Multiplayer_Controller.gameStarted = true;
 			started = true;
+		} else if (e.Topic == Multiplayer_Controller.winnerTopic)
+		{
+			if (message == "loser")
+				Multiplayer_Controller.lost = true;
 		}
 	} 
 

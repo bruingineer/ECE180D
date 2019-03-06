@@ -6,21 +6,22 @@ using UnityEngine.UI;
 public class Multiplayer_Controller : MonoBehaviour {
 
     // Objects
-    public static MultiplayerClient multiplayerClient;
-    public static string serverTopic;
-    public static string playerConnectedTopic = "server/player_connected";
-    public static string wonMessage = "I WON";
-    public static string playerHeader;
-    public static GameObject connectedButton;
-    public static GameObject readyButton;
-    public static bool playerConnected;
-    public static string challengeTopic;
-    public static string gameStateTopic = "game/state";
-    public static string winnerTopic;
-    public static bool gameStarted = false;
-    public static Multiplayer_Controller instance;
-    private bool connectButtonPressed;
-    private bool readyButtonPressed;
+public static MultiplayerClient multiplayerClient;
+public static string serverTopic;
+public static string playerConnectedTopic = "server/player_connected";
+public static string wonMessage = "I WON";
+public static string playerHeader;
+public static GameObject connectedButton;
+public static GameObject readyButton;
+public static bool playerConnected;
+public static string challengeTopic;
+public static string gameStateTopic = "game/state";
+public static string winnerTopic;
+public static bool gameStarted = false;
+public static Multiplayer_Controller instance;
+private bool connectButtonPressed;
+private bool readyButtonPressed;
+public static bool lost = false;
 
     // Use this for initialization
     void Awake () {
@@ -58,7 +59,7 @@ public class Multiplayer_Controller : MonoBehaviour {
     {
         playerConnected = false;
         challengeTopic = playerHeader + "challenge";
-        winnerTopic = playerHeader + "winner";
+        winnerTopic = playerHeader + "winner_notification";
         Debug.Log("Player connected to server...");
         connectedButton.SetActive(false);
     }

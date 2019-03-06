@@ -148,7 +148,7 @@ public abstract class GameState_Base : MonoBehaviour {
 
 public abstract class GameState_with_Player : GameState_Base {
 	
-	
+	public GameObject playerExplosion;
 	protected GameObject player;
 
 	protected override void Awake()
@@ -172,11 +172,24 @@ public abstract class GameState_with_Player : GameState_Base {
 			GameWon();
 	}
 
+	protected void DestroyPlayer()
+	{
+		gamePlaying = false;
+		ParticleSystem explosion = Instantiate(playerExplosion, player.transform.position, Quaternion.identity).GetComponent<ParticleSystem>();
+		Destroy(player.gameObject);
+		PlayClip(gameLostMusic);
+		float explosionDuration = gameLostMusic.length;
+		var main = explosion.main;
+		main.duration = explosionDuration;
+		explosion.Play();
+		StartCoroutine(HandlePostGame(explosionDuration));
+	}
+
 }
 
 public abstract class GameState_with_Lives : GameState_with_Player {
 	protected Player_Main player_Main;
-	public GameObject playerExplosion;
+
 	public List<GameObject> playerIcons;
 
 	protected override void Awake()
@@ -200,18 +213,9 @@ public abstract class GameState_with_Lives : GameState_with_Player {
 	protected override void HandleLose() 
 	{
 		if (player_Main.isDead) {
-			gamePlaying = false;
 			SelectedPlayer.died = true;
 			result.text = "Game Over!";
-			// add for handle lose for multiplayer
-			ParticleSystem explosion = Instantiate(playerExplosion, player.transform.position, Quaternion.identity).GetComponent<ParticleSystem>();
-			Destroy(player.gameObject);
-			PlayClip(gameLostMusic);
-			float explosionDuration = gameLostMusic.length;
-			var main = explosion.main;
-			main.duration = explosionDuration;
-			explosion.Play();
-			StartCoroutine(HandlePostGame(explosionDuration));
+			DestroyPlayer();
 		}
 	}
 
