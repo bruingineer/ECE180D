@@ -6,7 +6,7 @@ public class GameState_Multiplayer : GameState_with_Player {
 	private bool loseHandled = false;
 	protected override void SetUp_Events_Obstacles()
 	{
-		// gameObject.AddComponent<Obstacles_Multiplayer>();
+		gameObject.AddComponent<Obstacles_Multiplayer>();
 		gameObject.AddComponent<PlayerEvents_Multiplayer>();
 	}
 
