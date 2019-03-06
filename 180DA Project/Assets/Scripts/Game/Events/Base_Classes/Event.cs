@@ -82,11 +82,11 @@ public abstract class Event : MonoBehaviour {
 		Starts the event, first resets the variables, resets states for the actual event, then
 		starts the timer to start the event.
 	*/
-	public IEnumerator StartEvent() 
+	public IEnumerator StartEvent(string phrase = null) 
 	{
 		timerStopped = false;
 		eventCorrect = false;
-		SetUpEvent();
+		SetUpEvent(phrase);
 		if (SelectedPlayer.current_difficulty != "easy")
 			StartCoroutine(MakeTextBlink());
 		yield return StartCoroutine(StartTimer());
@@ -100,7 +100,7 @@ public abstract class Event : MonoBehaviour {
 
 	protected abstract void HandleIncorrectEvent();
 	protected abstract IEnumerator MakeTextBlink();
-	protected abstract void SetUpEvent();
+	protected abstract void SetUpEvent(string phrase = null);
 	protected abstract void HandleCorrectEvent();
 	protected abstract void Event_Initializer();
 	protected abstract void Reset();

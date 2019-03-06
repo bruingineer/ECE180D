@@ -189,30 +189,16 @@ public class MultiplayerClient : MQTT_Class {
 	}
 }
 
-[Serializable]
-public abstract class GameMultiplayerClient : MQTT_Class
+public class ObstacleMultiplayerClient : MQTT_Class
 {
-	protected ChallengeInfo challengeInfo;
-	public GameMultiplayerClient(string topic) : base(topic) {}
-
-	protected class ChallengeInfo 
-	{
-		public string challenge;
-		public List<int> data;
-	}
-}
-
-public class ObstacleMultiplayerClient : GameMultiplayerClient
-{
+	protected ObstacleInfo obstacleInfo;
 	public ObstacleMultiplayerClient(string topic) : base(topic) {}
 	protected override void client_MqttMsgPublishReceived(object sender, MqttMsgPublishEventArgs e) 
 	{
 		string message = System.Text.Encoding.UTF8.GetString(e.Message);
-		challengeInfo = JsonUtility.FromJson<ChallengeInfo>(message);
+		obstacleInfo = JsonUtility.FromJson<ObstacleInfo>(message);
 		int index;
-		Debug.Log(challengeInfo.challenge);
-		Debug.Log(challengeInfo.data[0]);
-		switch (challengeInfo.challenge)
+		switch (obstacleInfo.obstacleName)
 		{
 			case "small_lasers":
 				index = 0;
@@ -225,7 +211,51 @@ public class ObstacleMultiplayerClient : GameMultiplayerClient
 				break;
 		}
 		Obstacles_Multiplayer.obstacleIndex = index;
-		Obstacles_Multiplayer.laserPositions = challengeInfo.data;
+		Obstacles_Multiplayer.laserPositions = obstacleInfo.laserPositions;
 		Obstacles_Multiplayer.obstacleReady = true;
 	} 
+
+	protected class ObstacleInfo
+	{
+		public string obstacleName;
+		public List<int> laserPositions;
+	}
 }
+
+public class EventMultiplayerClient : MQTT_Class
+{
+	protected EventInfo eventInfo;
+	public EventMultiplayerClient(string topic) : base(topic) {}
+	protected override void client_MqttMsgPublishReceived(object sender, MqttMsgPublishEventArgs e) 
+	{
+		string message = System.Text.Encoding.UTF8.GetString(e.Message);
+		eventInfo = JsonUtility.FromJson<EventInfo>(message);
+		int index;
+		switch (eventInfo.eventName)
+		{
+			case "gesture":
+				index = 0;
+				break;
+			case "word":
+				index = 1;
+				break;
+			case "trivia":
+				index = 2;
+				break;
+			default:
+				index = -1;
+				break;
+		}
+
+		PlayerEvents_Multiplayer.eventIndex = index;
+		PlayerEvents_Multiplayer.phrase = eventInfo.phrase;
+		PlayerEvents_Multiplayer.eventReady = true;
+	} 
+
+	protected class EventInfo
+	{
+		public string eventName;
+		public string phrase;
+	}
+}
+

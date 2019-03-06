@@ -11,9 +11,9 @@ public class GameState_Scrambler_Minigame : GameState_Event_Minigame
 		gameObject.AddComponent<PlayerEvents_Scrambler_Minigame>().StartEvents();
 	}
 
-	protected override void SetUp()
+	protected override void Awake()
 	{
-		base.SetUp();
+		base.Awake();
 		gameMode = "unscramble_training";
 	}
 }

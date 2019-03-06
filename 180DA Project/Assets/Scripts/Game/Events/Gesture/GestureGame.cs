@@ -87,10 +87,9 @@ public class GestureGame : Event {
 
 	// This function is overriden from the Event base class,
 	// and is used to set up the event each time it is chosen
-	protected override void SetUpEvent()
+	protected override void SetUpEvent(string phrase = null)
 	{
-		// choose the gesture from the gestures list
-		curGesture = gestures[UnityEngine.Random.Range(0, gestures.Count)];
+		curGesture = phrase != null ? phrase : gestures[UnityEngine.Random.Range(0, gestures.Count)];
 		gestureText.text = curGesture.ToUpper();
 		Msg.text = "Do This:";
 		// tell OpenPose to start looking for this gesture

@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerEvents_MainGame : PlayerEvents {
 
 	protected Event gestureGame, scramblerGame, triviaGame;
-	public override void Awake()
+	protected override void Awake()
 	{
 		gestureGame = gameObject.AddComponent<GestureGame>();
 		scramblerGame = gameObject.AddComponent<WordScramble>();

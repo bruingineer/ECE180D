@@ -15,10 +15,10 @@ public class GameState_LaserMiniGame : GameState_with_Lives
 		SetUpButtons();
 	}
 
-	protected override void SetUp()
+	protected override void Awake()
 	{
 		gameMode = "laser_training";
-		base.SetUp();
+		base.Awake();
 	}
 
 }

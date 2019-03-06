@@ -10,9 +10,9 @@ public class GameState_Trivia_MiniGame : GameState_Event_Minigame {
 		gameObject.AddComponent<PlayerEvents_Trivia_Minigame>().StartEvents();
 	}
 
-	protected override void SetUp()
+	protected override void Awake()
 	{
-		base.SetUp();
+		base.Awake();
 		gameMode = "trivia_training";
 	}
 }

@@ -10,9 +10,9 @@ public class GameState_GestureMinigame : GameState_Event_Minigame {
 		gameObject.AddComponent<PlayerEvents_Gesture_Minigame>().StartEvents();
 	}
 
-	protected override void SetUp()
+	protected override void Awake()
 	{
-		base.SetUp();
+		base.Awake();
 		gameMode = "gesture_training";
 	}
 }

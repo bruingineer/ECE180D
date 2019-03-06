@@ -42,9 +42,12 @@ public class Trivia : Speech {
         Debug.Log("curTime: " + Event.curTime);
 	}
 
-	protected override void SetUpEvent(){
+	protected override void SetUpEvent(string phrase = null){
 		Debug.Log("Starting trivia");
-		SpeechList.getQuestion(ref ques, ref ans);
+		if (phrase != null)
+			SpeechList.getQuestionNumber(ref ques, ref ans, Int16.Parse(phrase));
+		else
+			SpeechList.getQuestion(ref ques, ref ans);
 		Debug.Log("Question: " + ques);
 		Debug.Log("Answer: " + ans);
         Debug.Log(SelectedPlayer.current_difficulty);

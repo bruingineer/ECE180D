@@ -54,8 +54,9 @@ public class SpeechList : MonoBehaviour
 
     public static int ListSize = WordList_.Count();
 
-    public static string getWord(){
-        return WordList_[Random.Range(0,ListSize)];
+    public static string getWord(int wordIndex = -1){
+        int index = wordIndex == -1 ? Random.Range(0,ListSize) : wordIndex;
+        return WordList_[index];
     }
 
     public static int size = triviaDictionay.Count; 

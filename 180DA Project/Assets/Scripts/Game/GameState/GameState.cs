@@ -32,7 +32,7 @@ public abstract class GameState_Base : MonoBehaviour {
     //MQTT Client to update db when training completed
     MQTTHelper training_client;
 
-    void Awake () {
+    protected virtual void Awake () {
         training_client = new MQTTHelper("database");
 		Time.timeScale = 1;
 		instance = this;
@@ -48,7 +48,6 @@ public abstract class GameState_Base : MonoBehaviour {
 		menu = Instantiate((Resources.Load("Prefabs/WorldSpace/Menu") as GameObject), canvas.transform).GetComponent<Button>();
 		menu.onClick.AddListener(LoadGameMenu);
 		DisableButtons();
-		SetUp();
 	}
 
 	private IEnumerator StartGameCoroutine()
@@ -91,7 +90,7 @@ public abstract class GameState_Base : MonoBehaviour {
 				countdownText.text = "Start!";
           	yield return null;
       	}
-		HandleCountdown();
+		Destroy(countdown);
 		gameMusic.Play();
 	}
 
@@ -119,11 +118,6 @@ public abstract class GameState_Base : MonoBehaviour {
 		menu.gameObject.SetActive(true);
 	}
 
-	protected virtual void HandleCountdown()
-	{
-		Destroy(countdown);
-	}
-
 	public static void DisableButtons()
 	{
 		retry.gameObject.SetActive(false);
@@ -136,7 +130,7 @@ public abstract class GameState_Base : MonoBehaviour {
 		HandlePostGameScene();
 	}
 
-	protected void GameWon()
+	protected virtual void GameWon()
 	{
 		gamePlaying = false;
 		result.text = "You win!";
@@ -145,7 +139,6 @@ public abstract class GameState_Base : MonoBehaviour {
 		StartCoroutine(HandlePostGame(gameWonMusic.length));
 	}
 
-	protected abstract void SetUp();
 	protected abstract void SetUp_Events_Obstacles();
 	protected abstract void HandlePostGameScene();
 	protected abstract void HandleWin();
@@ -158,7 +151,7 @@ public abstract class GameState_with_Player : GameState_Base {
 	
 	protected GameObject player;
 
-	protected override void SetUp()
+	protected override void Awake()
 	{
 		InitializeLaneList();
 		SelectedPlayer.resetGameStats();
@@ -186,16 +179,15 @@ public abstract class GameState_with_Lives : GameState_with_Player {
 	public GameObject playerExplosion;
 	public List<GameObject> playerIcons;
 
-	protected override void SetUp()
+	protected override void Awake()
 	{
-		base.SetUp();
+		base.Awake();
 		player_Main = player.AddComponent<Player_Main>();
 		StartGame();
 	}
 
 	public void RemoveLife(int curLives)
 	{
-		Debug.Log(curLives);
 		playerIcons[curLives - 1].SetActive(false);
 		ChangePitch(curLives);
 	}
@@ -230,7 +222,7 @@ public abstract class GameState_Event_Minigame : GameState_Base {
 	private int numCorrect = 5;
 	public static int curCorrect;
 
-	protected override void SetUp()
+	protected override void Awake()
 	{
 		curCorrect = 0;
 		StartGame();

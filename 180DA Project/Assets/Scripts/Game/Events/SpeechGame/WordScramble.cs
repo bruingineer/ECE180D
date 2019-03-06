@@ -42,10 +42,13 @@ public class WordScramble : Speech {
         Answer.text = "";
     }
 
-	protected override void SetUpEvent(){       
+	protected override void SetUpEvent(string phrase = null){       
 		Debug.Log("Starting Scramble");
 		string w = "";
 		w = SpeechList.getWord();
+		if (phrase != null)
+			w = phrase;
+		
 		WDisplay.SetWordDisplay(w);
 		WDisplay.SetFirstLetterClue();
 		Debug.Log(w);

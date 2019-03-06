@@ -17,9 +17,9 @@ public class GameState_MainGame : GameState_with_Lives {
 		LoadStatsMenu();
 	}
 
-	protected override void SetUp()
+	protected override void Awake()
 	{
-		base.SetUp();
+		base.Awake();
 		gameMode = "main_game";
 		player_MainGame = player.AddComponent<Player_Main>();
 	}

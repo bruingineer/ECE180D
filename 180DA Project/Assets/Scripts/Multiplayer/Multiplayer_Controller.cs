@@ -8,7 +8,8 @@ public class Multiplayer_Controller : MonoBehaviour {
     // Objects
     public static MultiplayerClient multiplayerClient;
     public static string serverTopic;
-    private string playerConnectedTopic = "server/player_connected";
+    public static string playerConnectedTopic = "server/player_connected";
+    public static string wonMessage = "I WON";
     public static string playerHeader;
     public static GameObject connectedButton;
     public static GameObject readyButton;
@@ -75,7 +76,6 @@ public class Multiplayer_Controller : MonoBehaviour {
 
     private void StartGame()
     {
-        Debug.Log("fuck");
         gameStarted = false;
         readyButton.SetActive(false);
         GameState_Base.StartGame();
