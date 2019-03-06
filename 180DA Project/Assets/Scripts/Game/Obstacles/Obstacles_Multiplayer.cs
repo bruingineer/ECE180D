@@ -11,8 +11,9 @@ public class Obstacles_Multiplayer : Obstacles {
 	public static int obstacleIndex;
 	public static List<int> laserPositions;
 
-	protected override void SetUp() 
+	protected override void Awake() 
 	{
+		base.Awake();
 		subscribeTopic = Multiplayer_Controller.playerHeader + "obstacle";
 		publishTopic = Multiplayer_Controller.playerHeader + "request_obstacle";
 		obstacleMultiplayerClient = new ObstacleMultiplayerClient(subscribeTopic);

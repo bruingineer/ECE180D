@@ -16,6 +16,7 @@ public abstract class Event : MonoBehaviour {
 	protected bool timerStopped;
 	protected bool eventCorrect;
 	public static float curTime;
+	private bool handledCleanup = false;
 
 	void Awake()
     {
@@ -96,6 +97,15 @@ public abstract class Event : MonoBehaviour {
 	protected virtual void HandleCorrectAction() 
 	{
 		m_player.MovePlayer();
+	}
+
+	protected virtual void Update()
+	{
+		if (!GameState_Base.gamePlaying && !handledCleanup)
+		{
+			handledCleanup = true;
+			StopCoroutine("StartEvent");
+		}
 	}
 
 	protected abstract void HandleIncorrectEvent();

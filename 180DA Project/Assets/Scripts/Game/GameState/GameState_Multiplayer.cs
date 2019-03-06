@@ -1,10 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
 using UnityEngine;
 
 public class GameState_Multiplayer : GameState_with_Player {
 	private bool loseHandled = false;
 	private bool winHandled = false;
+	private bool gameWonHandled = false;
 	protected override void SetUp_Events_Obstacles()
 	{
 		gameObject.AddComponent<Obstacles_Multiplayer>();
@@ -14,6 +16,13 @@ public class GameState_Multiplayer : GameState_with_Player {
 	protected override void HandlePostGameScene()
 	{
 		SetUpButtons();
+
+	}
+
+	public override void RetryLevel()
+	{
+		DisableButtons();
+		Multiplayer_Controller.ResetReadyButton();
 	}
 
 	protected override void Update()
@@ -38,12 +47,16 @@ public class GameState_Multiplayer : GameState_with_Player {
 
 	protected override void GameWon()
 	{
-	 	Multiplayer_Controller.multiplayerClient.SendMessage(Multiplayer_Controller.playerConnectionTopic, Multiplayer_Controller.wonMessage);
+		if (!gameWonHandled)
+		{
+	 		Multiplayer_Controller.multiplayerClient.SendMessage(Multiplayer_Controller.playerConnectionTopic, Multiplayer_Controller.wonMessage);
+			gameWonHandled = true;
+		}
 	}
 
 	protected override void Awake()
 	{
-		base.Awake();
 		gameMode = "multiplayer_game";
+		base.Awake();
 	}
 }

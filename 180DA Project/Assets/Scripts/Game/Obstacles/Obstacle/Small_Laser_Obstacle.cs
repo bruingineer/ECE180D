@@ -56,7 +56,9 @@ public class Small_Laser_Obstacle : Laser_Obstacle {
 			GameObject prefab = Instantiate(laserPrefab, new Vector3(laserPositions[i] + 0.5f, 
 					start_Y_Position), Quaternion.Euler(0, 0, 90));
 			Small_Laser smallLaser = AddComponentToLaser(prefab).GetComponent<Small_Laser>();
-			smallLaser.MoveLaser(new Vector3(smallLaser.transform.position.x, end_Y_Position), laserTimes);
+			if (smallLaser)
+				smallLaser.MoveLaser(new Vector3(smallLaser.transform.position.x, end_Y_Position), laserTimes);
+				
 			yield return new WaitForSeconds(waitForNextLaser);
 		}
 		yield return null;

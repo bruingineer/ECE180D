@@ -18,12 +18,12 @@ public static bool playerConnected;
 public static string challengeTopic;
 public static string gameStateTopic = "game/state";
 public static string winnerTopic;
-public static bool gameStarted = false;
+public static bool gameStarted;
 public static Multiplayer_Controller instance;
 private bool connectButtonPressed;
-private bool readyButtonPressed;
-public static bool lost = false;
-public static bool won = false;
+public static bool readyButtonPressed;
+public static bool lost;
+public static bool won;
 
     // Use this for initialization
     void Awake () {
@@ -32,6 +32,9 @@ public static bool won = false;
         readyButton = GameObject.Find("Ready Button");
         connectButtonPressed = false;
         readyButtonPressed = false;
+        won = false;
+        lost = false;
+        gameStarted = false;
     }
     
     
@@ -77,6 +80,13 @@ public static bool won = false;
                 multiplayerClient.SendMessage(playerConnectionTopic, "ready");
         }
     }
+
+    public static void ResetReadyButton()
+    {
+            readyButtonPressed = true;
+            Multiplayer_Controller.readyButton.transform.Find("Text").GetComponent<Text>().text = "Ready";
+            readyButton.SetActive(true);
+    }
 
     private void StartGame()
     {

@@ -69,8 +69,9 @@ public class GestureGame : Event {
 	// identified the gesture (subscribe)
 	private string topicCorrectGesture = "gesture_correct";
 
-	void Update()
+	protected override void Update()
 	{
+		base.Update();
 		if (gestureCorrect && !handledCorrect)
 			HandleCorrectEvent();
 	}

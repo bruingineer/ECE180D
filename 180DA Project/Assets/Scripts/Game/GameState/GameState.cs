@@ -25,7 +25,7 @@ public abstract class GameState_Base : MonoBehaviour {
 	protected Canvas canvas;
 	public Text result;
 	public Text countdown;
-	static Button retry, menu;
+	protected static Button retry, menu;
 	public static bool gamePlaying;
 	private static GameState_Base instance;
 
@@ -95,7 +95,7 @@ public abstract class GameState_Base : MonoBehaviour {
 	}
 
 	// add these to a scenemanager static class
-	public void RetryLevel()
+	public virtual void RetryLevel()
 	{
 		SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
 	}
@@ -103,12 +103,12 @@ public abstract class GameState_Base : MonoBehaviour {
 	// change to just one static function and constants for scenes
 	public void LoadGameMenu()
 	{
-		SceneManager.LoadScene("Game Menu");
+		menuScene.ChangeScenefromScript("Game Menu");
 	}
 
 	protected void LoadStatsMenu()
 	{
-		SceneManager.LoadScene("End Game");
+		menuScene.ChangeScenefromScript("End Game");
 	}
 
 	// create function to set up button

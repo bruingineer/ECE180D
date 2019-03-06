@@ -90,8 +90,6 @@ public class Big_Laser_Obstacle : Laser_Obstacle {
 	// add laser prefab component to laser later
 	protected List<GameObject> CreateLasers(List<int> laserPositions)
 	{
-		// reset variable for big laser
-		Big_Laser.playerHit = false;
 		List<GameObject> lasers = new List<GameObject>();
 		int list_count = laserPositions.Count;
 		for(int i = 0; i < list_count; i++)
@@ -126,7 +124,8 @@ public class Big_Laser_Obstacle : Laser_Obstacle {
 		int laser_count = lasers.Count;
 		for (int i = 0; i < laser_count; i++)
 		{
-			lasers[i].GetComponent<Big_Laser>().MoveLaser(new Vector3(lasers[i].transform.position.x, 0), laserTimes);
+			if(lasers[i])
+				lasers[i].GetComponent<Big_Laser>().MoveLaser(new Vector3(lasers[i].transform.position.x, 0), laserTimes);
 		}
 	}
 

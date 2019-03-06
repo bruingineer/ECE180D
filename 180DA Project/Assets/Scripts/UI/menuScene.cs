@@ -9,6 +9,11 @@ public class menuScene : MonoBehaviour {
     {
         SceneManager.LoadScene(sceneName);
     }
+
+    public static void ChangeScenefromScript(string sceneName)
+    {
+        SceneManager.LoadScene(sceneName);
+    }
     
 }
 

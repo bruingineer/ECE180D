@@ -8,13 +8,14 @@ public class Big_Laser : Laser {
 	private LineRenderer lineRenderer;
 	private bool laserStart = false;
 	// States
-	static public bool playerHit = false;
+	static public bool playerHit;
 
 	void Awake () {
 		// grabs the line render component from the beam child
 		lineRenderer = transform.GetComponent<LineRenderer>();
 		// sets the initial position to wherever the beam was created 
 		lineRenderer.SetPosition(0, transform.position);
+		playerHit = false;
 	}
 	
 	void Update () {
