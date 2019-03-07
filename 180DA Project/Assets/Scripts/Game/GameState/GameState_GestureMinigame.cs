@@ -7,7 +7,8 @@ public class GameState_GestureMinigame : GameState_Event_Minigame {
 	 // add title with selected difficulty
 	protected override void SetUp_Events_Obstacles()
 	{
-		gameObject.AddComponent<PlayerEvents_Gesture_Minigame>().StartEvents();
+		challenges.Add(gameObject.AddComponent<PlayerEvents_Gesture_Minigame>());
+		base.SetUp_Events_Obstacles();
 	}
 
 	protected override void Awake()

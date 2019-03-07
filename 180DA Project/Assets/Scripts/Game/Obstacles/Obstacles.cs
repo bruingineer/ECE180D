@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class Obstacles : MonoBehaviour {
+public abstract class Obstacles : Challenge {
 
 	protected Laser_Obstacle bigLaserObstacle, smallLaserObstacle;
 	protected List<Laser_Obstacle> obstacles;
 	private bool handledCleanup = false;
 
-	protected virtual void Awake()
+	protected override void Awake()
 	{
 		bigLaserObstacle = gameObject.AddComponent<Big_Laser_Obstacle>();
 		smallLaserObstacle = gameObject.AddComponent<Small_Laser_Obstacle>();
@@ -18,7 +18,7 @@ public abstract class Obstacles : MonoBehaviour {
 	
 	protected abstract IEnumerator HandleObstacles();
 
-	public void StartObstacles()
+	public override void StartChallenge()
 	{
 		StartCoroutine(HandleObstacles());
 	}

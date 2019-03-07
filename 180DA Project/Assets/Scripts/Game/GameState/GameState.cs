@@ -28,11 +28,13 @@ public abstract class GameState_Base : MonoBehaviour {
 	protected static Button retry, menu;
 	public static bool gamePlaying;
 	private static GameState_Base instance;
+	protected List<Challenge> challenges;
 
     //MQTT Client to update db when training completed
     MQTTHelper training_client;
 
     protected virtual void Awake () {
+		challenges = new List<Challenge>();
         training_client = new MQTTHelper("database");
 		Time.timeScale = 1;
 		instance = this;
@@ -54,6 +56,7 @@ public abstract class GameState_Base : MonoBehaviour {
 	{
 		yield return StartCoroutine(GameTimer());
 		gameMusic.Play();
+		yield return new WaitForSeconds(0.3f);
 		gamePlaying = true;
 		SetUp_Events_Obstacles();
 	}
@@ -91,7 +94,6 @@ public abstract class GameState_Base : MonoBehaviour {
           	yield return null;
       	}
 		Destroy(countdown);
-		gameMusic.Play();
 	}
 
 	// add these to a scenemanager static class
@@ -132,6 +134,8 @@ public abstract class GameState_Base : MonoBehaviour {
 
 	protected virtual void GameWon()
 	{
+		gameMusic.Stop();
+		gameMusic.Play();
 		gamePlaying = false;
 		result.text = "You win!";
 		PlayClip(gameWonMusic);
@@ -139,7 +143,16 @@ public abstract class GameState_Base : MonoBehaviour {
 		StartCoroutine(HandlePostGame(gameWonMusic.length));
 	}
 
-	protected abstract void SetUp_Events_Obstacles();
+	protected void StartChallenges()
+	{
+		foreach (Challenge challenge in challenges)
+			challenge.StartChallenge();
+	}
+
+	protected virtual void SetUp_Events_Obstacles()
+	{
+		StartChallenges();
+	}
 	protected abstract void HandlePostGameScene();
 	protected abstract void HandleWin();
 	protected virtual void HandleLose() {}
@@ -175,6 +188,8 @@ public abstract class GameState_with_Player : GameState_Base {
 
 	protected void DestroyPlayer()
 	{
+		gameMusic.Stop();
+		gameMusic.Play();
 		gamePlaying = false;
 		ParticleSystem explosion = Instantiate(playerExplosion, player.transform.position, Quaternion.identity).GetComponent<ParticleSystem>();
 		Destroy(player.gameObject);

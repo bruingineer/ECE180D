@@ -45,10 +45,7 @@ public class Trivia : Speech {
 	protected override void SetUpEvent(string phrase = null){
 		Debug.Log("Starting trivia");
 		Debug.Log(phrase);
-		if (phrase != null)
-			SpeechList.getQuestionNumber(ref ques, ref ans, Int32.Parse(phrase));
-		else
-			SpeechList.getQuestion(ref ques, ref ans);
+		SpeechList.getQuestionNumber(ref ques, ref ans, phrase != null ? Int32.Parse(phrase) : -1);
 		Debug.Log("Question: " + ques);
 		Debug.Log("Answer: " + ans);
         Debug.Log(SelectedPlayer.current_difficulty);

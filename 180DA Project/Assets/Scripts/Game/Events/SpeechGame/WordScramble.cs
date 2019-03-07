@@ -45,7 +45,8 @@ public class WordScramble : Speech {
 	protected override void SetUpEvent(string phrase = null){       
 		Debug.Log("Starting Scramble");
 		string w = "";
-		w = SpeechList.getWord(Int32.Parse(phrase));
+		
+		w = SpeechList.getWord(phrase != null ? Int32.Parse(phrase) : -1);
 		
 		WDisplay.SetWordDisplay(w);
 		WDisplay.SetFirstLetterClue();

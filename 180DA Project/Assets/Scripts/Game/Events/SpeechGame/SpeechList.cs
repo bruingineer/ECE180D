@@ -54,7 +54,7 @@ public class SpeechList : MonoBehaviour
 
     public static int ListSize = WordList_.Count();
 
-    public static string getWord(int wordIndex = -1){
+    public static string getWord(int wordIndex){
         int index = wordIndex == -1 ? Random.Range(0,ListSize) : wordIndex;
         return WordList_[index];
     }

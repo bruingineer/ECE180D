@@ -5,11 +5,11 @@ using UnityEngine;
 public class GameState_MainGame : GameState_with_Lives {
 
 	protected Player_Main player_MainGame;
-
 	protected override void SetUp_Events_Obstacles()
 	{
-		gameObject.AddComponent<Obstacles_Main>().StartObstacles();
-		gameObject.AddComponent<PlayerEvents_MainGame>().StartEvents();
+		challenges.Add(gameObject.AddComponent<Obstacles_Main>());
+		challenges.Add(gameObject.AddComponent<PlayerEvents_MainGame>());
+		base.SetUp_Events_Obstacles();
 	}
 
 	protected override void HandlePostGameScene()

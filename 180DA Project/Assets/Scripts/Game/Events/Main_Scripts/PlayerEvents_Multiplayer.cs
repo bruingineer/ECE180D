@@ -4,9 +4,6 @@ using UnityEngine;
 
 public class PlayerEvents_Multiplayer : PlayerEvents {
 	private string subscribeTopic; 
-	EventMultiplayerClient playerEventMultiplayerClient;
-	private string publishTopic;
-	private bool messageOut;
 	public static bool eventReady;
 	public static int eventIndex;
 	public static string phrase;
@@ -14,10 +11,10 @@ public class PlayerEvents_Multiplayer : PlayerEvents {
 
 	protected override void Awake() 
 	{
+	
 		subscribeTopic = Multiplayer_Controller.playerHeader + "event";
 		publishTopic = Multiplayer_Controller.playerHeader + "request_event";
-		playerEventMultiplayerClient = new EventMultiplayerClient(subscribeTopic);
-		messageOut = false;
+		multiplayerClient = new EventMultiplayerClient(subscribeTopic);
 		eventReady = false;
 		gestureGame = gameObject.AddComponent<GestureGame>();
 		scramblerGame = gameObject.AddComponent<WordScramble>();
@@ -26,21 +23,17 @@ public class PlayerEvents_Multiplayer : PlayerEvents {
 	}
 
 	void Update () {
-		if (GameState_Base.gamePlaying)
-		{
-			if (!messageOut)
+		HandleMultiplayer();
+	}
+
+	protected override void HandleChallengeReady()
+	{
+		if (eventReady)
 			{
-				messageOut = true;
-				playerEventMultiplayerClient.SendMessage(publishTopic, "requested");
-				Debug.Log("Sending message to server!");
-			}
-			if (eventReady)
-			{
+				Debug.Log("Starting Obstacle...");
 				eventReady = false;
-				Debug.Log("Starting Event...");
-				StartEvents();
+				StartChallenge();
 			}
-		}
 	}
 
 	protected override IEnumerator HandleEvents()

@@ -201,6 +201,7 @@ public class MultiplayerClient : MQTT_Class {
 	}
 }
 
+
 public class ObstacleMultiplayerClient : MQTT_Class
 {
 	protected ObstacleInfo obstacleInfo;

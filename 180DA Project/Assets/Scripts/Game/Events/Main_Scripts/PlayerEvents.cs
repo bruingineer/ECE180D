@@ -2,15 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class PlayerEvents : Moving_Object {
+public abstract class PlayerEvents : Challenge {
 
 	private float delay = 2f;
 
 	protected List<Event> playerEvents;
 
-	protected abstract void Awake();
-
-	public void StartEvents()
+	public override void StartChallenge()
 	{
 		StartCoroutine(HandleEvents());
 	}

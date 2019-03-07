@@ -8,7 +8,8 @@ public class GameState_Scrambler_Minigame : GameState_Event_Minigame
 	protected override void SetUp_Events_Obstacles()
 	{
 		// change to pass in gameobject and add to that component
-		gameObject.AddComponent<PlayerEvents_Scrambler_Minigame>().StartEvents();
+		challenges.Add(gameObject.AddComponent<PlayerEvents_Scrambler_Minigame>());
+		base.SetUp_Events_Obstacles();
 	}
 
 	protected override void Awake()

@@ -16,7 +16,6 @@ public class GameState_Multiplayer : GameState_with_Player {
 	protected override void HandlePostGameScene()
 	{
 		SetUpButtons();
-
 	}
 
 	public override void RetryLevel()
