@@ -240,13 +240,13 @@ public abstract class GameState_with_Lives : GameState_with_Player
 
     protected override void HandleLose()
     {
-        // change to game over
-        // if (player)
-        // {
-        //     SelectedPlayer.died = true;
-        //     result.text = "Game Over!";
-        //     DestroyPlayer();
-        // }
+
+        if (player.GetComponent<Player_Main>().isDead)
+        {
+            SelectedPlayer.died = true;
+            result.text = "Game Over!";
+            DestroyPlayer();
+        }
     }
 
     protected override void AddComponentToPlayer()
