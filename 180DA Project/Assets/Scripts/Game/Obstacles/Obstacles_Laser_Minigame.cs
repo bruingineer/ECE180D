@@ -18,7 +18,7 @@ public class Obstacles_Laser_Minigame : Obstacles_Main {
 
 	protected override void Handle_Minigame()
 	{
-		if (!laserHit)
+		if (!laserHit && GameState_Base.gamePlaying)
 			m_player.MovePlayer();
 		laserHit = false;
 	}

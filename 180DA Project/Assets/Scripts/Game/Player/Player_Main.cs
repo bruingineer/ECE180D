@@ -5,20 +5,6 @@ using UnityEngine;
 public class Player_Main : Player {
 	public bool isDead = false;
 	private int playerLives = 3;
-	
-	
-	protected override IEnumerator PlayerHitRoutine() 
-	{
-		isRecovering = true;
-		yield return HandlePlayerHit();
-		isRecovering = false;
-	}
-
-	public override void PlayerHit()
-	{
-		if(!isRecovering && GameState_Base.gamePlaying)
-			StartCoroutine(PlayerHitRoutine());
-	}
 
 	protected override IEnumerator HandlePlayerHit()
 	{

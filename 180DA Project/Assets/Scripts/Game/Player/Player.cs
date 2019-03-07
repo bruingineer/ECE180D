@@ -4,7 +4,7 @@ using UnityEngine;
 
 public abstract class Player : Moving_Object {
 	// Player Time Parameters
-	private float movementTimeY = .2f;
+	protected float movementTimeY = .2f;
 	private float secondsToMoveX = 0.1f;
 	private float recoveryStepTime = 0.5f;
 	// must be odd
@@ -84,11 +84,6 @@ public abstract class Player : Moving_Object {
 			}
     } 
 
-	protected abstract IEnumerator PlayerHitRoutine();
-
-	// function used by lasers when it hits the player
-	public abstract void PlayerHit();
-
 	// used to change the color when the player is in recovery mode
 	public IEnumerator ChangeColor()
 	{
@@ -111,6 +106,19 @@ public abstract class Player : Moving_Object {
 	public void MovePlayer()
 	{
 		m_playerMQTT_Y.PlayerMoved = true;
+	}
+
+	protected IEnumerator PlayerHitRoutine()
+	{
+		isRecovering = true;
+		yield return HandlePlayerHit();
+		isRecovering = false;
+	}
+
+	public void PlayerHit()
+	{
+		if(!isRecovering && GameState_Base.gamePlaying)
+			StartCoroutine(PlayerHitRoutine());
 	}
 
 	protected abstract IEnumerator HandlePlayerHit();
