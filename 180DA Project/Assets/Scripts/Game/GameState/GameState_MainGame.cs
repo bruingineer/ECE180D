@@ -19,9 +19,10 @@ public class GameState_MainGame : GameState_with_Lives {
 
 	protected override void Awake()
 	{
-		base.Awake();
 		gameMode = "main_game";
+		base.Awake();
 		player_MainGame = player.AddComponent<Player_Main>();
+		
 	}
 
 }

@@ -13,7 +13,7 @@ public class GameState_GestureMinigame : GameState_Event_Minigame {
 
 	protected override void Awake()
 	{
-		base.Awake();
 		gameMode = "gesture_training";
+		base.Awake();
 	}
 }

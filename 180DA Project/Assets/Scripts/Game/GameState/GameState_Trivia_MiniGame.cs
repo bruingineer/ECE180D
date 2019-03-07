@@ -13,7 +13,7 @@ public class GameState_Trivia_MiniGame : GameState_Event_Minigame {
 
 	protected override void Awake()
 	{
-		base.Awake();
 		gameMode = "trivia_training";
+		base.Awake();
 	}
 }

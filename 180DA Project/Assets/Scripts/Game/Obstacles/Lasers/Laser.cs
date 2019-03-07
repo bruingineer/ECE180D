@@ -13,13 +13,6 @@ public abstract class Laser : Moving_Object {
 		StartCoroutine(MoveLaserToPosition(endPosition, laserTimes));
 	}
 
-	// Destroys GameObject if the game is not playing anymore
-	protected void CheckGamePlaying()
-	{
-		if (!GameState_Base.gamePlaying)
-			Destroy(gameObject);
-	}
-
 	protected virtual void Handle_Minigame() {}
 
 	protected void PlayerHit(Transform hit)

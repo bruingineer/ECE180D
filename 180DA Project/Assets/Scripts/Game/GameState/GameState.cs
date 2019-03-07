@@ -9,252 +9,272 @@ using uPLibrary.Networking.M2Mqtt.Utility;
 using uPLibrary.Networking.M2Mqtt.Exceptions;
 using TMPro;
 
-public abstract class GameState_Base : MonoBehaviour {
+public abstract class GameState_Base : MonoBehaviour
+{
 
-	// Variables
-	public static int numLanes;
-	public static int end_row;
-	public static List<int> laneNums;
-	public static AudioSource gameMusic;
-	protected AudioClip gameLostMusic;
-	protected AudioClip gameWonMusic;
-	private const string SoundsPath = "Sounds/Game Music/";
-	public static string gameMode;
+    // Variables
+    public static int end_row;
+    public static AudioSource gameMusic;
+    protected AudioClip gameLostMusic;
+    protected AudioClip gameWonMusic;
+    private const string SoundsPath = "Sounds/Game Music/";
+    public static string gameMode;
 
-	// Objects
-	protected Canvas canvas;
-	public Text result;
-	public Text countdown;
-	protected static Button retry, menu;
-	public static bool gamePlaying;
-	private static GameState_Base instance;
-	protected List<Challenge> challenges;
+    // Objects
+    protected Canvas canvas;
+    public Text result;
+    public Text countdown;
+    protected static Button retry, menu;
+    public static bool gamePlaying;
+    private static GameState_Base instance;
+    protected List<Challenge> challenges;
 
     //MQTT Client to update db when training completed
     MQTTHelper training_client;
+    protected int countdownTime = 4;
 
-    protected virtual void Awake () {
-		challenges = new List<Challenge>();
+    protected virtual void Awake()
+    {
+        challenges = new List<Challenge>();
         training_client = new MQTTHelper("database");
-		Time.timeScale = 1;
-		instance = this;
-		numLanes = 10;
-		end_row = 14;
-		gameLostMusic = Resources.Load<AudioClip>(SoundsPath + "Game_Lost");
-		gameWonMusic = Resources.Load<AudioClip>(SoundsPath + "Game_Won");
-		gamePlaying = false;
-		canvas = GameObject.Find("Canvas").GetComponent<Canvas>();
-		gameMusic = GetComponent<AudioSource>();
-		retry = Instantiate((Resources.Load("Prefabs/WorldSpace/Retry") as GameObject), canvas.transform).GetComponent<Button>();
-		retry.onClick.AddListener(RetryLevel);
-		menu = Instantiate((Resources.Load("Prefabs/WorldSpace/Menu") as GameObject), canvas.transform).GetComponent<Button>();
-		menu.onClick.AddListener(LoadGameMenu);
-		DisableButtons();
-	}
-
-	private IEnumerator StartGameCoroutine()
-	{
-		yield return StartCoroutine(GameTimer());
-		gameMusic.Play();
-		yield return new WaitForSeconds(0.3f);
-		gamePlaying = true;
+        Time.timeScale = 1;
+        instance = this;
+        end_row = 14;
+        gameLostMusic = Resources.Load<AudioClip>(SoundsPath + "Game_Lost");
+        gameWonMusic = Resources.Load<AudioClip>(SoundsPath + "Game_Won");
+        gamePlaying = false;
+        canvas = GameObject.Find("Canvas").GetComponent<Canvas>();
+        gameMusic = GetComponent<AudioSource>();
+        retry = Instantiate((Resources.Load("Prefabs/WorldSpace/Retry") as GameObject), canvas.transform).GetComponent<Button>();
+        retry.onClick.AddListener(RetryLevel);
+        menu = Instantiate((Resources.Load("Prefabs/WorldSpace/Menu") as GameObject), canvas.transform).GetComponent<Button>();
+        menu.onClick.AddListener(LoadGameMenu);
+        DisableButtons();
 		SetUp_Events_Obstacles();
-	}
+    }
 
-	protected virtual void Update()
-	{
-		if (gamePlaying)
-		{
-			HandleWin();
-			HandleLose();
-		}
-	}
+    private IEnumerator StartGameCoroutine()
+    {
+        yield return StartCoroutine(GameTimer());
+        gameMusic.Play();
+        yield return new WaitForSeconds(0.1f);
+        gamePlaying = true;
+        StartChallenges();
+    }
 
-	public static void StartGame()
-	{
-		instance.StartCoroutine(instance.StartGameCoroutine());
-	}
+    protected virtual void Update()
+    {
+        if (gamePlaying)
+        {
+            HandleWin();
+            HandleLose();
+        }
+    }
 
-	public static void PlayClip(AudioClip clip) {
-		gameMusic.PlayOneShot(clip);
-	}
+    public static void StartGame()
+    {
+        instance.StartCoroutine(instance.StartGameCoroutine());
+    }
 
-	public IEnumerator GameTimer() 
-	{
-		Text countdownText = countdown.GetComponent<Text>();
-		float duration = 4f;
-      	while(duration >= 0)
-      	{
-			duration -= Time.deltaTime;
-			int integer = (int)duration;
-			if (integer >= 1)
-				countdownText.text = integer.ToString();
-			else
-				countdownText.text = "Start!";
-          	yield return null;
-      	}
-		Destroy(countdown);
-	}
+    public static void PlayClip(AudioClip clip)
+    {
+        gameMusic.PlayOneShot(clip);
+    }
 
-	// add these to a scenemanager static class
-	public virtual void RetryLevel()
-	{
-		SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-	}
+    public IEnumerator GameTimer()
+    {
+        countdown.gameObject.SetActive(true);
+        Text countdownText = countdown.GetComponent<Text>();
+        float duration = countdownTime;
+        while (duration >= 0)
+        {
+            duration -= Time.deltaTime;
+            int integer = (int)duration;
+            if (integer >= 1)
+                countdownText.text = integer.ToString();
+            else
+                countdownText.text = "Start!";
+            yield return null;
+        }
+        HandleCountdown();
+    }
 
-	// change to just one static function and constants for scenes
-	public void LoadGameMenu()
-	{
-		menuScene.ChangeScenefromScript("Game Menu");
-	}
+    protected virtual void HandleCountdown()
+    {
+        Destroy(countdown);
+    }
 
-	protected void LoadStatsMenu()
-	{
-		menuScene.ChangeScenefromScript("End Game");
-	}
+    // add these to a scenemanager static class
+    public virtual void RetryLevel()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
 
-	// create function to set up button
-	public static void SetUpButtons()
-	{
-		retry.gameObject.SetActive(true);
-		menu.gameObject.SetActive(true);
-	}
+    // change to just one static function and constants for scenes
+    public void LoadGameMenu()
+    {
+        menuScene.ChangeScenefromScript("Game Menu");
+    }
 
-	public static void DisableButtons()
-	{
-		retry.gameObject.SetActive(false);
-		menu.gameObject.SetActive(false);
-	}
+    protected void LoadStatsMenu()
+    {
+        menuScene.ChangeScenefromScript("End Game");
+    }
 
-	protected IEnumerator HandlePostGame(float length)
-	{
-		yield return new WaitForSeconds(length);
-		HandlePostGameScene();
-	}
+    // create function to set up button
+    public static void SetUpButtons()
+    {
+        retry.gameObject.SetActive(true);
+        menu.gameObject.SetActive(true);
+    }
 
-	protected virtual void GameWon()
-	{
-		gameMusic.Stop();
-		gameMusic.Play();
-		gamePlaying = false;
-		result.text = "You win!";
-		PlayClip(gameWonMusic);
+    public static void DisableButtons()
+    {
+        retry.gameObject.SetActive(false);
+        menu.gameObject.SetActive(false);
+    }
+
+    protected IEnumerator HandlePostGame(float length)
+    {
+        yield return new WaitForSeconds(length);
+        HandlePostGameScene();
+    }
+
+    protected virtual void GameWon()
+    {
+        gamePlaying = false;
+        result.text = "You win!";
+        PlayClip(gameWonMusic);
         training_client.CheckIfTrainingComplete(gameMode);
-		StartCoroutine(HandlePostGame(gameWonMusic.length));
-	}
+        StartCoroutine(HandlePostGame(gameWonMusic.length));
+    }
 
-	protected void StartChallenges()
+    protected void StartChallenges()
+    {
+        foreach (Challenge challenge in challenges)
+            challenge.StartChallenge();
+    }
+
+    protected virtual void SetUp_Events_Obstacles()
 	{
-		foreach (Challenge challenge in challenges)
-			challenge.StartChallenge();
-	}
-
-	protected virtual void SetUp_Events_Obstacles()
-	{
-		StartChallenges();
-	}
-	protected abstract void HandlePostGameScene();
-	protected abstract void HandleWin();
-	protected virtual void HandleLose() {}
-
-}
-
-public abstract class GameState_with_Player : GameState_Base {
-	
-	public GameObject playerExplosion;
-	protected GameObject player;
-
-	protected override void Awake()
-	{
-		base.Awake();
-		InitializeLaneList();
-		SelectedPlayer.resetGameStats();
-		player = (Resources.Load("Prefabs/Player/Player") as GameObject);
-		player = Instantiate(player, new Vector3(numLanes / 2 + 0.5f, 0.5f), Quaternion.identity);
-	}
-
-	private void InitializeLaneList() {
-		laneNums = new List<int>();
-		for (int i = 0; i < numLanes; i++)
-			laneNums.Add(i);
-	}
-
-
-	protected override void HandleWin() 
-	{
-		if (player.transform.position.y == (end_row - 0.5f))
-			GameWon();
-	}
-
-	protected void DestroyPlayer()
-	{
-		gameMusic.Stop();
-		gameMusic.Play();
-		gamePlaying = false;
-		ParticleSystem explosion = Instantiate(playerExplosion, player.transform.position, Quaternion.identity).GetComponent<ParticleSystem>();
-		Destroy(player.gameObject);
-		PlayClip(gameLostMusic);
-		float explosionDuration = gameLostMusic.length;
-		var main = explosion.main;
-		main.duration = explosionDuration;
-		explosion.Play();
-		StartCoroutine(HandlePostGame(explosionDuration));
-	}
-
-}
-
-public abstract class GameState_with_Lives : GameState_with_Player {
-	protected Player_Main player_Main;
-
-	public List<GameObject> playerIcons;
-
-	protected override void Awake()
-	{
-		base.Awake();
-		player_Main = player.AddComponent<Player_Main>();
 		StartGame();
 	}
+    protected abstract void HandlePostGameScene();
+    protected abstract void HandleWin();
+    protected virtual void HandleLose() { }
 
-	public void RemoveLife(int curLives)
-	{
-		playerIcons[curLives - 1].SetActive(false);
-		ChangePitch(curLives);
-	}
+}
 
-	public void ChangePitch(int playerLives)
-	{
-		gameMusic.pitch = playerLives > 1 ? 1 : 1.25f;
-	}
+public abstract class GameState_with_Player : GameState_Base
+{
 
-	protected override void HandleLose() 
-	{
-		if (player_Main.isDead) {
-			SelectedPlayer.died = true;
-			result.text = "Game Over!";
-			DestroyPlayer();
-		}
-	}
+    public GameObject playerExplosion;
+    protected GameObject player;
+    public static List<int> laneNums;
+    public static int numLanes;
+    protected Vector3 playerStartPosition;
+
+    protected override void Awake()
+    {
+        Debug.Log("nice");
+        numLanes = 10;
+        playerStartPosition = new Vector3(numLanes / 2 + 0.5f, 0.5f);
+        InitializeLaneList();
+        SelectedPlayer.resetGameStats();
+        player = (Resources.Load("Prefabs/Player/Player") as GameObject);
+        player = Instantiate(player, playerStartPosition, Quaternion.identity);
+        AddComponentToPlayer();
+        base.Awake();
+    }
+
+    protected abstract void AddComponentToPlayer();
+
+    private void InitializeLaneList()
+    {
+        laneNums = new List<int>();
+        for (int i = 0; i < numLanes; i++)
+            laneNums.Add(i);
+    }
+
+
+    protected override void HandleWin()
+    {
+        if (player.transform.position.y == (end_row - 0.5f))
+            GameWon();
+    }
+
+    protected void DestroyPlayer()
+    {
+        gamePlaying = false;
+        HandlePlayerDestroyed();
+        PlayClip(gameLostMusic);
+        ParticleSystem explosion = Instantiate(playerExplosion, player.transform.position, Quaternion.identity).GetComponent<ParticleSystem>();
+        float explosionDuration = gameLostMusic.length;
+        var main = explosion.main;
+        main.duration = explosionDuration;
+        explosion.Play();
+        StartCoroutine(HandlePostGame(explosionDuration));
+    }
+
+    protected virtual void HandlePlayerDestroyed()
+    {
+        Destroy(gameObject);
+    }
+}
+
+public abstract class GameState_with_Lives : GameState_with_Player
+{
+
+    public List<GameObject> playerIcons;
+
+    public void RemoveLife(int curLives)
+    {
+        playerIcons[curLives - 1].SetActive(false);
+        ChangePitch(curLives);
+    }
+
+    public void ChangePitch(int playerLives)
+    {
+        gameMusic.pitch = playerLives > 1 ? 1 : 1.25f;
+    }
+
+    protected override void HandleLose()
+    {
+
+        if (player.GetComponent<Player_Main>().isDead)
+        {
+            SelectedPlayer.died = true;
+            result.text = "Game Over!";
+            DestroyPlayer();
+        }
+    }
+
+    protected override void AddComponentToPlayer()
+    {
+        player.AddComponent<Player_Main>();
+    }
 }
 
 
-public abstract class GameState_Event_Minigame : GameState_Base {
-	private int numCorrect = 5;
-	public static int curCorrect;
+public abstract class GameState_Event_Minigame : GameState_Base
+{
+    private int numCorrect = 5;
+    public static int curCorrect;
 
-	protected override void Awake()
-	{
-		curCorrect = 0;
-		StartGame();
-	}
+    protected override void Awake()
+    {
+        curCorrect = 0;
+        base.Awake();
+    }
 
-	protected override void HandleWin()
-	{
-		if(curCorrect == numCorrect)
-			GameWon();
-	}
+    protected override void HandleWin()
+    {
+        if (curCorrect == numCorrect)
+            GameWon();
+    }
 
-	protected override void HandlePostGameScene()
-	{
-		SetUpButtons();
-	}
+    protected override void HandlePostGameScene()
+    {
+        SetUpButtons();
+    }
 }

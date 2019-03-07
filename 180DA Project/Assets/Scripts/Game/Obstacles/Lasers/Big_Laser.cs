@@ -20,7 +20,6 @@ public class Big_Laser : Laser {
 	
 	void Update () {
 		CheckHitPlayer();
-		CheckGamePlaying();
 	}
 
 	void CheckHitPlayer()
