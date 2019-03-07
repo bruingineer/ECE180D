@@ -13,12 +13,6 @@ public class Small_Laser : Laser {
 		GameState_Base.PlayClip(smallLaserSound);
   }
 
-	void Update()
-	{
-			CheckGamePlaying();
-	}
-
-
 	protected override IEnumerator MoveLaserToPosition(Vector3 endPosition, Laser_Obstacle.Laser_Times laserTimes)
 	{
 		// Moves position then destroys object when coroutine finishes

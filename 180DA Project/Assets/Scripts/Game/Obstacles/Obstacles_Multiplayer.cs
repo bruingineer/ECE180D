@@ -11,9 +11,6 @@ public class Obstacles_Multiplayer : Obstacles {
 	protected override void Awake() 
 	{
 		base.Awake();
-		subscribeTopic = Multiplayer_Controller.playerHeader + "obstacle";
-		publishTopic = Multiplayer_Controller.playerHeader + "request_obstacle";
-		multiplayerClient = new ObstacleMultiplayerClient(subscribeTopic);
 		obstacleReady = false;
 	}
 
@@ -29,6 +26,13 @@ public class Obstacles_Multiplayer : Obstacles {
 				obstacleReady = false;
 				StartChallenge();
 			}
+	}
+
+	public override void SetUpClient(string header)
+	{
+		subscribeTopic = header + "obstacle";
+		publishTopic = header + "request_obstacle";
+		multiplayerClient = new ObstacleMultiplayerClient(subscribeTopic);
 	}
 
 	protected override IEnumerator HandleObstacles()

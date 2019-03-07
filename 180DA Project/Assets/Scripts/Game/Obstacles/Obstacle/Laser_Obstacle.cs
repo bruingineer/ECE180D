@@ -12,8 +12,7 @@ public abstract class Laser_Obstacle : MonoBehaviour {
 	// how long the laser is shown for
 	protected float laserDuration;
 
-	protected float obstacleWaitTime = 3f;
-	private bool handledCleanup = false;
+	protected float obstacleWaitTime = 2f;
 
 	// struct is used to pass in the correct times to the obstacle times
 	public struct Laser_Times
@@ -41,13 +40,4 @@ public abstract class Laser_Obstacle : MonoBehaviour {
 	// function to be implemented by laser obstacle that fires the lasers
 	protected abstract IEnumerator FireLasers(List<int> laserPositions);
 	protected abstract List<int> RandomizeLanes();
-
-	void Update()
-	{
-		if (!GameState_Base.gamePlaying && handledCleanup)
-		{
-			handledCleanup = false;
-			StopCoroutine("FireLasers");
-		}
-	}
 }

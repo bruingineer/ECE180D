@@ -21,7 +21,7 @@ public class GameState_Multiplayer : GameState_with_Player {
 	public override void RetryLevel()
 	{
 		DisableButtons();
-		Multiplayer_Controller.ResetReadyButton();
+		GetComponent<Multiplayer_Controller>().ResetReadyButton();
 	}
 
 	protected override void Update()
@@ -34,6 +34,11 @@ public class GameState_Multiplayer : GameState_with_Player {
 		}
 	}
 
+	protected override void HandleCountdown()
+	{
+		countdown.gameObject.SetActive(false);
+	}
+
 	protected override void HandleLose()
 	{
 		if (Multiplayer_Controller.lost && !loseHandled)
@@ -42,6 +47,11 @@ public class GameState_Multiplayer : GameState_with_Player {
 			result.text = "You Lose!";
 			DestroyPlayer();
 		}
+	}
+
+	protected override void HandlePlayerDestroyed()
+	{
+		player.SetActive(false);
 	}
 
 	protected override void GameWon()
@@ -53,9 +63,24 @@ public class GameState_Multiplayer : GameState_with_Player {
 		}
 	}
 
+	public void ResetGameState()
+	{
+		player.SetActive(true);
+		player.transform.position = playerStartPosition;
+		countdown.text = "3";
+		gameWonHandled = false;
+		loseHandled = false;
+		winHandled = false;
+	}
+
 	protected override void Awake()
 	{
 		gameMode = "multiplayer_game";
 		base.Awake();
 	}
+
+	protected override void AddComponentToPlayer()
+    {
+        // Add player multiplayer component
+    }
 }

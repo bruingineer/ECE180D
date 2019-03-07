@@ -75,7 +75,7 @@ public class Big_Laser_Obstacle : Laser_Obstacle {
 
 	protected override List<int> RandomizeLanes()
 	{
-		List<int> laneNumsCopy = new List<int>(GameState_Base.laneNums);
+		List<int> laneNumsCopy = new List<int>(GameState_with_Player.laneNums);
 		List<int> lanesToFireLasers = new List<int>();
 		int numLasersToFire = Random.Range(minLasers, maxLasers);
 		for (int i = 0; i < numLasersToFire; i++)

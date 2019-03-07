@@ -71,7 +71,7 @@ public class Small_Laser_Obstacle : Laser_Obstacle {
 
     	for (int i = 0; i < lasersToFire; i++)
     	{
-      		rtnlist.Add(Random.Range(0, GameState_Base.numLanes));
+      		rtnlist.Add(Random.Range(0, GameState_with_Player.numLanes));
     	}
     	return rtnlist;
 	}

@@ -11,10 +11,6 @@ public class PlayerEvents_Multiplayer : PlayerEvents {
 
 	protected override void Awake() 
 	{
-	
-		subscribeTopic = Multiplayer_Controller.playerHeader + "event";
-		publishTopic = Multiplayer_Controller.playerHeader + "request_event";
-		multiplayerClient = new EventMultiplayerClient(subscribeTopic);
 		eventReady = false;
 		gestureGame = gameObject.AddComponent<GestureGame>();
 		scramblerGame = gameObject.AddComponent<WordScramble>();
@@ -24,6 +20,13 @@ public class PlayerEvents_Multiplayer : PlayerEvents {
 
 	void Update () {
 		HandleMultiplayer();
+	}
+
+	public override void SetUpClient(string header)
+	{
+		subscribeTopic = header + "event";
+		publishTopic = header + "request_event";
+		multiplayerClient = new EventMultiplayerClient(subscribeTopic);
 	}
 
 	protected override void HandleChallengeReady()

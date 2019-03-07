@@ -287,7 +287,7 @@ Prefab:
         type: 2}
       propertyPath: m_audioClip
       value: 
-      objectReference: {fileID: 8300000, guid: 58aeb878c3eb44bd4a56b4d5ddc1ea45, type: 3}
+      objectReference: {fileID: 8300000, guid: a903776594b964fa6907cc2876e9b910, type: 3}
     - target: {fileID: 114340158667787706, guid: d78defd6cd2f245f8bf556e9fc610325,
         type: 2}
       propertyPath: playerIcons.Array.data[0]
