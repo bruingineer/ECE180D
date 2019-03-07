@@ -18,14 +18,16 @@ DEBUG_PROCESS_KEYPOINTS = False
 MQTT_ENABLE = True
 
 waiting_for_target = True
+playerheader = 'A' # or B
 
 # mqtt setup
 if MQTT_ENABLE:
     port = 1883
 
     # mqtt topics for gestures
-    target_topic = 'gesture'
-    return_topic = 'gesture_correct'
+    target_topic = '{}/gesture'.format(playerheader)
+    return_topic = '{}/gesture_correct'.format(playerheader)
+    localization_topic = '{}/localization'.format(playerheader)
     target_gesture = "stop"
 
 # on connect callback for mqtt
@@ -286,6 +288,7 @@ def main():
     parser.add_argument("--gesture", default=None, help="Target Gesture to search for during testing.")
     parser.add_argument("--localization", default=True, help="If True, this enables the localization functionality.")
     parser.add_argument("--ip", default=None, help="Set the ip of the Mqtt server.")
+    parser.add_argument("--playerheader", default=None, help="A or B to set to correct laptop.")
 
     args = parser.parse_known_args()
 
@@ -317,6 +320,12 @@ def main():
             key = curr_item.replace('-','')
             if key not in params: params[key] = next_item
 
+    global target_topic
+    global return_topic 
+    global localization_topic
+    target_topic = '{}/gesture'.format(playerheader)
+    return_topic = '{}/gesture_correct'.format(playerheader)
+    localization_topic = '{}/localization'.format(playerheader)
     # connect mqtt server
     client = connect_to_server(args[0].ip, port)
     client.loop_start()
@@ -414,7 +423,7 @@ def main():
                 region = 10 - int(10*nose_x/WIDTH0)
             # print(region)
             if MQTT_ENABLE:
-                client.publish('localization',  payload= (region), qos=0, retain=False)
+                client.publish(localization_topic,  payload= (region), qos=0, retain=False)
                 print (region)
 
         # break loop and exit when ESC key is pressed
