@@ -126,8 +126,9 @@ def main():
     return_topic = '{}/gesture_correct'.format(playerheader)
     localization_topic = '{}/localization'.format(playerheader)
     # connect mqtt server
-    client = connect_to_server(args[0].ip, port)
-    client.loop_start()
+    if MQTT_ENABLE:
+        client = connect_to_server(args[0].ip, port)
+        client.loop_start()
 
     # Starting OpenPose
     opWrapper = op.WrapperPython()
