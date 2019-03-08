@@ -103,7 +103,6 @@ public class PlayerMQTT_X : MQTT_Class {
 		int lane_num;
 		if (Int32.TryParse(System.Text.Encoding.UTF8.GetString(e.Message), out lane_num)) {
 			lane_num = Mathf.Clamp(lane_num, 0, 9);
-			Debug.Log(lane_num);
 			if (lane_num != cur_lane_num) {
 				cur_lane_num = lane_num;
 			}

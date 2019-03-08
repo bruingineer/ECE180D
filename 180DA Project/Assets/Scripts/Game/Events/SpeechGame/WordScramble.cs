@@ -27,7 +27,9 @@ public class WordScramble : Speech {
 		timerStopped = true;
 		HandleCorrectAction();
 		StopRecognizer();
+		WDisplay.WordText.fontSize = 40;
 		WDisplay.WordText.text = "Correct!";
+		WDisplay.WordText.characterSpacing = default_spacing; 
 		SelectedPlayer.current_unscramble_pass++;
         SelectedPlayer.current_unscramble_timer_avg += Event.curTime;
         //Debug.Log("curTime: " + Event.curTime);
@@ -43,7 +45,11 @@ public class WordScramble : Speech {
 		base.Awake();
     }
 
-	protected override void SetUpEvent(string phrase = null){       
+	private float default_spacing;
+	protected override void SetUpEvent(string phrase = null){  
+		WDisplay.WordText.fontSize = 80;   
+		default_spacing = WDisplay.WordText.characterSpacing;
+		WDisplay.WordText.characterSpacing = 5f;
 		Debug.Log("Starting Scramble");
 		string w = "";
 		
@@ -73,6 +79,8 @@ public class WordScramble : Speech {
 
 	// ask jose if he can have one word shared by speech events
 	protected override void HandleIncorrectEvent(){
+		WDisplay.WordText.fontSize = 40;
+		WDisplay.WordText.characterSpacing = default_spacing;
         timerStopped = true;
         StopRecognizer();
         SelectedPlayer.current_unscramble_fail++;

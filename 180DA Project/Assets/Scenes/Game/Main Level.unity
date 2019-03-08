@@ -449,6 +449,46 @@ Prefab:
       propertyPath: m_isInputParsingRequired
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 114991035482318002, guid: 845256913211b44809f85d872213b61d,
+        type: 2}
+      propertyPath: m_text
+      value: engineer
+      objectReference: {fileID: 0}
+    - target: {fileID: 114991035482318002, guid: 845256913211b44809f85d872213b61d,
+        type: 2}
+      propertyPath: m_textInfo.characterCount
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 114991035482318002, guid: 845256913211b44809f85d872213b61d,
+        type: 2}
+      propertyPath: m_textInfo.wordCount
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114991035482318002, guid: 845256913211b44809f85d872213b61d,
+        type: 2}
+      propertyPath: m_textInfo.lineCount
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114991035482318002, guid: 845256913211b44809f85d872213b61d,
+        type: 2}
+      propertyPath: m_textInfo.pageCount
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114991035482318002, guid: 845256913211b44809f85d872213b61d,
+        type: 2}
+      propertyPath: m_firstOverflowCharacterIndex
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114991035482318002, guid: 845256913211b44809f85d872213b61d,
+        type: 2}
+      propertyPath: m_fontSize
+      value: 40
+      objectReference: {fileID: 0}
+    - target: {fileID: 114991035482318002, guid: 845256913211b44809f85d872213b61d,
+        type: 2}
+      propertyPath: m_fontSizeBase
+      value: 40
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 845256913211b44809f85d872213b61d, type: 2}
   m_IsPrefabAsset: 0
