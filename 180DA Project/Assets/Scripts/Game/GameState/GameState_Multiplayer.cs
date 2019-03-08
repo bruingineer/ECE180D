@@ -81,6 +81,6 @@ public class GameState_Multiplayer : GameState_with_Player {
 
 	protected override void AddComponentToPlayer()
     {
-        // Add player multiplayer component
+        player.AddComponent<Player_Multiplayer>();
     }
 }
