@@ -17,7 +17,7 @@ public class WordScramble : Speech {
 	protected override void handleSpeechTask(string text){
 		Answer.text = "";
 		Answer.text = text;
-		Debug.Log(text);
+		//Debug.Log(text);
 		if (Answer.text == WDisplay.word_str)
 			HandleCorrectEvent();
 	}
@@ -30,7 +30,7 @@ public class WordScramble : Speech {
 		WDisplay.WordText.text = "Correct!";
 		SelectedPlayer.current_unscramble_pass++;
         SelectedPlayer.current_unscramble_timer_avg += Event.curTime;
-        Debug.Log("curTime: " + Event.curTime);
+        //Debug.Log("curTime: " + Event.curTime);
         Reset();
 	}
 

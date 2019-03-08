@@ -46,13 +46,22 @@ public abstract class Player : Moving_Object {
 		playerRecovered = Resources.Load<AudioClip>(playerSoundsPath + "Recover");
 	}
 
+	public bool teleportActve = false;
 	void Update()
 	{
-		if(!isPlayerMoving) 
+		if (!isPlayerMoving) 
 			{
 				MovePlayerX();
 				if (GameState_Base.gamePlaying)
-					MovePlayerY();
+				MovePlayerY();
+				if (teleportActve){
+					Debug.Log("teleporting");
+					isPlayerMoving = true;
+					transform.position = Powerup.tele_to;
+					Debug.Log(Powerup.tele_to);
+					teleportActve = false;					
+					isPlayerMoving = false;
+				}
 			}
 	}
 

@@ -94,6 +94,12 @@ public abstract class Event : MonoBehaviour {
 	// The correct action here moves the player (for the main game)
 	protected virtual void HandleCorrectAction() 
 	{
+		if (curTime > timerDuration - 7){
+			Powerup.powerup_count++;
+		}
+		else{
+			Powerup.powerup_count = 0;
+		}
 		m_player.MovePlayer();
 	}
 

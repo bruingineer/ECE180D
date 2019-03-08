@@ -14,42 +14,11 @@ public abstract class Speech : Event
     static int correct = 0;
     static int failed = 0;
     
-    // [SerializeField]
-    // private Text m_Hypotheses;
-
-    // [SerializeField]
-    // private Text m_Recognitions;
-    //protected TextMeshProUGUI triviaText;
-    //protected TextMeshProUGUI answer;
     
     private int triviaORScrabmle;
-    //protected Text Question;
-    //private string ques = "";
-    //private string ans = "";
     protected static bool recognizer_started = false;
 
     protected DictationRecognizer m_DictationRecognizer;
-
-    // protected override void Initialize(){
-    //     WDisplay = new WordDisplay();
-    //     triviaText = GameObject.FindWithTag("trivia").GetComponent<TextMeshProUGUI>();
-    //     WDisplay.WordText = GameObject.FindWithTag("trivia").GetComponent<TextMeshProUGUI>();
-    //     triviaText.text = "";
-    //     answer = GameObject.FindWithTag("answer").GetComponent<TextMeshProUGUI>();
-    //     answer.text = "";
-    //     // Msg = GameObject.FindWithTag("msg").GetComponent<TextMeshProUGUI>();
-    //     // Msg.text = "";
-    //     SetUp();
-    // }
-
-    // protected override IEnumerator MakeTextBlink(){
-    //         while(triviaORScrabmle == 1 && !timerPaused){
-    //         //Debug.Log("making word blink");
-    //         WDisplay.MakeWordBlink();
-	// 		yield return new WaitForSeconds(repeatRate/1.5f);
-    //     }
-    // }
-
 
     protected abstract void handleSpeechTask(string text);
 

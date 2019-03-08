@@ -25,8 +25,10 @@ public class Small_Laser : Laser {
 	private void OnTriggerEnter(Collider other)
 	{
 		// gets component of the object, if player, it will return true, and the player will get hit
-		PlayerHit(other.transform);
-		Destroy(gameObject);
+		if (other.gameObject.tag == "Player"){
+			PlayerHit(other.transform);
+			Destroy(gameObject);
+		}
 	}
 
 }
