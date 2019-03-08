@@ -9,7 +9,7 @@ from time import time
 
 import numpy as np 
 import paho.mqtt.client as mqtt
-import keypointFrames
+from keypointFrames import keypointFrames
 
 # contants to enable debug options
 # TODO: add these to the arguments
