@@ -66,6 +66,7 @@ public abstract class GameState_Base : MonoBehaviour
     {
         if (gamePlaying)
         {
+            UpdateCtr();
             HandleWin();
             HandleLose();
         }
@@ -161,6 +162,7 @@ public abstract class GameState_Base : MonoBehaviour
 	}
     protected abstract void HandlePostGameScene();
     protected abstract void HandleWin();
+    protected virtual void UpdateCtr() { }
     protected virtual void HandleLose() { }
 
 }
@@ -261,8 +263,17 @@ public abstract class GameState_Event_Minigame : GameState_Base
     private int numCorrect = 5;
     public static int curCorrect;
 
+    public Text curCorrectTxt;
+    public Text timer;
+
+    protected override void UpdateCtr()
+    {
+        curCorrectTxt.text = (numCorrect - curCorrect) + " left to pass!";
+    }
     protected override void Awake()
     {
+        curCorrectTxt = GameObject.FindWithTag("curCorrect").GetComponent<Text>();
+        timer = GameObject.FindWithTag("timer").GetComponent<Text>();
         curCorrect = 0;
         base.Awake();
     }
@@ -270,7 +281,10 @@ public abstract class GameState_Event_Minigame : GameState_Base
     protected override void HandleWin()
     {
         if (curCorrect == numCorrect)
+        {
+            timer.text = "";
             GameWon();
+        }
     }
 
     protected override void HandlePostGameScene()
