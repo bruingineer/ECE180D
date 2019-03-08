@@ -6,7 +6,7 @@ public class PlayerEvents_MainGame : PlayerEvents {
 
 	protected override void Awake()
 	{
-		gestureGame = gameObject.AddComponent<GestureGame>();
+		gestureGame = gameObject.AddComponent<GestureMainGame>();
 		scramblerGame = gameObject.AddComponent<WordScramble>();
 		triviaGame = gameObject.AddComponent<Trivia>();
 		 playerEvents = new List<Event> {gestureGame, scramblerGame, triviaGame};

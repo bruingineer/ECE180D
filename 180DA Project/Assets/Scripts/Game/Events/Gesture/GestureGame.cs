@@ -15,7 +15,7 @@ using TMPro;
 	in which a player must match a gesture given to them.
 	The gesture is analyzed using OpenPose.
 */
-public class GestureGame : Event {
+public abstract class GestureGame : Event {
 	// Objects
 
 	/*
@@ -129,27 +129,29 @@ public class GestureGame : Event {
 	*/
 	protected override void HandleIncorrectEvent()
 	{
-		// incremement field for SelectedPlayer database
-		SelectedPlayer.current_gesture_fail++;
-		// reset based on if minigame or not
+		gestureClient.SendMessage(topicGestureSent, stopMessage);
 		Reset();
 	}
 
 	// function called when event is correct
 	protected override void HandleCorrectEvent()
 	{
+		Debug.Log("Correct");
 		// set to true as to not repeat the function
+		gestureClient.SendMessage(topicGestureSent, stopMessage);
 		handledCorrect = true;
 		timerStopped = true;
-		
+		Msg.text = "Correct!";
 		// increment SelectedPlayer's gesture pass counter
         // and add the time left on the timer to the timer avg counter
-		SelectedPlayer.current_gesture_pass++;
-        SelectedPlayer.current_g_timer_avg += Event.curTime;
-		Msg.text = "Correct!";
 		HandleCorrectAction();
+		StartCoroutine(ResetCorrect());
+	}
+
+	protected override IEnumerator ResetCorrect()
+	{
+		yield return new WaitForSeconds(0.5f);
 		Reset();
-		// reset variables
 		eventCorrect = true;
 		gestureCorrect = false;
         handledCorrect = false;
@@ -164,8 +166,6 @@ public class GestureGame : Event {
 	{
 		Msg.text = "";
 		gestureText.text = "";
-		// send a stop message to OpenPose to stop looking at messages
-		gestureClient.SendMessage(topicGestureSent, stopMessage);
 	}
 
 }
@@ -182,6 +182,7 @@ public class GestureMiniGame : GestureGame {
 	protected override void HandleIncorrectEvent()
 	{
 		GameState_Event_Minigame.curCorrect = 0;
+		base.HandleIncorrectEvent();
 	}
 }
 
@@ -193,5 +194,21 @@ public class GestureMultiplayerGame : GestureGame
 	{
 		topicGestureSent = MQTTHeader + '/' + gestureTopicString;
 		topicCorrectGesture = MQTTHeader + '/' + gestureCorrectTopicString;
+	}
+}
+
+public class GestureMainGame : GestureGame
+{
+	protected override void HandleCorrectAction()
+	{
+		SelectedPlayer.current_gesture_pass++;
+        SelectedPlayer.current_g_timer_avg += Event.curTime;
+		base.HandleCorrectAction();
+	}
+
+	protected override void HandleIncorrectEvent()
+	{
+		SelectedPlayer.current_gesture_fail++;
+		base.HandleIncorrectEvent();
 	}
 }

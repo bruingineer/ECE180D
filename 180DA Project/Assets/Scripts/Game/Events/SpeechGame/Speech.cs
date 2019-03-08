@@ -54,7 +54,7 @@ public abstract class Speech : Event
         }
     }
 
-    protected float endDisplayTime = 1.1f;
+    
 
     protected void StopRecognizer(){
         //Debug.Log("app quit");
@@ -68,10 +68,10 @@ public abstract class Speech : Event
 
     protected override void Reset()
 	{	
-		StartCoroutine(Reset_Speech_Correct());
+		StartCoroutine(ResetCorrect());
 	}
 
-    protected virtual IEnumerator Reset_Speech_Correct()
+    protected override IEnumerator ResetCorrect()
     {
         yield return new WaitForSeconds(endDisplayTime);
         eventCorrect = true;

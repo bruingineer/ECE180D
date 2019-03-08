@@ -17,6 +17,7 @@ public abstract class Event : MonoBehaviour {
 	protected bool eventCorrect;
 	public static float curTime;
 	private bool handledCleanup = false;
+	protected float endDisplayTime = 1.1f;
 
 	protected virtual void Awake()
     {
@@ -117,4 +118,5 @@ public abstract class Event : MonoBehaviour {
 	protected abstract void SetUpEvent(string phrase = null);
 	protected abstract void HandleCorrectEvent();
 	protected abstract void Reset();
+	protected abstract IEnumerator ResetCorrect();
 }
