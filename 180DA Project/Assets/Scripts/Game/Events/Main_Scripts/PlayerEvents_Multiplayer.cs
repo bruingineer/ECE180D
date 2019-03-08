@@ -41,6 +41,7 @@ public class PlayerEvents_Multiplayer : PlayerEvents {
 	protected override IEnumerator HandleEvents()
 	{	
 		yield return playerEvents[eventIndex].StartEvent(phrase);
+		yield return new WaitForSeconds(delay);
 		messageOut = false;
 	}	
 }

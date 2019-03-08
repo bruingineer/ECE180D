@@ -4,7 +4,7 @@ using UnityEngine;
 
 public abstract class PlayerEvents : Challenge {
 
-	private float delay = 2f;
+	protected float delay = 2f;
 	protected List<Event> playerEvents;
 	protected Event gestureGame, scramblerGame, triviaGame;
 
