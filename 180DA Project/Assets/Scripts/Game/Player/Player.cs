@@ -25,14 +25,17 @@ public abstract class Player : Moving_Object {
 	// Player Objects
 	PlayerMQTT_Y m_playerMQTT_Y;
 	PlayerMQTT_X m_playerMQTT_X;
+	protected const string localizationTopic = "localization";
+	protected const string movementTopic = "movement";
 	private int playerLaneNum;
 	SpriteRenderer sr;
 
 	// MQTT
-	private string playerMQTT_Y_topic = "movement";
-	private string playerMQTT_X_topic = "localization";
+	protected string playerMQTT_Y_topic;
+	protected string playerMQTT_X_topic;
 
-	void Awake () {
+	protected virtual void Awake () {
+
 		m_playerMQTT_Y = new PlayerMQTT_Y(playerMQTT_Y_topic);
 		playerLaneNum = (int)transform.position.y;
 		m_playerMQTT_X = new PlayerMQTT_X(playerMQTT_X_topic, playerLaneNum);

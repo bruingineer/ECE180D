@@ -18,7 +18,7 @@ public abstract class Event : MonoBehaviour {
 	public static float curTime;
 	private bool handledCleanup = false;
 
-	void Awake()
+	protected virtual void Awake()
     {
 		/*
 			Difficulty set depending on the chosen difficulty level
@@ -40,8 +40,6 @@ public abstract class Event : MonoBehaviour {
 		timerStopped = false;
 		// text object to show the timer
 		timeLeft = GameObject.FindWithTag("timer").GetComponent<Text>();
-		// used as the initializer for each event (gesture, speech, etc)
-        Event_Initializer();
 		// check to see if the player is in the game, and if so assign the player object to it
 		GameObject playerPresent = GameObject.FindWithTag("Player");
 		if(playerPresent)
@@ -112,6 +110,5 @@ public abstract class Event : MonoBehaviour {
 	protected abstract IEnumerator MakeTextBlink();
 	protected abstract void SetUpEvent(string phrase = null);
 	protected abstract void HandleCorrectEvent();
-	protected abstract void Event_Initializer();
 	protected abstract void Reset();
 }

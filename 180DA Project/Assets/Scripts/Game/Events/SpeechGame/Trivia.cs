@@ -15,11 +15,12 @@ public class Trivia : Speech {
 	private string ques = "";
 	private string ans = "";
 
-	protected override void Event_Initializer(){
+	protected override void Awake() {
         triviaText = GameObject.FindWithTag("trivia").GetComponent<TextMeshProUGUI>();
         triviaText.text = "";
         answer = GameObject.FindWithTag("answer").GetComponent<TextMeshProUGUI>();
         answer.text = "";
+		base.Awake();
     }
 
 	// ask jose if it can be called multiple times

@@ -28,7 +28,11 @@ public class GestureGame : Event {
 	private List<string> gestures = new List<string>()
 			{
 				"tpose", 
-				"fieldgoal"
+				"fieldgoal",
+				"dab",
+				"righthandwave",
+				"lefthandraise",
+				"righthandraise"
 			};
 
 
@@ -63,11 +67,13 @@ public class GestureGame : Event {
 	// MQTT topics
 	
 	// this topic is used to send the gesture to OpenPose (publish)
-	public const string topicGestureSent = "gesture";
+	protected const string gestureTopicString = "gesture";
+	protected const string gestureCorrectTopicString = "gesture_correct";
+	protected string topicGestureSent;
 
 	// this topic is used to know if OpenPose correctly
 	// identified the gesture (subscribe)
-	private string topicCorrectGesture = "gesture_correct";
+	protected string topicCorrectGesture;
 
 	protected override void Update()
 	{
@@ -79,12 +85,20 @@ public class GestureGame : Event {
 	// This function is overridden from the Event base class,
 	// and is used to add to the Awake function of the Event class
 	// for initialization
-	protected override void Event_Initializer()
+	protected override void Awake()
     {
+			SetUpTopics();
 			gestureClient = new GestureClient(topicCorrectGesture);
 			gestureText = GameObject.FindWithTag("word").GetComponent<TextMeshProUGUI>();
 			Msg = GameObject.FindWithTag("msg").GetComponent<TextMeshProUGUI>();
+			base.Awake();
     }
+
+	protected virtual void SetUpTopics()
+	{
+		topicGestureSent = gestureTopicString;
+		topicCorrectGesture = gestureCorrectTopicString;
+	}
 
 	// This function is overriden from the Event base class,
 	// and is used to set up the event each time it is chosen
@@ -167,5 +181,16 @@ public class GestureMiniGame : GestureGame {
 	protected override void HandleIncorrectEvent()
 	{
 		GameState_Event_Minigame.curCorrect = 0;
+	}
+}
+
+public class GestureMultiplayerGame : GestureGame
+{
+	// Change for OpenPose here!
+	private string MQTTHeader = "";
+	protected override void SetUpTopics()
+	{
+		topicGestureSent = MQTTHeader + '/' + gestureTopicString;
+		topicCorrectGesture = MQTTHeader + '/' + gestureCorrectTopicString;
 	}
 }
