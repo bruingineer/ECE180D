@@ -154,8 +154,8 @@ class challengeGenerator:
 
         # pick from events or obstacles
         if challengeType == 'event':
-            challengeType = 'trivia'
-            # challengeType = challengeGenerator.EVENTS_INDEX[random.randint(0,len(challengeGenerator.EVENTS_INDEX)-1)]
+            # challengeType = 'trivia'
+            challengeType = challengeGenerator.EVENTS_INDEX[random.randint(0,len(challengeGenerator.EVENTS_INDEX)-1)]
         elif challengeType == 'obstacle':
             challengeType = challengeGenerator.OBSTACLES_INDEX[random.randint(0,len(challengeGenerator.OBSTACLES_INDEX)-1)]
         log.info('chal type: {}'.format(challengeType))
