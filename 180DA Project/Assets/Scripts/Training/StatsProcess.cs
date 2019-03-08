@@ -55,6 +55,7 @@ public class StatsProcess : MonoBehaviour
     private const string topic = "database/games";
 
     GameData gd;
+
     //Text objects to display game results and smart training suggestion
     public Text gesture_acc;
     public Text unscramble_acc;
@@ -215,11 +216,11 @@ public class StatsProcess : MonoBehaviour
 
             //Populate Results in End Game scene
             gesture_acc.text += string.Format("\t{0}% accuracy, {1}s time average" , 
-                                            (100*g).ToString("0.##"), g_tleft_avg.ToString());
+                                            (100 * g).ToString("0.##"), g_tleft_avg.ToString("0.##"));
             unscramble_acc.text += string.Format("\t{0}% accuracy, {1}s time average",
-                                            (100 * u).ToString("0.##"), u_tleft_avg.ToString());
+                                            (100 * u).ToString("0.##"), u_tleft_avg.ToString("0.##"));
             trivia_acc.text += string.Format("\t{0}% accuracy, {1}s time average",
-                                            (100 * t).ToString("0.##"), t_tleft_avg.ToString());
+                                            (100 * t).ToString("0.##"), t_tleft_avg.ToString("0.##"));
 
             lives_left_txt.text += lives_left.ToString();
             score_txt.text += total_score.ToString("0.##");

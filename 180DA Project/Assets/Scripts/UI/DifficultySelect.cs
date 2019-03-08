@@ -10,12 +10,12 @@ public class DifficultySelect : MonoBehaviour {
     public Button hard;
     
 	void Start () {
-        //set default to easy
-        easy.Select();
-        
         easy.onClick.AddListener(delegate {changeSelection("easy");});
         medium.onClick.AddListener(delegate { changeSelection("medium"); });
         hard.onClick.AddListener(delegate { changeSelection("hard"); });
+        
+        //set default to easy
+        easy.Select();
     }
 
     void changeSelection(string button)
