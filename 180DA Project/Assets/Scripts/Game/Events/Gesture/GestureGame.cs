@@ -188,7 +188,7 @@ public class GestureMiniGame : GestureGame {
 public class GestureMultiplayerGame : GestureGame
 {
 	// Change for OpenPose here!
-	private string MQTTHeader = "";
+	private string MQTTHeader = "A";
 	protected override void SetUpTopics()
 	{
 		topicGestureSent = MQTTHeader + '/' + gestureTopicString;

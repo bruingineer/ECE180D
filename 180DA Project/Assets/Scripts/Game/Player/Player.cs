@@ -5,7 +5,7 @@ using UnityEngine;
 public abstract class Player : Moving_Object {
 	// Player Time Parameters
 	protected float movementTimeY = .2f;
-	private float secondsToMoveX = 0.1f;
+	private float secondsToMoveX = 0.05f;
 	private float recoveryStepTime = 0.5f;
 	// must be odd
 	private float numberOfChanges = 5;

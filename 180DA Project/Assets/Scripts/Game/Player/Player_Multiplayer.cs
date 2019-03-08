@@ -5,7 +5,7 @@ using UnityEngine;
 public class Player_Multiplayer : Player {
 
 	// Change header for Openpose here!
-	private string MQTTHeader = "";
+	private string MQTTHeader = "A";
 
 	protected override void Awake()
 	{

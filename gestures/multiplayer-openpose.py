@@ -15,7 +15,7 @@ from keypointFrames import keypointFrames
 # TODO: add these to the arguments
 DEBUG_MQTT = False
 DEBUG_MAIN = False
-MQTT_ENABLE = False
+MQTT_ENABLE = True
 
 waiting_for_target = True
 playerheader = 'A' # or B
@@ -106,7 +106,7 @@ def main():
     params = dict()
     params["model_folder"] = dir_path + "/models/"
     params["model_pose"] = "BODY_25"
-    params["net_resolution"] = "-1x160"
+    params["net_resolution"] = "-1x80"
     # Add others in path?
     for i in range(0, len(args[1])):
         curr_item = args[1][i]
