@@ -10,6 +10,12 @@ TagManager:
   - Retry
   - Menu
   - Canvas
+  - answer
+  - msg
+  - word
+  - trivia
+  - from
+  - to
   layers:
   - Default
   - TransparentFX

@@ -114,6 +114,10 @@ public abstract class Player : Moving_Object {
 	}
 
 	protected abstract IEnumerator HandlePlayerHit();
+
+	private void OnTriggerEnter(Collider other){
+		Debug.Log("hit");
+	}
 }
 
 

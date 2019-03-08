@@ -22,7 +22,7 @@ public abstract class Speech : Event
 
 
     protected void StartRecognizer(){
-        Debug.Log(recognizer_started.ToString());
+        //Debug.Log(recognizer_started.ToString());
         if (!recognizer_started){
             m_DictationRecognizer = new DictationRecognizer();
 
@@ -59,7 +59,7 @@ public abstract class Speech : Event
         //Debug.Log("app quit");
         if (m_DictationRecognizer != null)// && (m_DictationRecognizer.Status == UnityEngine.Windows.Speech.SpeechSystemStatus.Running))
         {
-            Debug.Log("Closing Dictation Recognizer");
+            //Debug.Log("Closing Dictation Recognizer");
             m_DictationRecognizer.Dispose();
             m_DictationRecognizer.Stop();
         }

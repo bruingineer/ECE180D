@@ -31,4 +31,7 @@ public class Player_Main : Player {
 		else 
 			isDead = true;
 	}
+
+	
+
 }

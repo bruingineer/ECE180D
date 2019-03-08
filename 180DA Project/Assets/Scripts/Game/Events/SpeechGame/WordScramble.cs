@@ -17,15 +17,18 @@ public class WordScramble : Speech {
 	protected override void handleSpeechTask(string text){
 		Answer.text = "";
 		Answer.text = text;
-		Debug.Log(text);
+		//Debug.Log(text);
 		if (Answer.text == WDisplay.word_str)
 			HandleCorrectEvent();
 	}
 
 	protected override void HandleCorrectEvent()
 	{
-		if (timerDuration > timerDuration - 4){
+		if (curTime > timerDuration - 7){
 			Powerup.powerup_count++;
+		}
+		else{
+			Powerup.powerup_count = 0;
 		}
 		
 		timerStopped = true;
@@ -46,13 +49,13 @@ public class WordScramble : Speech {
 
 	protected override void SetUpEvent(){
 		WDisplay.WordText.characterSpacing = 1.25f;       
-		Debug.Log("Starting Scramble");
+		//Debug.Log("Starting Scramble");
 		string w = "";
 		w = SpeechList.getWord();
 		WDisplay.SetWordDisplay(w);
 		WDisplay.SetFirstLetterClue();
-		Debug.Log(w);
-		Debug.Log(WDisplay.WordText.text);
+		Debug.Log("Word: " + w);
+		//Debug.Log(WDisplay.WordText.text);
 		StartRecognizer();
 		m_DictationRecognizer.Start();
     }
@@ -73,8 +76,9 @@ public class WordScramble : Speech {
 
 	// ask jose if he can have one word shared by speech events
 	protected override void HandleIncorrectEvent(){
-		Debug.Log("word scrambler failed");
-		Powerup.powerup_count = 0;
+		//Debug.Log("word scrambler failed");
+		//Powerup.powerup_count = 0;
+		Powerup.powerup_count++;
         timerStopped = true;
         StopRecognizer();
         SelectedPlayer.current_unscramble_fail++;

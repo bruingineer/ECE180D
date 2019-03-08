@@ -60,6 +60,13 @@ public class SpeechList : MonoBehaviour
         return WordList_[Random.Range(0,ListSize)];
     }
 
+    public static string getWordNumber(int i = -1){
+        if (i == -1)
+            return getWord();
+        else   
+            return WordList_[i];
+    }
+
     public static int size = triviaDictionay.Count; 
     public static void getQuestion(ref string ques, ref string ans){
         int r = Random.Range(0, size);

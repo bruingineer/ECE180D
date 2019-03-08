@@ -32,6 +32,12 @@ public class Trivia : Speech {
 
 	protected override void HandleCorrectEvent()
 	{
+		if (curTime > timerDuration - 7){
+			Powerup.powerup_count++;
+		}
+		else {
+			Powerup.powerup_count = 0;
+		}
 		timerStopped = true;
 		HandleCorrectAction();
 		triviaText.text = "Correct!";
@@ -42,12 +48,12 @@ public class Trivia : Speech {
 
 	protected override void SetUpEvent(){
 		triviaText.characterSpacing = 1.0f;
-		Debug.Log("Starting trivia");
+		//Debug.Log("Starting trivia");
 		SpeechList.getQuestion(ref ques, ref ans);
-		Debug.Log("Question: " + ques);
+		//Debug.Log("Question: " + ques);
 		Debug.Log("Answer: " + ans);
 		triviaText.text = ques;
-		Debug.Log(triviaText.text);
+		//Debug.Log(triviaText.text);
 		StartRecognizer();
 		m_DictationRecognizer.Start();
 	}
@@ -59,8 +65,10 @@ public class Trivia : Speech {
 	}
 
 	protected override void HandleIncorrectEvent(){
-		Debug.Log("trivia incorrect");
-		Powerup.powerup_count = 0;
+		//Debug.Log("trivia incorrect");
+		// Powerup.powerup_count = 0;
+		Powerup.powerup_count++;
+		Debug.Log("increasing powerup counter");
         timerStopped = true;
         StopRecognizer();
         SelectedPlayer.current_trivia_fail++;
