@@ -4,6 +4,7 @@ module to define gestures and poses
 """
 
 import numpy as np
+from time import time
 
 DEBUG_PROCESS_KEYPOINTS = False
 
