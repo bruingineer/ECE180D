@@ -29,4 +29,16 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/End/End Game.unity
     guid: d5caef2cadd43b04ab98c483523427b4
+  - enabled: 1
+    path: Assets/Scenes/Game/Minigames/Laser Instr.unity
+    guid: 55deb316e15ce98468a1025376ac0cba
+  - enabled: 1
+    path: Assets/Scenes/Game/Minigames/Gesture Instr.unity
+    guid: 8a850c415e4178f40bc8c3a29cd415eb
+  - enabled: 1
+    path: Assets/Scenes/Game/Minigames/Scrambler Instr.unity
+    guid: 7e1c698cf2b3ea246a2adbbf755d0190
+  - enabled: 1
+    path: Assets/Scenes/Game/Minigames/Trivia Instr.unity
+    guid: f62a720958910b44fab19d52eaaa1cba
   m_configObjects: {}
