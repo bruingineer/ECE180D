@@ -30,10 +30,6 @@ public class WordDisplay
 
     public void MakeBlink() {
         int r = UnityEngine.Random.Range(0, orginal_scramble.Length);
-        //Debug.Log(word_str);
-        //Debug.Log(orginal_scramble);
-        //Debug.Log(r);
-        //Debug.Log(orginal_scramble.Length);
         if ( (r != 0) && (r != orginal_scramble.Length - 1))
             WordText.text = orginal_scramble.Substring(0, r - 1) + " " + orginal_scramble.Substring(r+1);
         else if ( r == 0)
