@@ -4,6 +4,17 @@ using UnityEngine;
 
 public class Player_Multiplayer : Player {
 
+	// Change header for Openpose here!
+	private string MQTTHeader = "";
+
+	protected override void Awake()
+	{
+		
+		playerMQTT_X_topic = MQTTHeader + '/' + localizationTopic;
+		playerMQTT_Y_topic = MQTTHeader + '/' + movementTopic;
+		base.Awake();
+	}
+
 	protected override IEnumerator HandlePlayerHit()
 	{
 		if (transform.position.y > 0.5)

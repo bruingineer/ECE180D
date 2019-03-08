@@ -7,12 +7,11 @@ public class PlayerEvents_Multiplayer : PlayerEvents {
 	public static bool eventReady;
 	public static int eventIndex;
 	public static string phrase;
-	protected Event gestureGame, scramblerGame, triviaGame;
 
 	protected override void Awake() 
 	{
 		eventReady = false;
-		gestureGame = gameObject.AddComponent<GestureGame>();
+		gestureGame = gameObject.AddComponent<GestureMultiplayerGame>();
 		scramblerGame = gameObject.AddComponent<WordScramble>();
 		triviaGame = gameObject.AddComponent<Trivia>();
 		playerEvents = new List<Event> {gestureGame, scramblerGame, triviaGame};

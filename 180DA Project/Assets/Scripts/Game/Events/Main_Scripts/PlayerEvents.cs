@@ -5,8 +5,8 @@ using UnityEngine;
 public abstract class PlayerEvents : Challenge {
 
 	private float delay = 2f;
-
 	protected List<Event> playerEvents;
+	protected Event gestureGame, scramblerGame, triviaGame;
 
 	public override void StartChallenge()
 	{
@@ -29,28 +29,26 @@ public abstract class PlayerEvents_Minigame: PlayerEvents {
 }
 
 public class PlayerEvents_Gesture_Minigame : PlayerEvents_Minigame {
-	Event gestureMiniGame;
 	protected override void Awake()
 	{
-		gestureMiniGame = gameObject.AddComponent<GestureMiniGame>();
-		playerEvents = new List<Event> {gestureMiniGame};
+		gestureGame = gameObject.AddComponent<GestureMiniGame>();
+		playerEvents = new List<Event> {gestureGame};
 	}
 }
 
 public class PlayerEvents_Scrambler_Minigame : PlayerEvents_Minigame {
-	Event scramblerMiniGame;
+
 	protected override void Awake()
 	{
-		scramblerMiniGame = gameObject.AddComponent<WordScrambleMiniGame>();
-		playerEvents = new List<Event> {scramblerMiniGame};
+		scramblerGame = gameObject.AddComponent<WordScrambleMiniGame>();
+		playerEvents = new List<Event> {scramblerGame};
 	}
 }
 
 public class PlayerEvents_Trivia_Minigame : PlayerEvents_Minigame {
-	Event triviaMiniGame;
 	protected override void Awake()
 	{
-		triviaMiniGame = gameObject.AddComponent<TriviaMiniGame>();
-		playerEvents = new List<Event> {triviaMiniGame};
+		triviaGame = gameObject.AddComponent<TriviaMiniGame>();
+		playerEvents = new List<Event> {triviaGame};
 	}
 }

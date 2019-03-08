@@ -34,12 +34,13 @@ public class WordScramble : Speech {
         Reset();
 	}
 
-	protected override void Event_Initializer(){
+	protected override void Awake() {
         WDisplay = new WordDisplay();
 		WDisplay.WordText = GameObject.FindWithTag("trivia").GetComponent<TextMeshProUGUI>();
         WDisplay.WordText.text = "";
         Answer = GameObject.FindWithTag("answer").GetComponent<TextMeshProUGUI>();
         Answer.text = "";
+		base.Awake();
     }
 
 	protected override void SetUpEvent(string phrase = null){       
