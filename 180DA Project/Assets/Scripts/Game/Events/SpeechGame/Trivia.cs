@@ -34,11 +34,11 @@ public class Trivia : Speech {
 	protected override void HandleCorrectEvent()
 	{
 		timerStopped = true;
+		StopRecognizer();
 		HandleCorrectAction();
 		triviaText.text = "Correct!";
-		StopRecognizer();
 		Reset();
-		SelectedPlayer.current_trivia_pass++; //need to change
+		SelectedPlayer.current_trivia_pass++; // put in handle correct action
         SelectedPlayer.current_trivia_timer_avg += Event.curTime;
         Debug.Log("curTime: " + Event.curTime);
 	}
@@ -57,8 +57,8 @@ public class Trivia : Speech {
 		m_DictationRecognizer.Start();
 	}
 
-	protected override IEnumerator Reset_Speech_Correct(){
-	    yield return base.Reset_Speech_Correct();
+	protected override IEnumerator ResetCorrect(){
+	    yield return base.ResetCorrect();
         triviaText.text = "";
         answer.text = "";
 	}

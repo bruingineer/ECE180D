@@ -63,9 +63,9 @@ public class WordScramble : Speech {
 		m_DictationRecognizer.Start();
     }
 
-	protected override IEnumerator Reset_Speech_Correct()
+	protected override IEnumerator ResetCorrect()
 	{
-		yield return base.Reset_Speech_Correct();
+		yield return base.ResetCorrect();
 		WDisplay.WordText.text = "";
         Answer.text = "";
 	}
