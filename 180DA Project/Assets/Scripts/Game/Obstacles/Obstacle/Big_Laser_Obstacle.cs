@@ -23,6 +23,7 @@ public class Big_Laser_Obstacle : Laser_Obstacle {
 	// Extra Parameters
 	private int minLasers;
 	private int maxLasers;
+	private float fireDelay;
 	
 	void Awake () {
         // Choose # of lasers to fire based on difficulty selected
@@ -47,6 +48,7 @@ public class Big_Laser_Obstacle : Laser_Obstacle {
 		}
 		// Load sounds from Resources
 		laserCountdown = Resources.Load<AudioClip>(soundsPath + laserCountdown_str + "_Big_Laser");
+		fireDelay = laserCountdown.length;
 		laserFire = Resources.Load<AudioClip>(soundsPath + laserSound);
 		// how long the lasers take to get to desired location
 		laserDuration = 0.005f;
@@ -62,9 +64,9 @@ public class Big_Laser_Obstacle : Laser_Obstacle {
 
 		GameState_Base.PlayClip(laserCountdown);
 		// Instantiate warnings at the lanes acquired
-		CreateWarnings(lasers, laserCountdown.length);
+		CreateWarnings(lasers);
 		// waits the length of the warmup track
-		yield return new WaitForSeconds(laserCountdown.length);
+		yield return new WaitForSeconds(fireDelay);
 		// plays audio to fire lasers
 		GameState_Base.PlayClip(laserFire);
 		// creates lasers at locations and then moves them
@@ -106,14 +108,14 @@ public class Big_Laser_Obstacle : Laser_Obstacle {
 
 
 	// Play the laser warning on the laser prefab
-	private void CreateWarnings(List<GameObject> lasers, float laserWarmUpTime)
+	private void CreateWarnings(List<GameObject> lasers)
 	{
 		int laser_count = lasers.Count;
 		for(int i = 0; i < laser_count; i++)
 		{
 			ParticleSystem ps = lasers[i].GetComponent<ParticleSystem>();
 			var main = ps.main;
-			main.duration = laserWarmUpTime;
+			main.duration = fireDelay;
 			ps.Play();
 		}
 	}
