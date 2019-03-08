@@ -32,7 +32,8 @@ public class GestureGame : Event {
 				"dab",
 				"righthandwave",
 				"lefthandraise",
-				"righthandraise"
+				"righthandraise",
+				"lefthandraise"
 			};
 
 
