@@ -78,6 +78,8 @@ class keypointFrames:
             return self.isFieldGoal()
         elif _target_gesture == "righthandwave":
             return self.isRightHandRightToLeftWave()
+        elif _target_gesture == "lefthandwave":
+            return self.isLeftHandLeftToRightWave()
         elif _target_gesture == "lefthandraise":
             return self.isRaiseLeftHand()
         elif _target_gesture == "righthandraise":
@@ -152,6 +154,34 @@ class keypointFrames:
                     return True
         return False
 
+    def isLeftHandLeftToRightWave(self):
+        x = []
+        y = []
+        if DEBUG_PROCESS_KEYPOINTS:
+            print("Wave - last3frames length: {}".format(len(self.last_3_frames)))
+        
+        # get the right wrist x-y coordinates from the last 3 frames array
+        for i in range(len(self.last_3_frames)):
+            frame = self.last_3_frames[i][1]
+            x.append(frame[0,body25['LWrist'],0])
+            y.append(frame[0,body25['LWrist'],1])
+
+        if DEBUG_PROCESS_KEYPOINTS:
+            print("Wave - processed x: {0}".format(x))
+        
+        npx = np.array([z for z in x if z>0])
+        npy = np.array([z for z in y if z>0])
+
+        # TODO: normalize threshold to skeleton size
+        if len(npy) > 1:
+            # check for minimal y movement
+            if ( ((npy.max() - npy.min())/self.HEIGHT) < 0.3 ):
+                # check for x coordinates are in order which means movement in one directin
+                # check for movement across .4 of the screen width
+                # TODO normalize sizes
+                if ( np.array_equal(np.sort(npx, axis=None)[::], npx) ) and ( ((npx.max() - npx.min())/self.WIDTH) > 0.4 ):
+                    return True
+        return False
 
     # checks for arms straight out from sides, using passed in keypoints to class
     # returns true if in TPose
