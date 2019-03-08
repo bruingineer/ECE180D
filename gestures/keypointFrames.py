@@ -110,8 +110,8 @@ class keypointFrames:
 
         # left arm check is straight and up a bit
         leftArmCorrect = False
-        leftArmX = self.keypoints[0,[body25['LShoulder', 'LElbow', 'LWrist']],0]
-        leftArmY = self.keypoints[0,[body25['LShoulder', 'LElbow', 'LWrist']],1]
+        leftArmX = self.keypoints[0,[body25[x] for x in ['LShoulder', 'LElbow', 'LWrist']],0]
+        leftArmY = self.keypoints[0,[body25[x] for x in ['LShoulder', 'LElbow', 'LWrist']],1]
         if (np.array_equal(leftArmX, np.sort(leftArmX, axis=None)[::])):
             print('left arm is in order to the left')
             # check goes up
