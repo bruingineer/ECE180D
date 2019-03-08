@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Teleport : MonoBehaviour {
 
-	static public bool On = false;
+	private bool On = false;
 
 	public AudioClip sound;
 
@@ -12,27 +12,27 @@ public class Teleport : MonoBehaviour {
 		sound = Resources.Load<AudioClip>("Sounds/Laser/Small_Laser_Sound");
 	}
 
+	
+	void Update (){
+		Vector3 player_pos = GameObject.FindGameObjectWithTag("Player").transform.position;
+		if (player_pos[1] > Powerup.tele_from[1]){
+			
+		}
+
+	}
+
 	private void OnTriggerEnter(Collider other)
 	{
 		if (this.gameObject.tag == "from" && other.gameObject.tag == "Player"){
-			other.transform.position = Powerup.tele_to;
-			if (other.transform.position != Powerup.tele_to)
-				Debug.Log("Not the same");
+			other.GetComponent<Player>().teleportActve = true;
+			Debug.Log("teleporting from");
 			Destroy(this.gameObject);
+			On = true;
 		}
 
 		if (this.gameObject.tag == "to" && other.gameObject.tag == "Player"){
 			Destroy(this.gameObject);
-			On = false;
 		}
 	}
-
-	// IEnumerator Teleport_to(ref Collider other){
-	// 	other.transform.position = Powerup.tele_to;
-	// 	if (other.transform.position != Powerup.tele_to)
-	// 		Debug.Log("Not the same");
-	// 	Destroy(this.gameObject);
-	// 	return null;
-	// }
 
 }

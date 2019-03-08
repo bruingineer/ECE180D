@@ -32,12 +32,6 @@ public class Trivia : Speech {
 
 	protected override void HandleCorrectEvent()
 	{
-		if (curTime > timerDuration - 7){
-			Powerup.powerup_count++;
-		}
-		else {
-			Powerup.powerup_count = 0;
-		}
 		timerStopped = true;
 		HandleCorrectAction();
 		triviaText.text = "Correct!";
@@ -65,9 +59,7 @@ public class Trivia : Speech {
 	}
 
 	protected override void HandleIncorrectEvent(){
-		//Debug.Log("trivia incorrect");
-		// Powerup.powerup_count = 0;
-		Powerup.powerup_count++;
+		Powerup.powerup_count = 0;
 		Debug.Log("increasing powerup counter");
         timerStopped = true;
         StopRecognizer();

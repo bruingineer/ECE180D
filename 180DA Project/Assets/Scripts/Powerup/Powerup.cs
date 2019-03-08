@@ -11,19 +11,22 @@ public class Powerup : MonoBehaviour {
 
 	void Start(){
 		start = new Vector3(GameState_Base.numLanes / 2 - 0.5f, 0.5f);
+		teleportOn = false;
+		powerup_count = 0;
 	}
 
 
 	public GameObject from;
 	public GameObject to;
+	bool teleportOn;
 	// Update is called once per frame
 	static bool resetCount = false;
 	void Update () {
-		if(powerup_count == 2 && !Teleport.On){
+		if(powerup_count == 2 && !teleportOn){
 			Debug.Log("Give Player Teleport");
 			powerup_count = 0;
 			AddTeleport();
-			Teleport.On = true;
+			teleportOn = true;
 		}
 
 		if (powerup_count == 3){

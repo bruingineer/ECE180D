@@ -122,14 +122,7 @@ public class GestureGame : Event {
 	}
 
 	// function called when event is correct
-	protected override void HandleCorrectEvent()
-	{
-		if (timerDuration > timerDuration-4){
-			Powerup.powerup_count++;
-		}
-		else{
-			Powerup.powerup_count = 0;
-		}
+	protected override void HandleCorrectEvent(){
 
 		// set to true as to not repeat the function
 		handledCorrect = true;

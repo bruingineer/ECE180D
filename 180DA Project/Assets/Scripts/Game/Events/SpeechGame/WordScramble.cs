@@ -23,14 +23,7 @@ public class WordScramble : Speech {
 	}
 
 	protected override void HandleCorrectEvent()
-	{
-		if (curTime > timerDuration - 7){
-			Powerup.powerup_count++;
-		}
-		else{
-			Powerup.powerup_count = 0;
-		}
-		
+	{		
 		timerStopped = true;
 		HandleCorrectAction();
 		StopRecognizer();
@@ -76,9 +69,7 @@ public class WordScramble : Speech {
 
 	// ask jose if he can have one word shared by speech events
 	protected override void HandleIncorrectEvent(){
-		//Debug.Log("word scrambler failed");
-		//Powerup.powerup_count = 0;
-		Powerup.powerup_count++;
+		Powerup.powerup_count = 0;
         timerStopped = true;
         StopRecognizer();
         SelectedPlayer.current_unscramble_fail++;
