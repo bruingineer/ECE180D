@@ -218,7 +218,7 @@ public abstract class GameState_with_Player : GameState_Base
 
     protected virtual void HandlePlayerDestroyed()
     {
-        Destroy(gameObject);
+        Destroy(player);
     }
 }
 
