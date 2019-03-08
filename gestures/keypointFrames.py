@@ -89,7 +89,7 @@ class keypointFrames:
 
     def isDab(self):
         parts = [body25[x] for x in ['RWrist', 'Neck', 'RElbow', 'RShoulder','LElbow', 'LShoulder', 'LWrist']]
-        if not all(self.keypoints[0,parts,:]):
+        if not np.all(self.keypoints[0,parts,:]):
             print('not enough keypoints for dab!')
             return False
 
