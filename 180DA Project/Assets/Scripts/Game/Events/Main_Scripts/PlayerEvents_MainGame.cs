@@ -9,7 +9,8 @@ public class PlayerEvents_MainGame : PlayerEvents {
 		gestureGame = gameObject.AddComponent<GestureMainGame>();
 		scramblerGame = gameObject.AddComponent<WordScramble>();
 		triviaGame = gameObject.AddComponent<Trivia>();
-		 playerEvents = new List<Event> {gestureGame, scramblerGame, triviaGame};
-		// playerEvents = new List<Event> {scramblerGame, triviaGame};
+		playerEvents = new List<Event> {gestureGame, scramblerGame, triviaGame};
+		//  playerEvents = new List<Event> {scramblerGame, triviaGame};
+		// playerEvents = new List<Event> {gestureGame};
 	}
 }

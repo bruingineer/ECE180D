@@ -237,7 +237,7 @@ public abstract class GameState_with_Lives : GameState_with_Player
 
     public void ChangePitch(int playerLives)
     {
-        gameMusic.pitch = playerLives > 1 ? 1 : 1.25f;
+        gameMusic.pitch = playerLives > 1 ? 1 : 1.03f;
     }
 
     protected override void HandleLose()

@@ -150,7 +150,7 @@ public abstract class GestureGame : Event {
 
 	protected override IEnumerator ResetCorrect()
 	{
-		yield return new WaitForSeconds(0.5f);
+		yield return new WaitForSeconds(endDisplayTime);
 		Reset();
 		eventCorrect = true;
 		gestureCorrect = false;
