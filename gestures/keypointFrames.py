@@ -5,6 +5,8 @@ module to define gestures and poses
 
 import numpy as np
 
+DEBUG_PROCESS_KEYPOINTS = False
+
 # dictionary to convert body part names to the body_25 indexes
 body25 = {
         "Nose":      0,
@@ -79,8 +81,46 @@ class keypointFrames:
             return self.isRaiseLeftHand()
         elif _target_gesture == "righthandraise":
             return self.isRaiseRightHand()
+        elif _target_gesture == "dab":
+            return self.isDab()
         else:
             print("gesture "+_target_gesture+" not recognized.")
+
+    def isDab(self):
+        parts = [body25[x] for x in ['RWrist', 'Neck', 'RElbow', 'RShoulder','LElbow', 'LShoulder', 'LWrist']]
+        if not all(self.keypoints[0,parts,:]):
+            print('not enough keypoints for dab!')
+            return False
+
+        wristAndNeckCorrect = False
+        # RWrist X is close to neck X
+        if (self.WIDTH * 0.1 > abs(self.keypoints[0,body25['RWrist'],0] - self.keypoints[0,body25['Neck'],0])):
+            # RWrist above neck
+            print('RWrist / Neck X pass')
+            if (self.keypoints[0,body25['RWrist'],1] < self.keypoints[0,body25['Neck'],1]):
+                print('RWrist / Neck Y pass')
+                wristAndNeckCorrect = True
+
+        rightElbowCorrect = False
+        # right elbow placement 
+        if (self.keypoints[0,body25['RElbow'],0] < self.keypoints[0,body25['RShoulder'],0]):
+            print('RElbow / RShoulder X pass')
+            rightElbowCorrect = True
+
+        # left arm check is straight and up a bit
+        leftArmCorrect = False
+        leftArmX = self.keypoints[0,[body25['LShoulder', 'LElbow', 'LWrist']],0]
+        leftArmY = self.keypoints[0,[body25['LShoulder', 'LElbow', 'LWrist']],1]
+        if (np.array_equal(leftArmX, np.sort(leftArmX, axis=None)[::])):
+            print('left arm is in order to the left')
+            # check goes up
+            if(np.array_equal(leftArmY, np.sort(leftArmY, axis=None)[::-1])):
+                print('left arm goes up')
+                if(self.HEIGHT * 0.15 < (leftArmY.max() - leftArmY.min())):
+                    print('left arm goes up Enough')
+                    leftArmCorrect = True
+
+        return wristAndNeckCorrect and rightElbowCorrect and leftArmCorrect
 
     def isRightHandRightToLeftWave(self):
         x = []
@@ -132,7 +172,8 @@ class keypointFrames:
 
         # check for at least 6 of the 8 points are detected and their y variation is within threshold
         threshold = 0.1
-        if (TPoseKeypoints_y.size >= 6) and (abs(((TPoseKeypoints_y.max() - TPoseKeypoints_y.min()) / self.HEIGHT)) < threshold):
+        if (TPoseKeypoints_y.size >= 6) and (
+            (((TPoseKeypoints_y.max() - TPoseKeypoints_y.min()) / self.HEIGHT)) < threshold):
             if DEBUG_PROCESS_KEYPOINTS:
                 print("tpose - testing for x order")
             if (np.array_equal(np.sort(TPoseKeypoints_x, axis=None), TPoseKeypoints_x)):

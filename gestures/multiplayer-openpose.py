@@ -15,7 +15,6 @@ import keypointFrames
 # TODO: add these to the arguments
 DEBUG_MQTT = False
 DEBUG_MAIN = False
-DEBUG_PROCESS_KEYPOINTS = False
 MQTT_ENABLE = False
 
 waiting_for_target = True
