@@ -98,16 +98,19 @@ public abstract class Player : Moving_Object {
 	private void MovePlayerY() {
 			if (m_playerMQTT_Y.PlayerMoved || testY) {
 				int newY = (int)(transform.position.y + 1);
-				Vector3 end_position = new Vector3(transform.position.x, newY);
-				GameState_Base.PlayClip(Y_movement);
-				m_playerMQTT_Y.PlayerMoved = false;
 				HandlePlayerY(newY);
-				StartCoroutine(MovePlayerPosition(end_position, movementTimeY));
-				testY = false;
 			}
     } 
 
-	protected virtual void HandlePlayerY(int newY) {}
+	protected virtual void HandlePlayerY(int newY) 
+	{
+		Vector3 end_position = new Vector3(transform.position.x, newY);
+		GameState_Base.PlayClip(Y_movement);
+		m_playerMQTT_Y.PlayerMoved = false;
+		HandlePlayerY(newY);
+		StartCoroutine(MovePlayerPosition(end_position, movementTimeY));
+		testY = false;
+	}
 
 	// used to change the color when the player is in recovery mode
 	public IEnumerator ChangeColor()

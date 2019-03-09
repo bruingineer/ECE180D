@@ -40,6 +40,7 @@ public class Player_Multiplayer : Player {
 
 	protected override void HandlePlayerY(int newY)
 	{
+		base.HandlePlayerY(newY);
 		Multiplayer_Controller.multiplayerClient.SendMessage(Multiplayer_Controller.playerMovement, newY.ToString());
 	}
 
