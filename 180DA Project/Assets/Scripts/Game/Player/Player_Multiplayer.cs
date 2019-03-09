@@ -47,6 +47,6 @@ public class Player_Multiplayer : Player {
 	protected override void TeleportPowerUp()
 	{
 		base.TeleportPowerUp();
-		Multiplayer_Controller.multiplayerClient.SendMessage(Multiplayer_Controller.otherPlayerMovement, transform.position.y.ToString());
+		Multiplayer_Controller.multiplayerClient.SendMessage(Multiplayer_Controller.playerMovement, transform.position.y.ToString());
 	}
 }

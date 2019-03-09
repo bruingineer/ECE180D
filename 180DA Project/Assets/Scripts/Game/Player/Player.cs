@@ -107,7 +107,6 @@ public abstract class Player : Moving_Object {
 		Vector3 end_position = new Vector3(transform.position.x, newY);
 		GameState_Base.PlayClip(Y_movement);
 		m_playerMQTT_Y.PlayerMoved = false;
-		HandlePlayerY(newY);
 		StartCoroutine(MovePlayerPosition(end_position, movementTimeY));
 		testY = false;
 	}
