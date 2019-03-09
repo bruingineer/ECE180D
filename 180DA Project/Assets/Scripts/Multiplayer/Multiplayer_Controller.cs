@@ -11,6 +11,7 @@ public class Multiplayer_Controller : MonoBehaviour
     public static GameObject connectedButton;
     public static GameObject readyButton;
     public static Multiplayer_Controller instance;
+    private Slider otherPlayerSlider;
 
     // MQTT 
     public static string serverTopic;
@@ -21,6 +22,8 @@ public class Multiplayer_Controller : MonoBehaviour
     public static string winnerTopic;
     public static string playerHeader;
     public static string wonMessage = "I WON";
+    public static string playerMovement;
+    public static string otherPlayerMovement;
     private int clientID;
 
     // States
@@ -36,11 +39,16 @@ public class Multiplayer_Controller : MonoBehaviour
     private bool handledConnected;
     private bool gamePlayedOnce;
     private bool handledGameStarted;
+    public static int otherPlayerPosition;
+    public static bool otherPlayerMoved;
 
 
     // Use this for initialization
     void Awake()
     {
+        otherPlayerSlider = GameObject.Find("Slider").GetComponent<Slider>();
+        otherPlayerMoved = false;
+        otherPlayerPosition = 0;
         instance = this;
         connectedButton = GameObject.Find("Connect Button");
         readyButton = GameObject.Find("Ready Button");
@@ -56,6 +64,14 @@ public class Multiplayer_Controller : MonoBehaviour
             Connected();
         if (gameStarted && !handledGameStarted)
             StartGame();
+        if (otherPlayerMoved)
+            MoveSlider();
+    }
+
+    private void MoveSlider()
+    {
+        otherPlayerSlider.value = otherPlayerPosition;
+        otherPlayerMoved = false;
     }
 
     private void ResetBools()
@@ -95,7 +111,9 @@ public class Multiplayer_Controller : MonoBehaviour
         challengeTopic = playerHeader + "challenge";
         winnerTopic = playerHeader + "winner_notification";
         playerConnectionTopic = playerHeader + "connection_status";
+        playerMovement = playerHeader + "movement";
         Debug.Log("Player connected to server...");
+        otherPlayerMovement = (playerHeader == "player1" ? "player2" : "player1") + "/movement";
         GetComponent<Obstacles_Multiplayer>().SetUpClient(playerHeader);
         GetComponent<PlayerEvents_Multiplayer>().SetUpClient(playerHeader);
         connectedButton.SetActive(false);
@@ -110,7 +128,7 @@ public class Multiplayer_Controller : MonoBehaviour
             readyButton.transform.Find("Text").GetComponent<Text>().text = "Waiting to play...";
             if (!gamePlayedOnce)
             {
-                multiplayerClient.Subscribe(new string[] { gameStateTopic, challengeTopic, winnerTopic });
+                multiplayerClient.Subscribe(new string[] { gameStateTopic, challengeTopic, winnerTopic, otherPlayerMovement});
                 gamePlayedOnce = true;
             }
             multiplayerClient.SendMessage(playerConnectionTopic, "ready");
@@ -130,6 +148,8 @@ public class Multiplayer_Controller : MonoBehaviour
     {
         GameState_Base.gameMusic.Stop();
         GetComponent<GameState_Multiplayer>().ResetGameState();
+        otherPlayerPosition = 0;
+        otherPlayerSlider.value = otherPlayerPosition;
         ResetBools();
     }
 

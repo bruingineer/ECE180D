@@ -503,8 +503,8 @@ Canvas:
   m_GameObject: {fileID: 2009109394}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 0
-  m_Camera: {fileID: 0}
+  m_RenderMode: 1
+  m_Camera: {fileID: 1541241235}
   m_PlaneDistance: 100
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
@@ -513,7 +513,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 25
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 2
   m_TargetDisplay: 0
 --- !u!1 &434165913
 GameObject:
@@ -549,7 +549,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 400, y: -219.99995}
+  m_AnchoredPosition: {x: 400, y: -219.99994}
   m_SizeDelta: {x: 530.7, y: 69.4}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &434165915
@@ -799,6 +799,11 @@ Prefab:
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fc32d5d2052764c00bbaa420a247668f, type: 2}
   m_IsPrefabAsset: 0
+--- !u!20 &1541241235 stripped
+Camera:
+  m_CorrespondingSourceObject: {fileID: 20844947195079582, guid: fc32d5d2052764c00bbaa420a247668f,
+    type: 2}
+  m_PrefabInternal: {fileID: 1541241234}
 --- !u!1 &1550006967
 GameObject:
   m_ObjectHideFlags: 0

@@ -27,9 +27,9 @@ public abstract class Player : Moving_Object {
 	PlayerMQTT_X m_playerMQTT_X;
 	protected const string localizationTopic = "localization";
 	protected const string movementTopic = "movement";
+	public bool testY = false;
 	private int playerLaneNum;
 	SpriteRenderer sr;
-	public bool testY = false;
 
 	// MQTT
 	protected string playerMQTT_Y_topic;
@@ -60,11 +60,12 @@ public abstract class Player : Moving_Object {
 			}
 	}
 
-	private void TeleportPowerUp()
+	protected virtual void TeleportPowerUp()
 	{
 		Debug.Log("teleporting");
 		isPlayerMoving = true;
 		transform.position = Powerup.tele_to;
+		
 		Debug.Log(Powerup.tele_to);
 		teleportActve = false;					
 		isPlayerMoving = false;
@@ -85,6 +86,8 @@ public abstract class Player : Moving_Object {
 			StartCoroutine(MovePlayerPosition(end_position, timeToMove));	
 		}
 	}
+
+	// add message to send to other
 	public IEnumerator MovePlayerPosition(Vector3 end_position, float timeToMove)
    	{
 		isPlayerMoving = true;
@@ -94,13 +97,17 @@ public abstract class Player : Moving_Object {
 
 	private void MovePlayerY() {
 			if (m_playerMQTT_Y.PlayerMoved || testY) {
-				Vector3 end_position = new Vector3(transform.position.x, transform.position.y + 1);
+				int newY = (int)(transform.position.y + 1);
+				Vector3 end_position = new Vector3(transform.position.x, newY);
 				GameState_Base.PlayClip(Y_movement);
 				m_playerMQTT_Y.PlayerMoved = false;
+				HandlePlayerY(newY);
 				StartCoroutine(MovePlayerPosition(end_position, movementTimeY));
 				testY = false;
 			}
     } 
+
+	protected virtual void HandlePlayerY(int newY) {}
 
 	// used to change the color when the player is in recovery mode
 	public IEnumerator ChangeColor()

@@ -31,9 +31,21 @@ public class Player_Multiplayer : Player {
 			}
 
 			newY = Mathf.Ceil(transform.position.y - 1);
+			Multiplayer_Controller.multiplayerClient.SendMessage(Multiplayer_Controller.playerMovement, newY.ToString());
 			StartCoroutine(MovePlayerPosition(new Vector2(newX, newY) , movementTimeY));
 			yield return ChangeColor();
 		}
 		
+	}
+
+	protected override void HandlePlayerY(int newY)
+	{
+		Multiplayer_Controller.multiplayerClient.SendMessage(Multiplayer_Controller.playerMovement, newY.ToString());
+	}
+
+	protected override void TeleportPowerUp()
+	{
+		base.TeleportPowerUp();
+		Multiplayer_Controller.multiplayerClient.SendMessage(Multiplayer_Controller.otherPlayerMovement, transform.position.y.ToString());
 	}
 }

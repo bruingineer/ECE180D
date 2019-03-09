@@ -178,6 +178,11 @@ public class MultiplayerClient : MQTT_Class {
 				Multiplayer_Controller.lost = true;
 			else if (message == "winner")
 				Multiplayer_Controller.won = true;
+		} else if (e.Topic == Multiplayer_Controller.otherPlayerMovement)
+		{
+			Debug.Log("Other player is at: " + Int32.Parse(message));
+			Multiplayer_Controller.otherPlayerPosition = Int32.Parse(message);
+			Multiplayer_Controller.otherPlayerMoved = true;
 		}
 	} 
 

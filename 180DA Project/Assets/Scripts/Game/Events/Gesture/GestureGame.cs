@@ -28,12 +28,14 @@ public abstract class GestureGame : Event {
 
 	// Gesture names
 	public static string tpose = "tpose";
-	public static string fieldGoal = "fieldgoal";
+	public static string fieldGoal = "fieldGoal";
 	public static string rightHandDab = "dab";
-	public static string rightHandWave = "righthandwave";
-	public static string leftHandRaise = "lefthandraise";
-	public static string rightHandRaise = "righthandraise";
-	public static string leftHandWave = "lefthandwave";
+	public static string rightHandWave = "rightHandWave";
+	public static string leftHandWave = "leftHandWave";
+	public static string rightHandRaise = "rightHandRaise";
+	public static string leftHandRaise = "leftHandRaise";
+	
+	
 	private List<string> gestures = new List<string>()
 			{
 				tpose, 
@@ -55,13 +57,8 @@ public abstract class GestureGame : Event {
 		{rightHandDab, "Dab Right Side"}
 	};
 
-
-	// TODO change later so there's only one it accesses
-	// should only be one on the canvas it accesses
-	// ask Jose if ok to merge
 	private TextMeshProUGUI gestureText;
 
-	// TODO Ask Jose if this can be merged as well
 	private TextMeshProUGUI Msg;
 
 	// Handle communication with OpenPose
@@ -69,10 +66,8 @@ public abstract class GestureGame : Event {
 
 	// Variables
 
-	// TODO check if any of these are shared with SpeechGames
-
 	// used to know what gesture was chosen
-	private string curGesture;
+	protected string curGesture;
 
 	// used to know if GestureClient received a correct gesture
 	public static bool gestureCorrect = false;
@@ -125,6 +120,7 @@ public abstract class GestureGame : Event {
 	protected override void SetUpEvent(string phrase = null)
 	{
 		curGesture = phrase != null ? phrase : gestures[UnityEngine.Random.Range(0, gestures.Count)];
+		Debug.Log(curGesture);
 		gestureText.text = gestureStringBeautify[curGesture];
 		Msg.text = "Do This:";
 		// tell OpenPose to start looking for this gesture
@@ -190,7 +186,7 @@ public abstract class GestureGame : Event {
 }
 
 public class GestureMiniGame : GestureGame {
-
+	private Video_Player video_Player;
 	// number of current gestures correct increments when it is a minigame
 	protected override void HandleCorrectAction()
 	{
@@ -202,6 +198,20 @@ public class GestureMiniGame : GestureGame {
 	{
 		GameState_Event_Minigame.curCorrect = 0;
 		base.HandleIncorrectEvent();
+	}
+
+	protected override void Awake()
+	{
+		video_Player = GameObject.Find("Video Player").GetComponent<Video_Player>();
+		base.Awake();
+	}
+
+	protected override void SetUpEvent(string phrase = null)
+	{
+		base.SetUpEvent(phrase);
+		video_Player.StopClips();
+		Debug.Log(curGesture);
+		video_Player.PlayClips(curGesture);
 	}
 }
 
