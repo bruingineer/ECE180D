@@ -17,14 +17,18 @@ public class Player_Multiplayer : Player {
 
 	protected override IEnumerator HandlePlayerHit()
 	{
-		if (transform.position.y > 0.5)
+
+		if (transform.position.y > 0)
 		{
-			StopAllCoroutines();
-			float newX, newY;
-			if (facingRight)
-				newX = Mathf.Floor(transform.position.x + 1);
-			else
-				newX = Mathf.Ceil(transform.position.x - 1);
+			
+			float newX = transform.position.x, newY;
+			if (transform.position.x != Mathf.Floor(newX))
+			{
+				if (facingRight)
+					newX = Mathf.Floor(transform.position.x + 1);
+				else
+					newX = Mathf.Ceil(transform.position.x - 1);
+			}
 
 			newY = Mathf.Ceil(transform.position.y - 1);
 			StartCoroutine(MovePlayerPosition(new Vector2(newX, newY) , movementTimeY));

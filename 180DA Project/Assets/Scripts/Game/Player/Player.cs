@@ -29,6 +29,7 @@ public abstract class Player : Moving_Object {
 	protected const string movementTopic = "movement";
 	private int playerLaneNum;
 	SpriteRenderer sr;
+	public bool testY = false;
 
 	// MQTT
 	protected string playerMQTT_Y_topic;
@@ -92,11 +93,12 @@ public abstract class Player : Moving_Object {
     }
 
 	private void MovePlayerY() {
-			if (m_playerMQTT_Y.PlayerMoved) {
+			if (m_playerMQTT_Y.PlayerMoved || testY) {
 				Vector3 end_position = new Vector3(transform.position.x, transform.position.y + 1);
 				GameState_Base.PlayClip(Y_movement);
 				m_playerMQTT_Y.PlayerMoved = false;
 				StartCoroutine(MovePlayerPosition(end_position, movementTimeY));
+				testY = false;
 			}
     } 
 

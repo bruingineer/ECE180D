@@ -168,12 +168,12 @@ Prefab:
     - target: {fileID: 224055233316080858, guid: fc32d5d2052764c00bbaa420a247668f,
         type: 2}
       propertyPath: m_AnchoredPosition.x
-      value: -7
+      value: -7.5
       objectReference: {fileID: 0}
     - target: {fileID: 224055233316080858, guid: fc32d5d2052764c00bbaa420a247668f,
         type: 2}
       propertyPath: m_AnchoredPosition.y
-      value: -1
+      value: -1.5
       objectReference: {fileID: 0}
     - target: {fileID: 224055233316080858, guid: fc32d5d2052764c00bbaa420a247668f,
         type: 2}
@@ -298,6 +298,14 @@ Prefab:
       propertyPath: playerIcons.Array.data[1]
       value: 
       objectReference: {fileID: 595776788}
+    - target: {fileID: 4076207377801242, guid: d78defd6cd2f245f8bf556e9fc610325, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: -9.35
+      objectReference: {fileID: 0}
+    - target: {fileID: 4076207377801242, guid: d78defd6cd2f245f8bf556e9fc610325, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 2.59
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 114340158667787706, guid: d78defd6cd2f245f8bf556e9fc610325, type: 2}
   m_SourcePrefab: {fileID: 100100000, guid: d78defd6cd2f245f8bf556e9fc610325, type: 2}
@@ -452,27 +460,27 @@ Prefab:
     - target: {fileID: 114991035482318002, guid: 845256913211b44809f85d872213b61d,
         type: 2}
       propertyPath: m_text
-      value: engineer
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 114991035482318002, guid: 845256913211b44809f85d872213b61d,
         type: 2}
       propertyPath: m_textInfo.characterCount
-      value: 8
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 114991035482318002, guid: 845256913211b44809f85d872213b61d,
         type: 2}
       propertyPath: m_textInfo.wordCount
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 114991035482318002, guid: 845256913211b44809f85d872213b61d,
         type: 2}
       propertyPath: m_textInfo.lineCount
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 114991035482318002, guid: 845256913211b44809f85d872213b61d,
         type: 2}
       propertyPath: m_textInfo.pageCount
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 114991035482318002, guid: 845256913211b44809f85d872213b61d,
         type: 2}
