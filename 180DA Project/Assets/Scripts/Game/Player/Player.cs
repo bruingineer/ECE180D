@@ -9,7 +9,7 @@ public abstract class Player : Moving_Object {
 	private float recoveryStepTime = 0.5f;
 	// must be odd
 	private float numberOfChanges = 5;
-	private bool facingRight = true;
+	protected bool facingRight = true;
 	
 	// Player Audio Clips
 	private AudioClip X_movement;
@@ -54,15 +54,19 @@ public abstract class Player : Moving_Object {
 				MovePlayerX();
 				if (GameState_Base.gamePlaying)
 				MovePlayerY();
-				if (teleportActve){
-					Debug.Log("teleporting");
-					isPlayerMoving = true;
-					transform.position = Powerup.tele_to;
-					Debug.Log(Powerup.tele_to);
-					teleportActve = false;					
-					isPlayerMoving = false;
-				}
+				if (teleportActve)
+					TeleportPowerUp();
 			}
+	}
+
+	private void TeleportPowerUp()
+	{
+		Debug.Log("teleporting");
+		isPlayerMoving = true;
+		transform.position = Powerup.tele_to;
+		Debug.Log(Powerup.tele_to);
+		teleportActve = false;					
+		isPlayerMoving = false;
 	}
 
 	private void MovePlayerX() {

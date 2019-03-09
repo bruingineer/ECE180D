@@ -19,7 +19,15 @@ public class Player_Multiplayer : Player {
 	{
 		if (transform.position.y > 0.5)
 		{
-			StartCoroutine(MovePlayerPosition(new Vector2(transform.position.x, transform.position.y - 1) , movementTimeY));
+			StopAllCoroutines();
+			float newX, newY;
+			if (facingRight)
+				newX = Mathf.Floor(transform.position.x + 1) + 0.5f;
+			else
+				newX = Mathf.Ceil(transform.position.x - 1) - 0.5f;
+
+			// newY = 
+			// StartCoroutine(MovePlayerPosition(new Vector2(transform.position.x, transform.position.y - 1) , movementTimeY));
 			yield return ChangeColor();
 		}
 		
