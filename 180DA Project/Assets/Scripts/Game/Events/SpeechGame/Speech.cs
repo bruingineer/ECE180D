@@ -61,7 +61,7 @@ public abstract class Speech : Event
         if (m_DictationRecognizer != null && (m_DictationRecognizer.Status == UnityEngine.Windows.Speech.SpeechSystemStatus.Running))
         {
             //Debug.Log("Closing Dictation Recognizer");
-            m_DictationRecognizer.Dispose();
+            //m_DictationRecognizer.Dispose();
             m_DictationRecognizer.Stop();
         }
     }

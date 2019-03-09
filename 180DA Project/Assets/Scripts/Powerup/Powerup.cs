@@ -42,9 +42,15 @@ public class Powerup : MonoBehaviour {
 	static public Vector3 tele_to;
 	public GameObject Super;
 	public void AddTeleport(){
+		int row = UnityEngine.Random.Range(0,10);
 		Vector3 player_pos = GameObject.FindWithTag("Player").transform.position;
-		tele_from = new Vector3(1.5f, player_pos[1] + 2f);
-		tele_to = new Vector3(6.5f, player_pos[1] + 5f);
+		if (player_pos[1] > 13.5 - 4){
+
+		}
+		else{
+			tele_from = new Vector3((float)row + 0.5f, player_pos[1] + 2f);
+			tele_to = new Vector3((float)row + 0.5f, player_pos[1] + 5f);
+		}
 
 
 		from = (Resources.Load("Prefabs/Powerups/From") as GameObject);
