@@ -25,16 +25,35 @@ public abstract class GestureGame : Event {
 
 		Use this for adding new gestures.
 	*/
+
+	// Gesture names
+	public static string tpose = "tpose";
+	public static string fieldGoal = "fieldgoal";
+	public static string rightHandDab = "dab";
+	public static string rightHandWave = "righthandwave";
+	public static string leftHandRaise = "lefthandraise";
+	public static string rightHandRaise = "righthandraise";
+	public static string leftHandWave = "lefthandwave";
 	private List<string> gestures = new List<string>()
 			{
-				"tpose", 
-				"fieldgoal",
-				"dab",
-				"righthandwave",
-				"lefthandraise",
-				"righthandraise",
-				"lefthandraise"
+				tpose, 
+				fieldGoal,
+				rightHandWave,
+				leftHandWave,
+				rightHandRaise,
+				leftHandRaise,
+				rightHandDab
 			};
+
+	private Dictionary<string, string> gestureStringBeautify = new Dictionary<string, string> {
+		{tpose, "TPose"},
+		{fieldGoal, "Touchdown"},
+		{rightHandWave, "Wave Right Hand"},
+		{leftHandWave, " Wave Left Hand"},
+		{rightHandRaise, "Raise Right Hand"},
+		{leftHandRaise, "Raise Left Hand"},
+		{rightHandDab, "Dab Right Side"}
+	};
 
 
 	// TODO change later so there's only one it accesses
@@ -106,7 +125,7 @@ public abstract class GestureGame : Event {
 	protected override void SetUpEvent(string phrase = null)
 	{
 		curGesture = phrase != null ? phrase : gestures[UnityEngine.Random.Range(0, gestures.Count)];
-		gestureText.text = curGesture.ToUpper();
+		gestureText.text = gestureStringBeautify[curGesture];
 		Msg.text = "Do This:";
 		// tell OpenPose to start looking for this gesture
 		gestureClient.SendMessage(topicGestureSent, curGesture);
