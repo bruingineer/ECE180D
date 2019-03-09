@@ -39,7 +39,7 @@ public abstract class GameState_Base : MonoBehaviour
         training_client = new MQTTHelper("database");
         Time.timeScale = 1;
         instance = this;
-        end_row = 14;
+        end_row = 13;
         gameLostMusic = Resources.Load<AudioClip>(SoundsPath + "Game_Lost");
         gameWonMusic = Resources.Load<AudioClip>(SoundsPath + "Game_Won");
         gamePlaying = false;
