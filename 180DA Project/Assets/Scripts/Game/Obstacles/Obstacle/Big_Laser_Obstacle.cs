@@ -97,7 +97,7 @@ public class Big_Laser_Obstacle : Laser_Obstacle {
 		for(int i = 0; i < list_count; i++)
 		{
 			// create laser prefab
-			GameObject prefab = Instantiate(laserPrefab, new Vector3(laserPositions[i] + 0.5f, GameState_Base.end_row), Quaternion.Euler(0, 0, 90)) as GameObject;
+			GameObject prefab = Instantiate(laserPrefab, new Vector3(laserPositions[i], GameState_Base.end_row), Quaternion.Euler(0, 0, 90)) as GameObject;
 			// add component based on whether it is a Minigame or maingame
 			AddComponentToLaser(prefab);
 			lasers.Add(prefab);

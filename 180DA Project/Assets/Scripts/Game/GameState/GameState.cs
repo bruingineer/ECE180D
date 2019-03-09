@@ -180,7 +180,7 @@ public abstract class GameState_with_Player : GameState_Base
     {
         Debug.Log("nice");
         numLanes = 10;
-        playerStartPosition = new Vector3(numLanes / 2 + 0.5f, 0.5f);
+        playerStartPosition = new Vector3(numLanes / 2, 0);
         InitializeLaneList();
         SelectedPlayer.resetGameStats();
         player = (Resources.Load("Prefabs/Player/Player") as GameObject);
@@ -201,7 +201,7 @@ public abstract class GameState_with_Player : GameState_Base
 
     protected override void HandleWin()
     {
-        if (player.transform.position.y == (end_row - 0.5f))
+        if (player.transform.position.y == end_row)
             GameWon();
     }
 

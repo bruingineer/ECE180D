@@ -315,6 +315,14 @@ Prefab:
       propertyPath: m_audioClip
       value: 
       objectReference: {fileID: 8300000, guid: b2c75deb4bb1f4fc894e6d1008d9278b, type: 3}
+    - target: {fileID: 4076207377801242, guid: d78defd6cd2f245f8bf556e9fc610325, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: -9.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 4076207377801242, guid: d78defd6cd2f245f8bf556e9fc610325, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 2.59
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 114340158667787706, guid: d78defd6cd2f245f8bf556e9fc610325, type: 2}
     - {fileID: 82402646971904474, guid: d78defd6cd2f245f8bf556e9fc610325, type: 2}
@@ -493,6 +501,16 @@ Prefab:
     - target: {fileID: 4174209569127958, guid: fc32d5d2052764c00bbaa420a247668f, type: 2}
       propertyPath: m_RootOrder
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224055233316080858, guid: fc32d5d2052764c00bbaa420a247668f,
+        type: 2}
+      propertyPath: m_AnchoredPosition.x
+      value: -7.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 224055233316080858, guid: fc32d5d2052764c00bbaa420a247668f,
+        type: 2}
+      propertyPath: m_AnchoredPosition.y
+      value: -1.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fc32d5d2052764c00bbaa420a247668f, type: 2}

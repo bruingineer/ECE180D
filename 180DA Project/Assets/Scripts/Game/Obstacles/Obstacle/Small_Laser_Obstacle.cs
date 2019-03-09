@@ -53,7 +53,7 @@ public class Small_Laser_Obstacle : Laser_Obstacle {
 		int list_count = laserPositions.Count;
 		for(int i = 0; i < list_count; i++) 
 		{
-			GameObject prefab = Instantiate(laserPrefab, new Vector3(laserPositions[i] + 0.5f, 
+			GameObject prefab = Instantiate(laserPrefab, new Vector3(laserPositions[i], 
 					start_Y_Position), Quaternion.Euler(0, 0, 90));
 			Small_Laser smallLaser = AddComponentToLaser(prefab).GetComponent<Small_Laser>();
 			if (smallLaser)

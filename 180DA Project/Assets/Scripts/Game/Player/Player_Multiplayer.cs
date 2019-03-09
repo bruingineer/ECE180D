@@ -22,12 +22,12 @@ public class Player_Multiplayer : Player {
 			StopAllCoroutines();
 			float newX, newY;
 			if (facingRight)
-				newX = Mathf.Floor(transform.position.x + 1) + 0.5f;
+				newX = Mathf.Floor(transform.position.x + 1);
 			else
-				newX = Mathf.Ceil(transform.position.x - 1) - 0.5f;
+				newX = Mathf.Ceil(transform.position.x - 1);
 
-			// newY = 
-			// StartCoroutine(MovePlayerPosition(new Vector2(transform.position.x, transform.position.y - 1) , movementTimeY));
+			newY = Mathf.Ceil(transform.position.y - 1);
+			StartCoroutine(MovePlayerPosition(new Vector2(newX, newY) , movementTimeY));
 			yield return ChangeColor();
 		}
 		
