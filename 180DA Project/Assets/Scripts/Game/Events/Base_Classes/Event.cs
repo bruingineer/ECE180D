@@ -24,15 +24,15 @@ public abstract class Event : MonoBehaviour {
 		/*
 			Difficulty set depending on the chosen difficulty level
 		*/
-		if (SelectedPlayer.current_difficulty == "easy") {
+		if (GameState_Base.gameDifficulty == "easy") {
 			timerDuration = 11f;
 		}
-        else if (SelectedPlayer.current_difficulty == "medium") {
+        else if (GameState_Base.gameDifficulty == "medium") {
 			timerDuration = 8f;
 			repeatRate = .5f;
 			
 		}
-        else if (SelectedPlayer.current_difficulty == "hard")  {
+        else if (GameState_Base.gameDifficulty == "hard")  {
 			timerDuration = 5f;
 			repeatRate = .25f; 
 		} 

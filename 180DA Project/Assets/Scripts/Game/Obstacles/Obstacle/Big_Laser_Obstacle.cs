@@ -28,19 +28,19 @@ public class Big_Laser_Obstacle : Laser_Obstacle {
 	void Awake () {
         // Choose # of lasers to fire based on difficulty selected
 		// Choose countdown time based on difficulty
-        if (SelectedPlayer.current_difficulty == "easy") 
+        if (GameState_Base.gameDifficulty == "easy") 
 		{ 
 			laserCountdown_str = countdownEasy;
 			minLasers = 4;
 			maxLasers = 7;
 		}
-        else if (SelectedPlayer.current_difficulty == "medium") 
+        else if (GameState_Base.gameDifficulty == "medium") 
 		{
 			laserCountdown_str = countdownMedium;
 			minLasers = 5;
 			maxLasers = 8;
 		}
-        else if (SelectedPlayer.current_difficulty == "hard") 
+        else if (GameState_Base.gameDifficulty == "hard") 
 		{
 			laserCountdown_str = countdownHard;
 			minLasers = 6;

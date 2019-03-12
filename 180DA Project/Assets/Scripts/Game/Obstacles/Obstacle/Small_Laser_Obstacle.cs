@@ -16,18 +16,18 @@ public class Small_Laser_Obstacle : Laser_Obstacle {
 	void Awake()
 	{
 		//Choose # of lasers to fire and laser speed based on difficulty selected
-        if (SelectedPlayer.current_difficulty == "easy") 
+        if (GameState_Base.gameDifficulty == "easy") 
 		{
 			laserDuration = 4f;
 			lasersToFire = 10;
 			waitForNextLaser = .5f;
 		}
-        else if (SelectedPlayer.current_difficulty == "medium") {
+        else if (GameState_Base.gameDifficulty == "medium") {
 			laserDuration = 3f;
 			lasersToFire = 15;
 			waitForNextLaser = 0.4f;
 		}
-        else if (SelectedPlayer.current_difficulty == "hard") {
+        else if (GameState_Base.gameDifficulty == "hard") {
 			laserDuration = 2.5f;
 			lasersToFire = 20;
 			waitForNextLaser = 0.3f;
