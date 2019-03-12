@@ -12,14 +12,16 @@ public class Teleport : MonoBehaviour {
 		sound = Resources.Load<AudioClip>("Sounds/Laser/Small_Laser_Sound");
 	}
 
-	
+	public bool DestroyOn = false;
 	void Update (){
 		Vector3 player_pos = GameObject.FindGameObjectWithTag("Player").transform.position;
 		if (player_pos[1] > Powerup.tele_from[1]){
 			Destroy(this.gameObject);
 			Powerup.teleportOn = false;
 		}
-
+		if (DestroyOn){
+			Destroy(this.gameObject);
+		}
 	}
 
 	private void OnTriggerEnter(Collider other)

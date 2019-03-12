@@ -66,6 +66,7 @@ public class Trivia : Speech {
 	protected override void HandleIncorrectEvent(){
         timerStopped = true;
         StopRecognizer();
+		Powerup.powerup_count = 0;
         SelectedPlayer.current_trivia_fail++;
         answer.text = "";
         triviaText.text = "";

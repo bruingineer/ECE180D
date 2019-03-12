@@ -48,8 +48,16 @@ public abstract class Player : Moving_Object {
 	}
 
 	public bool teleportActve = false;
+	public bool superActive = false;
+	public bool superActived = false;
 	void Update()
 	{
+		if (superActive && !superActived){
+			//Debug.Log("super activaed");
+				superActived = true;
+				StartCoroutine("SetSuper");
+		}
+
 		if (!isPlayerMoving) 
 			{
 				MovePlayerX();
@@ -58,6 +66,22 @@ public abstract class Player : Moving_Object {
 				if (teleportActve)
 					TeleportPowerUp();
 			}
+	}
+
+	IEnumerator SetSuper(){
+			Color p_color = sr.color;
+			sr.color = Color.blue;
+			yield return new WaitForSeconds(8);
+			
+			for (int i = 0; i < 16; i++){
+				sr.color = Color.blue;
+				yield return new WaitForSeconds(0.125f);
+				sr.color = p_color;
+				yield return new WaitForSeconds(0.125f);
+			}
+			superActive = false;
+			superActived = false;
+			Powerup.superOn = false;
 	}
 
 	protected virtual void TeleportPowerUp()
@@ -73,7 +97,7 @@ public abstract class Player : Moving_Object {
 
 	private void MovePlayerX() {
 		if ((playerLaneNum != m_playerMQTT_X.cur_lane_num)) {
-			Vector3 end_position = new Vector3(0.5f + m_playerMQTT_X.cur_lane_num, transform.position.y );
+			Vector3 end_position = new Vector3(m_playerMQTT_X.cur_lane_num, transform.position.y );
 			float timeToMove = secondsToMoveX * Mathf.Abs(playerLaneNum - m_playerMQTT_X.cur_lane_num);
 			GameState_Base.PlayClip(X_movement);
 			if ((facingRight && m_playerMQTT_X.cur_lane_num < playerLaneNum)

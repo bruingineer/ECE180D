@@ -24,12 +24,20 @@ public class Big_Laser : Laser {
 
 	void CheckHitPlayer()
 	{
+		if (Powerup.superOn)
+			return;
 		// RaycastHit returns information regarding the hit from the LineRenderer (you can access it's transform)
 		RaycastHit hit;
         if (Physics.Raycast(transform.position, Vector3.down, out hit) && !playerHit && laserStart)
 		{
 			playerHit = true;
 			PlayerHit(hit.transform);
+			GameObject teleport = GameObject.FindWithTag("to");
+			if (teleport != null){
+				//if to is present in the game so is from
+				teleport.GetComponent<Teleport>().DestroyOn = true;
+				GameObject.FindWithTag("from").GetComponent<Teleport>().DestroyOn = true;
+			}
 		}
 	}
 

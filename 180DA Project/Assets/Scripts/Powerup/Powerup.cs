@@ -21,23 +21,43 @@ public class Powerup : MonoBehaviour {
 	static public bool teleportOn;
 	// Update is called once per frame
 	static bool resetCount = false;
-	void Update () {
-		if(powerup_count == 3 && !teleportOn){
-			Debug.Log("Give Player Teleport");
-			powerup_count = 0;
-			AddTeleport();
-			teleportOn = true;
-		}
+	bool cooldown = false;
 
-		if (powerup_count == 3){
-			superOn = true;
-			Debug.Log("Give player Super");
-			
-		}
+	IEnumerator CoolDownTimer(){
+		yield return new WaitForSeconds(20);
+		cooldown = false;
 	}
 
-	Vector3 start;
+	void Update () {
+		if (powerup_count > 4 && !cooldown){
+			int x = UnityEngine.Random.Range(0,1);
+			x = 1;
+			if (x == 0){
+				Debug.Log("Give Player Teleport");
+				powerup_count = 0;
+				AddTeleport();
+				teleportOn = true;
+				cooldown = true;
+				StartCoroutine(CoolDownTimer());
+			}
+			else{
+				powerup_count  = 0;
+				superOn = true;
+				Debug.Log("Give player Super");
+				GiveSuper();
+				cooldown = true;
+				StartCoroutine(CoolDownTimer());
+			}
 	
+		}
+
+	}
+
+	public void GiveSuper(){
+		GameObject.FindWithTag("Player").GetComponent<Player>().superActive = true;
+	}
+
+ 	Vector3 start;
 	static public Vector3 tele_from;
 	static public Vector3 tele_to;
 	public GameObject Super;
@@ -48,8 +68,8 @@ public class Powerup : MonoBehaviour {
 
 		}
 		else{
-			tele_from = new Vector3((float)row + 0.5f, player_pos[1] + 2f);
-			tele_to = new Vector3((float)row + 0.5f, player_pos[1] + 5f);
+			tele_from = new Vector3((float)row , player_pos[1] + 2f);
+			tele_to = new Vector3((float)row , player_pos[1] + 5f);
 		}
 
 

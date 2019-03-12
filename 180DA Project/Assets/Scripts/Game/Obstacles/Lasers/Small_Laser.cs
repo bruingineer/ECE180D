@@ -26,11 +26,18 @@ public class Small_Laser : Laser {
 	{
 		// gets component of the object, if player, it will return true, and the player will get hit
 		if (other.gameObject.tag == "Player"){
+			if (Powerup.superOn)
+				return;
 			PlayerHit(other.transform);
 			Destroy(gameObject);
+			GameObject teleport = GameObject.FindWithTag("to");
+			if (teleport != null){
+				//if to is present in the game so is from
+				teleport.GetComponent<Teleport>().DestroyOn = true;
+				GameObject.FindWithTag("from").GetComponent<Teleport>().DestroyOn = true;
+			}
 		}
 	}
-
 }
 
 public class Small_Laser_Minigame : Small_Laser {
