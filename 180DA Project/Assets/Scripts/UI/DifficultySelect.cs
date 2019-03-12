@@ -31,7 +31,12 @@ public class DifficultySelect : MonoBehaviour {
         if (button == "medium")
         {
             //Only allow medium if player has unlocked this difficulty
-            if (SelectedPlayer.suggested_difficulty == "easy") easy.Select();
+            if (SelectedPlayer.suggested_difficulty == "easy")
+            {
+                easy.Select();
+                Debug.Log("Difficulty set to Easy");
+                SelectedPlayer.current_difficulty = "easy";
+            }
             else
             {
                 Debug.Log("Difficulty set to Medium");
@@ -41,8 +46,18 @@ public class DifficultySelect : MonoBehaviour {
         if (button == "hard")
         {
             //Only allow hard if player has unlocked this difficulty
-            if (SelectedPlayer.suggested_difficulty == "easy") easy.Select();
-            else if (SelectedPlayer.suggested_difficulty == "medium") medium.Select();
+            if (SelectedPlayer.suggested_difficulty == "easy")
+            {
+                easy.Select();
+                Debug.Log("Difficulty set to Easy");
+                SelectedPlayer.current_difficulty = "easy";
+            }
+            else if (SelectedPlayer.suggested_difficulty == "medium")
+            {
+                medium.Select();
+                Debug.Log("Difficulty set to Medium");
+                SelectedPlayer.current_difficulty = "medium";
+            }
             else
             {
                 Debug.Log("Difficulty set to Hard");
