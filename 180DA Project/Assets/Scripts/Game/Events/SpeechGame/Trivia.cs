@@ -79,6 +79,10 @@ public class Trivia : Speech {
 public class TriviaMiniGame : Trivia {
 
 	// number of current gestures correct increments when it is a minigame
+	protected override void Awake()
+	{
+		GameState_Event_Minigame.numCorrect = 5;
+	}
 	protected override void HandleCorrectAction()
 	{
 		GameState_Event_Minigame.curCorrect++;

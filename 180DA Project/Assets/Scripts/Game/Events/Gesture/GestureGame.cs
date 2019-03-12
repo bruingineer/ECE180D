@@ -36,7 +36,7 @@ public abstract class GestureGame : Event {
 	public static string leftHandRaise = "leftHandRaise";
 	
 	
-	private List<string> gestures = new List<string>()
+	protected List<string> gestures = new List<string>()
 			{
 				tpose, 
 				fieldGoal,
@@ -191,18 +191,19 @@ public class GestureMiniGame : GestureGame {
 	protected override void HandleCorrectAction()
 	{
 		GameState_Event_Minigame.curCorrect++;
+		gestures.Remove(curGesture);
 	}
 
 	// number of correct gestures resets to 0 when incorrect
 	protected override void HandleIncorrectEvent()
 	{
-		GameState_Event_Minigame.curCorrect = 0;
 		base.HandleIncorrectEvent();
 	}
 
 	protected override void Awake()
 	{
 		video_Player = GameObject.Find("Video Player").GetComponent<Video_Player>();
+		GameState_Event_Minigame.numCorrect = gestures.Count;
 		base.Awake();
 	}
 
