@@ -19,6 +19,7 @@ public abstract class GameState_Base : MonoBehaviour
     protected AudioClip gameWonMusic;
     private const string SoundsPath = "Sounds/Game Music/";
     public static string gameMode;
+    public static string gameDifficulty;
 
     // Objects
     protected Canvas canvas;
@@ -35,6 +36,7 @@ public abstract class GameState_Base : MonoBehaviour
 
     protected virtual void Awake()
     {
+        SetUpDifficulty();
         challenges = new List<Challenge>();
         training_client = new MQTTHelper("database");
         Time.timeScale = 1;
@@ -51,6 +53,11 @@ public abstract class GameState_Base : MonoBehaviour
         menu.onClick.AddListener(LoadGameMenu);
         DisableButtons();
 		SetUp_Events_Obstacles();
+    }
+
+    protected virtual void SetUpDifficulty()
+    {
+        gameDifficulty = SelectedPlayer.current_difficulty;
     }
 
     private IEnumerator StartGameCoroutine()

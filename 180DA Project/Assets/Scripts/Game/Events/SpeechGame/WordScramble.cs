@@ -79,6 +79,7 @@ public class WordScramble : Speech {
 
 	// ask jose if he can have one word shared by speech events
 	protected override void HandleIncorrectEvent(){
+		Powerup.powerup_count = 0;
 		WDisplay.WordText.fontSize = 40;
 		WDisplay.WordText.characterSpacing = default_spacing;
         timerStopped = true;

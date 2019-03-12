@@ -75,8 +75,14 @@ public class GameState_Multiplayer : GameState_with_Player {
 
 	protected override void Awake()
 	{
+		
 		gameMode = "multiplayer_game";
 		base.Awake();
+	}
+
+	protected override void SetUpDifficulty()
+	{
+		gameDifficulty = "easy";
 	}
 
 	protected override void AddComponentToPlayer()
