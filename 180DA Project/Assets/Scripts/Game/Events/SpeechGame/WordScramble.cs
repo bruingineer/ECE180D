@@ -47,7 +47,7 @@ public class WordScramble : Speech {
 
 	private float default_spacing;
 	protected override void SetUpEvent(string phrase = null){  
-		WDisplay.WordText.fontSize = 80;   
+		WDisplay.WordText.fontSize = 60;   
 		default_spacing = WDisplay.WordText.characterSpacing;
 		WDisplay.WordText.characterSpacing = 5f;
 		Debug.Log("Starting Scramble");

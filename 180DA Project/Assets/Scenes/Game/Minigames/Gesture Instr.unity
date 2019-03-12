@@ -351,7 +351,7 @@ RectTransform:
   m_GameObject: {fileID: 683119734}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.3, y: 1.3, z: 1.3}
+  m_LocalScale: {x: 1.7158101, y: 1.7158101, z: 1.7158101}
   m_Children:
   - {fileID: 83482706}
   m_Father: {fileID: 2000929023}
@@ -480,8 +480,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -97, y: 22}
-  m_SizeDelta: {x: 214.2, y: 231.7}
+  m_AnchoredPosition: {x: 11.7, y: -53.3}
+  m_SizeDelta: {x: 431.7, y: 382.3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &751609626
 MonoBehaviour:
@@ -515,7 +515,8 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "Objective: \n\n\nPoses: "
+  m_Text: "Objective: \n\n\nPoses: \n\n\n\n\n\n\n\n\nFollow the video guides in the
+    mini-game to learn the right way to perform each pose!"
 --- !u!222 &751609627
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -788,8 +789,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 53, y: 22}
-  m_SizeDelta: {x: 214.2, y: 231.7}
+  m_AnchoredPosition: {x: 53, y: -49.4}
+  m_SizeDelta: {x: 214.2, y: 374.6}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1752717563
 MonoBehaviour:
@@ -823,7 +824,22 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Act out the gesture named in the screen before time runs out!
+  m_Text: 'Act out the gesture named in the screen before time runs out!
+
+
+    Field Goal
+
+    T-Pose
+
+    Raise Left Hand
+
+    Raise Right Hand
+
+    Wave Left Hand
+
+    Wave Right Hand
+
+    Right Hand Dab'
 --- !u!222 &1752717564
 CanvasRenderer:
   m_ObjectHideFlags: 0
