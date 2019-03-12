@@ -44,12 +44,14 @@ def on_message(client, userdata, msg):
             
             print(json_str)
             
-            if 'name' in json_str:
-                target = '/players'
-            elif 'game_id' in json_str:
-                target = '/games'
-            rc = client.publish(topic + target, payload= (json_str), qos =0, retain=False)
-            print(rc)
+            if len(result_dict) != 0:
+                if 'name' in json_str:
+                    target = '/players'
+                elif 'game_id' in json_str:
+                    target = '/games'
+                rc = client.publish(topic + target, payload= (json_str), qos =0, retain=False)
+                print(rc)
+               
         else:
             print("Committing to db w/ " + cmd_type + " command")
             mydb.commit()
@@ -64,7 +66,7 @@ def connect_to_db(ip):
       host = ip,
       user = "root",
       passwd = "password",
-      database = "Synchro"
+      database = "synchro3"
     )
 
     mycursor = mydb.cursor()
@@ -84,14 +86,14 @@ def main():
     parser = argparse.ArgumentParser(description='Wrapper for mysql commands from unity')
     parser.add_argument('--ip', type=str, action = 'store', default = 'localhost', help='IP address of machine running Mosquitto server')
     parser.add_argument('--dbip', type=str, action = 'store', default = 'localhost', help='IP address of machine running MySQL server')
-    parser.add_argument('--standalone', '-s', action = 'store_true', help='Run script withou') 
+    parser.add_argument('--standalone', '-s', action = 'store_true', help='Run script without connecting to MQTT') 
     args = parser.parse_args()
     
     if args.standalone:
         return
     
     connect_to_server(args.ip)
-    connect_to_db(args.ip)
+    connect_to_db(args.dbip)
     
     client.loop_forever()
    
