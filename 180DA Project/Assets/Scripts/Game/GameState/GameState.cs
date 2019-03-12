@@ -260,8 +260,9 @@ public abstract class GameState_with_Lives : GameState_with_Player
 
 public abstract class GameState_Event_Minigame : GameState_Base
 {
-    private int numCorrect = 5;
+    public static int numCorrect = 0;
     public static int curCorrect;
+    public static bool gameWon = false;
 
     public Text curCorrectTxt;
     public Text timer;
