@@ -66,7 +66,7 @@ def connect_to_db(ip):
       host = ip,
       user = "root",
       passwd = "password",
-      database = "synchro3"
+      database = "Synchro"
     )
 
     mycursor = mydb.cursor()
