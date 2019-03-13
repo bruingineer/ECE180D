@@ -84,7 +84,7 @@ class keypointFrames:
             return self.isRaiseLeftHand()
         elif _target_gesture == "righthandraise":
             return self.isRaiseRightHand()
-        elif _target_gesture == "dab":
+        elif _target_gesture == "righthanddab":
             return self.isDab()
         else:
             print("gesture "+_target_gesture+" not recognized.")

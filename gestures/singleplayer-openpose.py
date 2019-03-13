@@ -214,7 +214,7 @@ def main():
                 nose_x = main_keypoints[0][0][0]
                 num_lanes = 10
                 side = WIDTH0 / num_lanes
-                region = num_lanes * (1 - double((nose_x - side) / (WIDTH0 - 2.0*side)))
+                region = int(num_lanes * (1 - float((nose_x - side) / (WIDTH0 - 2.0*side))))
             # print(region)
             if MQTT_ENABLE:
                 client.publish('localization',  payload= (region), qos=0, retain=False)
