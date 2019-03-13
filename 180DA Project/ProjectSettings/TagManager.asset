@@ -15,6 +15,9 @@ TagManager:
   - word
   - trivia
   - curCorrect
+  - to
+  - from
+  - gestureText
   layers:
   - Default
   - TransparentFX
