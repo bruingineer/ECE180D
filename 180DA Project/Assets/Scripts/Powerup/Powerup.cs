@@ -31,7 +31,6 @@ public class Powerup : MonoBehaviour {
 	void Update () {
 		if (powerup_count > 4 && !cooldown){
 			int x = UnityEngine.Random.Range(0,1);
-			x = 1;
 			if (x == 0){
 				Debug.Log("Give Player Teleport");
 				powerup_count = 0;

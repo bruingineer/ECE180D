@@ -30,10 +30,14 @@ public class Big_Laser : Laser {
 		RaycastHit hit;
         if (Physics.Raycast(transform.position, Vector3.down, out hit) && !playerHit && laserStart)
 		{
+			if (hit.collider.tag == "to" || hit.collider.tag == "from"){
+				return;
+			}
 			playerHit = true;
 			PlayerHit(hit.transform);
 			GameObject teleport = GameObject.FindWithTag("to");
 			if (teleport != null){
+				Debug.Log("Player hit");
 				//if to is present in the game so is from
 				teleport.GetComponent<Teleport>().DestroyOn = true;
 				GameObject.FindWithTag("from").GetComponent<Teleport>().DestroyOn = true;
