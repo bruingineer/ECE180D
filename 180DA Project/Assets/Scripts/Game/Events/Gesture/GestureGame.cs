@@ -29,7 +29,7 @@ public abstract class GestureGame : Event {
 	// Gesture names
 	public static string tpose = "tpose";
 	public static string fieldGoal = "fieldGoal";
-	public static string rightHandDab = "dab";
+	public static string rightHandDab = "righthanddab";
 	public static string rightHandWave = "rightHandWave";
 	public static string leftHandWave = "leftHandWave";
 	public static string rightHandRaise = "rightHandRaise";
