@@ -42,7 +42,8 @@ public class Trivia : Speech {
 		Reset();
 		SelectedPlayer.current_trivia_pass++; // put in handle correct action
         SelectedPlayer.current_trivia_timer_avg += Event.curTime;
-        // Debug.Log("curTime: " + Event.curTime);
+        SelectedPlayer.new_score = true;
+        Debug.Log("curTime: " + Event.curTime);
 	}
 
 	protected override void SetUpEvent(string phrase = null){
@@ -67,6 +68,7 @@ public class Trivia : Speech {
         StopRecognizer();
 		Powerup.powerup_count = 0;
         SelectedPlayer.current_trivia_fail++;
+        SelectedPlayer.new_score = true;
         answer.text = "";
         triviaText.text = "";
     }

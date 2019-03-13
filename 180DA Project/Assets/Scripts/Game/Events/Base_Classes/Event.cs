@@ -10,6 +10,7 @@ using UnityEngine.UI;
 */
 public abstract class Event : MonoBehaviour {
 	protected Text timeLeft;
+    protected Text score;
 	protected Player m_player;
 	protected float timerDuration;
 	protected float repeatRate;
@@ -41,8 +42,12 @@ public abstract class Event : MonoBehaviour {
 		timerStopped = false;
 		// text object to show the timer
 		timeLeft = GameObject.FindWithTag("timer").GetComponent<Text>();
-		// check to see if the player is in the game, and if so assign the player object to it
-		GameObject playerPresent = GameObject.FindWithTag("Player");
+
+        if (GameState_Base.gameMode == "main_game")
+            score = GameObject.FindWithTag("score").GetComponent<Text>();
+
+        // check to see if the player is in the game, and if so assign the player object to it
+        GameObject playerPresent = GameObject.FindWithTag("Player");
 		if(playerPresent)
 			m_player = GameObject.FindWithTag("Player").GetComponent<Player>();
     }
@@ -112,6 +117,13 @@ public abstract class Event : MonoBehaviour {
 			handledCleanup = true;
 			StopCoroutine("StartEvent");
 		}
+
+
+        if (SelectedPlayer.new_score && GameState_Base.gameMode == "main_game")
+        {
+            score.text = "Score: " + SelectedPlayer.GetResults(true)[0].ToString("#.##");
+            SelectedPlayer.new_score = false;
+        }
 	}
 
 	protected abstract void HandleIncorrectEvent();

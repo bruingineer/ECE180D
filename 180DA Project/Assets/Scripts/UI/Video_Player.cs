@@ -70,12 +70,12 @@ public class Video_Player : MonoBehaviour {
 	{
 		if (clipName.StartsWith("wrong"))
 			{
-				gestureText.text = "Wrong!";
+				gestureText.text = "X";
 				gestureText.color = Color.red;
 			}
 			else
 			{
-				gestureText.text = "Right!";
+				gestureText.text = "✔";
 				gestureText.color = Color.green;
 			}
 	}

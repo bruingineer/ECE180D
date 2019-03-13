@@ -64,15 +64,19 @@ public class MQTTHelper : MQTT_Class
         {
             case "gesture_training":
                 selectedTrainingComplete = SelectedPlayer.gesture_training;
+                SelectedPlayer.gesture_training = true;
                 break;
             case "laser_training":
                 selectedTrainingComplete = SelectedPlayer.laser_training;
+                SelectedPlayer.laser_training = true;
                 break;
             case "unscramble_training":
                 selectedTrainingComplete = SelectedPlayer.unscramble_training;
+                SelectedPlayer.unscramble_training = true;
                 break;
             case "trivia_training":
-                selectedTrainingComplete = SelectedPlayer.unscramble_training;
+                selectedTrainingComplete = SelectedPlayer.trivia_training;
+                SelectedPlayer.trivia_training = true;
                 break;
             // error
             default:

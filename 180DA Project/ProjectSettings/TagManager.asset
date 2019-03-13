@@ -18,6 +18,7 @@ TagManager:
   - to
   - from
   - gestureText
+  - score
   layers:
   - Default
   - TransparentFX

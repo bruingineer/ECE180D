@@ -18,6 +18,7 @@ public class GameState_LaserMiniGame : GameState_with_Lives
 
 	protected override void Awake()
 	{
+		end_row = 13;
 		gameMode = "laser_training";
 		base.Awake();
 	}
