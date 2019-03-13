@@ -54,6 +54,7 @@ public abstract class Event : MonoBehaviour {
 	 */
 	protected IEnumerator StartTimer()
 	{
+		// Debug.Log("fail is: " + SelectedPlayer.current_gesture_fail);
 		// used to reset the time each the event is called
 		curTime = timerDuration;
 		while (!eventCorrect)
@@ -87,8 +88,8 @@ public abstract class Event : MonoBehaviour {
 		timerStopped = false;
 		eventCorrect = false;
 		SetUpEvent(phrase);
-		if (SelectedPlayer.current_difficulty != "easy")
-			StartCoroutine(MakeTextBlink());
+		// if (SelectedPlayer.current_difficulty != "easy")
+			//StartCoroutine(MakeTextBlink());
 		yield return StartCoroutine(StartTimer());
 	}
 
