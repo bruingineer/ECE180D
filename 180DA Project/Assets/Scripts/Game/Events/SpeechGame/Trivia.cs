@@ -20,14 +20,16 @@ public class Trivia : Speech {
         triviaText.text = "";
         answer = GameObject.FindWithTag("answer").GetComponent<TextMeshProUGUI>();
         answer.text = "";
+		// StartRecognizer();
 		base.Awake();
     }
 
 	// ask jose if it can be called multiple times
 	protected override void handleSpeechTask(string text){
-		answer.text = "";
-		answer.text = text;
-		if (answer.text == ans)
+		// answer.text = "";
+		// answer.text = text;
+		if (text == ans)
+			answer.text = ans;	
 			HandleCorrectEvent();
 	}
 
@@ -40,19 +42,16 @@ public class Trivia : Speech {
 		Reset();
 		SelectedPlayer.current_trivia_pass++; // put in handle correct action
         SelectedPlayer.current_trivia_timer_avg += Event.curTime;
-        Debug.Log("curTime: " + Event.curTime);
+        // Debug.Log("curTime: " + Event.curTime);
 	}
 
 	protected override void SetUpEvent(string phrase = null){
-		triviaText.fontSize = 40;
-		Debug.Log("Starting trivia");
 		Debug.Log(phrase);
 		SpeechList.getQuestionNumber(ref ques, ref ans, phrase != null ? Int32.Parse(phrase) : -1);
 		Debug.Log("Question: " + ques);
 		Debug.Log("Answer: " + ans);
         Debug.Log(SelectedPlayer.current_difficulty);
 		triviaText.text = ques;
-		Debug.Log(triviaText.text);
 		StartRecognizer();
 		m_DictationRecognizer.Start();
 	}
@@ -82,6 +81,7 @@ public class TriviaMiniGame : Trivia {
 	// number of current gestures correct increments when it is a minigame
 	protected override void Awake()
 	{
+		base.Awake();
 		GameState_Event_Minigame.numCorrect = 5;
 	}
 	protected override void HandleCorrectAction()

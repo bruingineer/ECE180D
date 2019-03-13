@@ -15,19 +15,21 @@ public class WordScramble : Speech {
 	private static int failed = 0;
 
 	protected override void handleSpeechTask(string text){
-		Answer.text = "";
-		Answer.text = text;
+		// Answer.text = "";
+		// Answer.text = text;
 		//Debug.Log(text);
-		if (Answer.text == WDisplay.word_str)
+		if (text == WDisplay.word_str)
+			Answer.text = text;
 			HandleCorrectEvent();
 	}
 
 	protected override void HandleCorrectEvent()
 	{
 		timerStopped = true;
-		HandleCorrectAction();
+		Debug.Log("calling stop recognizer");
 		StopRecognizer();
-		WDisplay.WordText.fontSize = 40;
+		HandleCorrectAction();
+		//WDisplay.WordText.fontSize = 40;
 		WDisplay.WordText.text = "Correct!";
 		WDisplay.WordText.characterSpacing = default_spacing; 
 		SelectedPlayer.current_unscramble_pass++;
@@ -38,16 +40,17 @@ public class WordScramble : Speech {
 
 	protected override void Awake() {
         WDisplay = new WordDisplay();
-		WDisplay.WordText = GameObject.FindWithTag("trivia").GetComponent<TextMeshProUGUI>();
+		WDisplay.WordText = GameObject.FindWithTag("word").GetComponent<TextMeshProUGUI>();
         WDisplay.WordText.text = "";
         Answer = GameObject.FindWithTag("answer").GetComponent<TextMeshProUGUI>();
         Answer.text = "";
 		base.Awake();
+		// StartRecognizer();
     }
 
 	private float default_spacing;
 	protected override void SetUpEvent(string phrase = null){  
-		WDisplay.WordText.fontSize = 60;   
+		//WDisplay.WordText.fontSize = 60;   
 		default_spacing = WDisplay.WordText.characterSpacing;
 		WDisplay.WordText.characterSpacing = 5f;
 		Debug.Log("Starting Scramble");
@@ -79,10 +82,12 @@ public class WordScramble : Speech {
 
 	// ask jose if he can have one word shared by speech events
 	protected override void HandleIncorrectEvent(){
+		
 		Powerup.powerup_count = 0;
-		WDisplay.WordText.fontSize = 40;
+		//WDisplay.WordText.fontSize = 40;
 		WDisplay.WordText.characterSpacing = default_spacing;
         timerStopped = true;
+		Debug.Log("calling stop recognizer");
         StopRecognizer();
         SelectedPlayer.current_unscramble_fail++;
         WDisplay.WordText.text = "";
@@ -94,6 +99,7 @@ public class WordScrambleMiniGame : WordScramble {
 
 	protected override void Awake()
 	{
+		base.Awake();
 		GameState_Event_Minigame.numCorrect = 5;
 	}
 
