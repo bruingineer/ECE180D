@@ -104,7 +104,7 @@ public abstract class GestureGame : Event {
     {
 			SetUpTopics();
 			gestureClient = new GestureClient(topicCorrectGesture);
-			gestureText = GameObject.FindWithTag("word").GetComponent<TextMeshProUGUI>();
+			gestureText = GameObject.FindWithTag("gestureText").GetComponent<TextMeshProUGUI>();
 			Msg = GameObject.FindWithTag("msg").GetComponent<TextMeshProUGUI>();
 			base.Awake();
     }
