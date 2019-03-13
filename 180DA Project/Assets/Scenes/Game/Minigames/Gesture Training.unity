@@ -5145,6 +5145,11 @@ Prefab:
       propertyPath: m_Tiles.Array.data[2].first.y
       value: -4
       objectReference: {fileID: 0}
+    - target: {fileID: 224055233316080858, guid: fc32d5d2052764c00bbaa420a247668f,
+        type: 2}
+      propertyPath: m_AnchoredPosition.x
+      value: -5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fc32d5d2052764c00bbaa420a247668f, type: 2}
   m_IsPrefabAsset: 0
