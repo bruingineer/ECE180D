@@ -86,9 +86,8 @@ public class StatsProcess : MonoBehaviour
         client.Connect(clientId);
         client.Subscribe(new string[] { topic }, new byte[] { MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE });
 
-        //calculate results for current game and update database, then reset stats
+        //calculate results for current game and update database
         CalculateResults();
-        SelectedPlayer.resetGameStats();
 
         //Query game data for iterative learning model
         QueryDB("Training");
@@ -110,125 +109,50 @@ public class StatsProcess : MonoBehaviour
     }
 
 
-    void CalculateResults()
+    public void CalculateResults()
     {
-        //current game stats to push to database
-        float g; //gestures acc
-        float u; //unscramble acc
-        float t; //trivia acc
-        float g_tleft_avg;
-        float u_tleft_avg;
-        float t_tleft_avg;
-        bool died;
-        int lives_left;
-        float total_score = 0;
+        List<float> results = SelectedPlayer.GetResults(false);
+        float g = results[0];           //gestures acc
+        float g_tleft_avg = results[1];
+        float u = results[2];           //unscramble acc
+        float u_tleft_avg = results[3];
+        float t = results[4];           //trivia acc
+        float t_tleft_avg = results[5];
+        float total_score = results[6];
+        bool died = SelectedPlayer.died;
+        int lives_left = SelectedPlayer.current_lives_left;
+        
 
-        //calculate accuracies for the game that just ended and call UpdateDatabase() 
-        if (SelectedPlayer.name != null)
-        {
-            //Debug.Log("current_gesture_fail: " + SelectedPlayer.current_gesture_fail);
-            //Debug.Log("current_gesture_pass: " + SelectedPlayer.current_gesture_pass);
-            //Debug.Log("current_unscramble_fail: " + SelectedPlayer.current_unscramble_fail);
-            //Debug.Log("current_unscramble_pass: " + SelectedPlayer.current_unscramble_pass);
-            //Debug.Log("current_trivia_fail: " + SelectedPlayer.current_trivia_fail);
-            //Debug.Log("current_trivia_pass: " + SelectedPlayer.current_trivia_pass);
+        /////////////////HARDCODED test values///////////////
+        //g = 0.77f;
+        //u = 0.77f;
+        //t = 0.77f;
+        //g_tleft_avg = 8;
+        //u_tleft_avg = 8;
+        //t_tleft_avg = 8;
+        //died = false;
+        //lives_left = 1;
+        //total_score = 50 * (g + u + t + g_tleft_avg/10 + u_tleft_avg/10 + t_tleft_avg/10 + lives_left/3);
+        //total_score += 100;
+        ////////////////////////////////////////////////////
 
-            float tot_gestures = (SelectedPlayer.current_gesture_fail + SelectedPlayer.current_gesture_pass);
-            float tot_unscramble = (SelectedPlayer.current_unscramble_fail + SelectedPlayer.current_unscramble_pass);
-            float tot_trivia = (SelectedPlayer.current_trivia_fail + SelectedPlayer.current_trivia_pass);
-
-            //gesture averages
-            //out of 50 pts
-            if (tot_gestures == 0)
-            {
-                g = -1;
-                g_tleft_avg = -1;
-            }
-            else
-            {
-                g = SelectedPlayer.current_gesture_pass / tot_gestures;
-                total_score += g * 50; 
-
-                g_tleft_avg = SelectedPlayer.current_g_timer_avg / tot_gestures;
-                total_score += g_tleft_avg * 5; 
-            }
-
-            //unscramble averages
-            //out of 50 points
-            if (tot_unscramble == 0)
-            {
-                u = -1;
-                u_tleft_avg = -1;
-            }
-            else
-            {
-                u = SelectedPlayer.current_unscramble_pass / tot_unscramble;
-                total_score += u * 50; 
-
-                u_tleft_avg = SelectedPlayer.current_unscramble_timer_avg / tot_unscramble;
-                total_score += u_tleft_avg * 5; 
-            }
-
-            //trivia averages
-            //out of 50 points
-            if (tot_trivia == 0)
-            {
-                t = -1;
-                t_tleft_avg = -1;
-            }
-            else
-            {
-                t = SelectedPlayer.current_trivia_pass / tot_trivia;
-                total_score += t * 50;
-
-                t_tleft_avg = SelectedPlayer.current_trivia_timer_avg / tot_trivia;
-                total_score += t_tleft_avg * 5;
-            }
-
-            Debug.Log("g_tleft_avg" + g_tleft_avg);
-            Debug.Log("u_tleft_avg" + u_tleft_avg);
-            Debug.Log("t_tleft_avg" + t_tleft_avg);
-
-            //lives left out of 50 pts
-            lives_left = SelectedPlayer.current_lives_left;
-            total_score += lives_left/3 * 50 ;
-
-            if (lives_left == 0) died = true;
-
-            //surviving worth 100 pts
-            else {
-                died = false;
-                total_score += 100;
-            }
-
-            /////////////////HARDCODED test values///////////////
-            //g = 0.77f;
-            //u = 0.77f;
-            //t = 0.77f;
-            //g_tleft_avg = 8;
-            //u_tleft_avg = 8;
-            //t_tleft_avg = 8;
-            //died = false;
-            //lives_left = 1;
-            //total_score = 50 * (g + u + t + g_tleft_avg/10 + u_tleft_avg/10 + t_tleft_avg/10 + lives_left/3);
-            //total_score += 100;
-            ////////////////////////////////////////////////////
-
-            //Populate Results in End Game scene
-            gesture_acc.text += string.Format("\t{0}% accuracy, {1}s time average" , 
+        //Populate Results in End Game scene
+        gesture_acc.text += string.Format("\t{0}% accuracy, {1}s time average" , 
                                             (100 * g).ToString("0.##"), g_tleft_avg.ToString("0.##"));
-            unscramble_acc.text += string.Format("\t{0}% accuracy, {1}s time average",
-                                            (100 * u).ToString("0.##"), u_tleft_avg.ToString("0.##"));
-            trivia_acc.text += string.Format("\t{0}% accuracy, {1}s time average",
-                                            (100 * t).ToString("0.##"), t_tleft_avg.ToString("0.##"));
+        unscramble_acc.text += string.Format("\t{0}% accuracy, {1}s time average",
+                                        (100 * u).ToString("0.##"), u_tleft_avg.ToString("0.##"));
+        trivia_acc.text += string.Format("\t{0}% accuracy, {1}s time average",
+                                        (100 * t).ToString("0.##"), t_tleft_avg.ToString("0.##"));
 
-            lives_left_txt.text += lives_left.ToString();
-            score_txt.text += total_score.ToString("0.##");
+        lives_left_txt.text += lives_left.ToString();
+        score_txt.text += total_score.ToString("0.##");
 
-            //Input game data into database
+        //Input game data into database
+        if (SelectedPlayer.name != null)
             UpdateDatabase(g, u, t, Convert.ToInt32(died), g_tleft_avg, u_tleft_avg, t_tleft_avg, lives_left, total_score);
         }
-    }
+       
+    
     
     void UpdateDatabase(float g, float u, float t, int d, float g_tleft_avg, float u_tleft_avg,
                         float t_tleft_avg, int lives_left, float total_score)

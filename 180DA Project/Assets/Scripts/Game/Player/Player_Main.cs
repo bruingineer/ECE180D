@@ -16,7 +16,8 @@ public class Player_Main : Player {
 	protected override IEnumerator HandlePlayerHit()
 	{
 		SelectedPlayer.current_lives_left--;
-		if (playerLives > 1) {
+        SelectedPlayer.new_score = true;
+        if (playerLives > 1) {
 			playerLives--;
 			GameObject.Find("Game_Manager").GetComponent<GameState_with_Lives>().RemoveLife(playerLives);
 			yield return ChangeColor();

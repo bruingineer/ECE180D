@@ -32,6 +32,7 @@ public class WordScramble : Speech {
 		WDisplay.WordText.characterSpacing = default_spacing; 
 		SelectedPlayer.current_unscramble_pass++;
         SelectedPlayer.current_unscramble_timer_avg += Event.curTime;
+        SelectedPlayer.new_score = true;
         //Debug.Log("curTime: " + Event.curTime);
         Reset();
 	}
@@ -85,6 +86,7 @@ public class WordScramble : Speech {
         timerStopped = true;
         StopRecognizer();
         SelectedPlayer.current_unscramble_fail++;
+        SelectedPlayer.new_score = true;
         WDisplay.WordText.text = "";
         Answer.text = "";
     }

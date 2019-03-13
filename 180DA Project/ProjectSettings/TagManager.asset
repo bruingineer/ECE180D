@@ -15,6 +15,7 @@ TagManager:
   - word
   - trivia
   - curCorrect
+  - score
   layers:
   - Default
   - TransparentFX

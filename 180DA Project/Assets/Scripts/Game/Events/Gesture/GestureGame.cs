@@ -231,16 +231,20 @@ public class GestureMainGame : GestureGame
 {
 	protected override void HandleCorrectAction()
 	{
-		Powerup.powerup_count++;
 		SelectedPlayer.current_gesture_pass++;
         SelectedPlayer.current_g_timer_avg += Event.curTime;
+        SelectedPlayer.new_score = true;
+
+        Powerup.powerup_count++;
+		
 		base.HandleCorrectAction();
 	}
 
 	protected override void HandleIncorrectEvent()
 	{
 		Powerup.powerup_count = 0;
-		SelectedPlayer.current_gesture_fail++;
+        SelectedPlayer.current_gesture_fail++;
+        SelectedPlayer.new_score = true;
 		base.HandleIncorrectEvent();
 	}
 }
