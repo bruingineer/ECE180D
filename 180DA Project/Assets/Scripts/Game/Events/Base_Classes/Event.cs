@@ -42,7 +42,7 @@ public abstract class Event : MonoBehaviour {
 		timerStopped = false;
 		// text object to show the timer
 		timeLeft = GameObject.FindWithTag("timer").GetComponent<Text>();
-        score = GameObject.FindWithTag("score").GetComponent<Text>();
+        // score = GameObject.FindWithTag("score").GetComponent<Text>();
         // check to see if the player is in the game, and if so assign the player object to it
         GameObject playerPresent = GameObject.FindWithTag("Player");
 		if(playerPresent)
@@ -114,11 +114,11 @@ public abstract class Event : MonoBehaviour {
 			StopCoroutine("StartEvent");
 		}
 
-        if (SelectedPlayer.new_score)
-        {
-            score.text = "Score: " + SelectedPlayer.GetResults(true)[0].ToString("#.##");
-            SelectedPlayer.new_score = false;
-        }
+        // if (SelectedPlayer.new_score)
+        // {
+        //     score.text = "Score: " + SelectedPlayer.GetResults(true)[0].ToString("#.##");
+        //     SelectedPlayer.new_score = false;
+        // }
 	}
 
 	protected abstract void HandleIncorrectEvent();
