@@ -19,9 +19,19 @@ public abstract class Event : MonoBehaviour {
 	public static float curTime;
 	private bool handledCleanup = false;
 	protected float endDisplayTime = 1.1f;
+	private bool timerSoundHandled;
+	private AudioClip timerSound;
+	private AudioClip eventSetup;
+	private AudioClip timerDone;
+	private string soundPath = "Sounds/Game Music/";
 
 	protected virtual void Awake()
     {
+		timerSoundHandled = false;
+		timerSound = Resources.Load<AudioClip>(soundPath + "Timer_Warning");
+		eventSetup = Resources.Load<AudioClip>(soundPath + "Event_Setup");
+		timerDone = Resources.Load<AudioClip>(soundPath + "timer_done");
+
 		/*
 			Difficulty set depending on the chosen difficulty level
 		*/
@@ -73,11 +83,18 @@ public abstract class Event : MonoBehaviour {
 				curTime -= Time.deltaTime;
 				// casts the integer time to show on the screen
 				int integer = (int)curTime;
+				Debug.Log(timerDuration / 2);
+				if ((Mathf.Floor(timerDuration / 2) == integer) && !timerSoundHandled)
+				{
+					timerSoundHandled = true;
+					GameState_Base.PlayClip(timerSound);
+				}
 				if (integer >= 1)
 					timeLeft.text = integer.ToString();
 				else
 				{
 					timeLeft.text = "Time's Up";
+					GameState_Base.PlayClip(timerDone);
 					HandleIncorrectEvent();
 					break;
 				}
@@ -95,6 +112,8 @@ public abstract class Event : MonoBehaviour {
 	{
 		timerStopped = false;
 		eventCorrect = false;
+		timerSoundHandled = false;
+		GameState_Base.PlayClip(eventSetup);
 		SetUpEvent(phrase);
 		// if (SelectedPlayer.current_difficulty != "easy")
 			//StartCoroutine(MakeTextBlink());
@@ -104,7 +123,7 @@ public abstract class Event : MonoBehaviour {
 	// The correct action here moves the player (for the main game)
 	protected virtual void HandleCorrectAction() 
 	{
-		if (curTime > timerDuration - 7){
+		if (curTime > Mathf.Floor(timerDuration / 2)){
 			Powerup.powerup_count++;
 		}
 		else{

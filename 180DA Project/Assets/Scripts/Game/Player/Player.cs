@@ -25,6 +25,7 @@ public abstract class Player : Moving_Object {
 	// Player Objects
 	PlayerMQTT_Y m_playerMQTT_Y;
 	PlayerMQTT_X m_playerMQTT_X;
+	private int x_threshold = 3;
 	protected const string localizationTopic = "localization";
 	protected const string movementTopic = "movement";
 	private int playerLaneNum;
@@ -95,7 +96,7 @@ public abstract class Player : Moving_Object {
 	}
 
 	private void MovePlayerX() {
-		if ((playerLaneNum != m_playerMQTT_X.cur_lane_num)) {
+		if ((playerLaneNum != m_playerMQTT_X.cur_lane_num) && (Mathf.Abs(playerLaneNum - m_playerMQTT_X.cur_lane_num) < x_threshold)) {
 			Vector3 end_position = new Vector3(m_playerMQTT_X.cur_lane_num, transform.position.y );
 			float timeToMove = secondsToMoveX * Mathf.Abs(playerLaneNum - m_playerMQTT_X.cur_lane_num);
 			GameState_Base.PlayClip(X_movement);
@@ -106,7 +107,7 @@ public abstract class Player : Moving_Object {
 					transform.Rotate(new Vector3(0, 180, 0));
 				}
 			playerLaneNum = m_playerMQTT_X.cur_lane_num;
-			StartCoroutine(MovePlayerPosition(end_position, timeToMove));	
+			transform.position = end_position;	
 		}
 	}
 
@@ -130,7 +131,7 @@ public abstract class Player : Moving_Object {
 		Vector3 end_position = new Vector3(transform.position.x, newY);
 		GameState_Base.PlayClip(Y_movement);
 		m_playerMQTT_Y.PlayerMoved = false;
-		StartCoroutine(MovePlayerPosition(end_position, movementTimeY));
+		transform.position = end_position;
 	}
 
 	// used to change the color when the player is in recovery mode
