@@ -10,17 +10,15 @@ public class SpeechList : MonoBehaviour
     public static IDictionary <string, string> triviaDictionay = new Dictionary<string, string>()
     {
         {"Washington", "Who was the first US President?"},
-        //{"thursday", "What day is it?"},
         {"light", "What is the UC motto?"},
         {"murder","What do you call a flock of crows"},
         {"wooden","Who is the most successful UCLA coach?"},
         {"rose", "Where does UCLA play home football games?"},
         {"right","Up, down, left, _____" },
-        //{"woody","What is the name of the toy cowboy in Toy Story?" },
         {"pizza","Round and has pepperoni." },
         {"down", "Opposite of up?" },
-        {"exit", "What's the opposite of enter?" }
-        //{"ohm's law", "What do you call: I = V / R"}
+        {"exit", "What's the opposite of enter?" },
+        {"water", "What is the ocean made of?" }
     };
 
     public static string[] WordList_ = new string[] {
@@ -33,29 +31,34 @@ public class SpeechList : MonoBehaviour
         "pizza",
         "down",
         "exit",
-    // public static List<string> WordList_ = new List<string>(){
         "crime",
         "fame",
         "apple",
-    //         //"mouse", hard to detect
         "lime",
         "kid",
         "make",
-    //     //"pot", // may not work
         "pick",
         "bit",
-        "luck",
         "boat",
         "look",
         "outreach",
         "engineer",
         "national",
         "week",
-
-    //     //"lake", ambiguous
+        "university",
+        "crazy",
+        "winner",
+        "chicken",
+        "loser",
+        "potato",
+        "dinner",
+        "active",
+        "super",
+        "random",
+        "country",
+        "dolphin",
+        "between",
         "snake"
-    //     "nap" ambiguous
-    //     "slime" ambiguous
 
     // "en<uppercase><color=\"blue\">g</color=\"blue\"><uppercase>ineer"
     };
