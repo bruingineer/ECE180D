@@ -420,8 +420,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 53, y: -80.075}
-  m_SizeDelta: {x: 214.2, y: 449.85}
+  m_AnchoredPosition: {x: 99.7, y: -35.998}
+  m_SizeDelta: {x: 490.5, y: 489.8}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &587654162
 MonoBehaviour:
@@ -455,8 +455,23 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "Move around to avoid getting hit! \n\nBullet-like lasers\n\n\n\n\n\n\n\nShoot
-    after warmup period"
+  m_Text: 'Move around to avoid getting hit! Your movement is tracked based on your
+    nose position on the screen. (left side of screen = player on left side)
+
+
+
+
+    Bullet-like lasers
+
+
+
+
+
+
+
+
+
+    Shoot after warmup period'
 --- !u!222 &587654163
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -496,7 +511,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 258}
+  m_AnchoredPosition: {x: 4, y: 363}
   m_SizeDelta: {x: 250, y: 80}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1025593742
@@ -576,8 +591,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -97, y: -74.7}
-  m_SizeDelta: {x: 214.2, y: 439.2}
+  m_AnchoredPosition: {x: -207.2, y: -68.013}
+  m_SizeDelta: {x: 306.3, y: 553.83}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1189273004
 MonoBehaviour:
@@ -600,18 +615,18 @@ MonoBehaviour:
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 20
+    m_FontSize: 31
     m_FontStyle: 1
     m_BestFit: 0
     m_MinSize: 2
-    m_MaxSize: 40
+    m_MaxSize: 41
     m_Alignment: 0
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "Objective: \n\n\nSmall Lasers:\n\n\n\n\n\n\n\nBig Lasers:"
+  m_Text: "Objective: \n\n\n\nSmall Lasers:\n\n\n\n\n\n\n\nBig Lasers:"
 --- !u!222 &1189273005
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -992,8 +1007,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 192.63}
-  m_SizeDelta: {x: 214.2, y: 42.33}
+  m_AnchoredPosition: {x: 6, y: 278}
+  m_SizeDelta: {x: 356.4, y: 63.4}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1923687411
 MonoBehaviour:
@@ -1016,11 +1031,11 @@ MonoBehaviour:
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 30
+    m_FontSize: 52
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 3
-    m_MaxSize: 40
+    m_MaxSize: 52
     m_Alignment: 1
     m_AlignByGeometry: 0
     m_RichText: 1
