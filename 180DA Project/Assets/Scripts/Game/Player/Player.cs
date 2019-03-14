@@ -27,7 +27,6 @@ public abstract class Player : Moving_Object {
 	PlayerMQTT_X m_playerMQTT_X;
 	protected const string localizationTopic = "localization";
 	protected const string movementTopic = "movement";
-	public bool testY = false;
 	private int playerLaneNum;
 	SpriteRenderer sr;
 
@@ -120,7 +119,7 @@ public abstract class Player : Moving_Object {
     }
 
 	private void MovePlayerY() {
-			if (m_playerMQTT_Y.PlayerMoved || testY) {
+			if (m_playerMQTT_Y.PlayerMoved) {
 				int newY = (int)(transform.position.y + 1);
 				HandlePlayerY(newY);
 			}
@@ -132,7 +131,6 @@ public abstract class Player : Moving_Object {
 		GameState_Base.PlayClip(Y_movement);
 		m_playerMQTT_Y.PlayerMoved = false;
 		StartCoroutine(MovePlayerPosition(end_position, movementTimeY));
-		testY = false;
 	}
 
 	// used to change the color when the player is in recovery mode
