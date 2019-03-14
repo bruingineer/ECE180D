@@ -121,7 +121,6 @@ public class Multiplayer_Controller : MonoBehaviour
         GetComponent<PlayerEvents_Multiplayer>().SetUpClient(playerHeader);
         connectedButton.SetActive(false);
         back.SetActive(false);
-        intro.SetActive(false);
     }
 
     public void Ready()
@@ -178,6 +177,7 @@ public class Multiplayer_Controller : MonoBehaviour
     {
         handledGameStarted = true;
         readyButton.SetActive(false);
+        intro.SetActive(false);
         GameState_Base.StartGame();
     }
 
