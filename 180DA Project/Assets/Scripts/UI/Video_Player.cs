@@ -19,13 +19,13 @@ public class Video_Player : MonoBehaviour {
 
 	// change later
 	private Dictionary<string, string[]> gestureClipStrings = new Dictionary<string, string[]>() {
-		{GestureGame.tpose, new string[] {wrong1, wrong2, correct}}, 
-		{GestureGame.fieldGoal, new string[]{wrong1, wrong2, correct}},
-		{GestureGame.rightHandDab, new string[]{wrong1, wrong2, correct}},
-		{GestureGame.rightHandWave, new string[]{wrong1, wrong2, correct}},
-		{GestureGame.leftHandWave, new string[]{wrong1, wrong2, correct}},
-		{GestureGame.rightHandRaise, new string[]{wrong1, correct}},
-		{GestureGame.leftHandRaise, new string[]{wrong1, correct}}
+		{GestureGame.tpose, new string[] {correct, wrong1, wrong2}}, 
+		{GestureGame.fieldGoal, new string[]{correct, wrong1, wrong2}},
+		{GestureGame.rightHandDab, new string[]{correct, wrong1, wrong2}},
+		{GestureGame.rightHandWave, new string[]{correct, wrong1, wrong2}},
+		{GestureGame.leftHandWave, new string[]{correct, wrong1, wrong2}},
+		{GestureGame.rightHandRaise, new string[]{correct, wrong1}},
+		{GestureGame.leftHandRaise, new string[]{correct, wrong1}}
 	};
 	
 	Dictionary<string, List<VideoClip>> clipDictionary; // = new Dictionary<string, VideoClip[]>
@@ -70,12 +70,12 @@ public class Video_Player : MonoBehaviour {
 	{
 		if (clipName.StartsWith("wrong"))
 			{
-				gestureText.text = "X";
+				gestureText.text = "NOT THIS";
 				gestureText.color = Color.red;
 			}
 			else
 			{
-				gestureText.text = "✔";
+				gestureText.text = "NOT THIS";
 				gestureText.color = Color.green;
 			}
 	}

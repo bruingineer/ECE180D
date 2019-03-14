@@ -38,14 +38,28 @@ public class SpeechList : MonoBehaviour
         "make",
         "pick",
         "bit",
-        "luck",
         "boat",
         "look",
         "outreach",
         "engineer",
         "national",
         "week",
+        "university",
+        "crazy",
+        "winner",
+        "chicken",
+        "loser",
+        "potato",
+        "dinner",
+        "active",
+        "super",
+        "random",
+        "country",
+        "dolphin",
+        "between",
         "snake"
+
+    // "en<uppercase><color=\"blue\">g</color=\"blue\"><uppercase>ineer"
     };
 
     public static int ListSize = WordList_.Count();

@@ -125,7 +125,7 @@ public static class SelectedPlayer{
         }
         
         //add points for survival
-        total_score += current_lives_left / 3 * 50;
+        total_score += (float)current_lives_left / 3 * 50;
         if (current_lives_left != 0) total_score += 100;
 
         if (score_only)

@@ -41,7 +41,7 @@ public class WordScramble : Speech {
 
 	protected override void Awake() {
         WDisplay = new WordDisplay();
-		WDisplay.WordText = GameObject.FindWithTag("word").GetComponent<TextMeshProUGUI>();
+		WDisplay.WordText = GameObject.FindWithTag("trivia").GetComponent<TextMeshProUGUI>();
         WDisplay.WordText.text = "";
         Answer = GameObject.FindWithTag("answer").GetComponent<TextMeshProUGUI>();
         Answer.text = "";
