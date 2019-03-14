@@ -206,7 +206,7 @@ def main():
                 if MQTT_ENABLE:
                     client.publish(return_topic, payload= ('correct'), qos=0, retain=False)
                 print("{target_gesture}: Correct".format(target_gesture=target_gesture))
-                waiting_for_target = True
+                # waiting_for_target = True
 
         # if using this script for localization
         if args[0].localization:
