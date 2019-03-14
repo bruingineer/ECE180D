@@ -41,7 +41,8 @@ public class Multiplayer_Controller : MonoBehaviour
     private bool handledGameStarted;
     public static int otherPlayerPosition;
     public static bool otherPlayerMoved;
-
+    public GameObject back;
+    public GameObject intro;
 
     // Use this for initialization
     void Awake()
@@ -53,6 +54,8 @@ public class Multiplayer_Controller : MonoBehaviour
         connectedButton = GameObject.Find("Connect Button");
         readyButton = GameObject.Find("Ready Button");
         gamePlayedOnce = false;
+        back = GameObject.Find("Back");
+        intro = GameObject.Find("Intro");
         ResetBools();
     }
 
@@ -117,6 +120,8 @@ public class Multiplayer_Controller : MonoBehaviour
         GetComponent<Obstacles_Multiplayer>().SetUpClient(playerHeader);
         GetComponent<PlayerEvents_Multiplayer>().SetUpClient(playerHeader);
         connectedButton.SetActive(false);
+        back.SetActive(false);
+        intro.SetActive(false);
     }
 
     public void Ready()
@@ -147,10 +152,17 @@ public class Multiplayer_Controller : MonoBehaviour
     private void ResetGame()
     {
         GameState_Base.gameMusic.Stop();
+        back.SetActive(true);
+        intro.SetActive(true);
         GetComponent<GameState_Multiplayer>().ResetGameState();
         otherPlayerPosition = 0;
         otherPlayerSlider.value = otherPlayerPosition;
         ResetBools();
+    }
+
+    public void ReturnToHome()
+    {
+        menuScene.ChangeScenefromScript("Game Menu");
     }
 
     public void ResetConnectButton()
