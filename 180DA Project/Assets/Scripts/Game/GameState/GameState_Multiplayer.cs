@@ -75,7 +75,6 @@ public class GameState_Multiplayer : GameState_with_Player {
 
 	protected override void Awake()
 	{
-		end_row = 11;
 		gameMode = "multiplayer_game";
 		base.Awake();
 	}

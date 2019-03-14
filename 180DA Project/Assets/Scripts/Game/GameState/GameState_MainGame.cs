@@ -19,7 +19,6 @@ public class GameState_MainGame : GameState_with_Lives {
 
 	protected override void Awake()
 	{
-		end_row = 11;
 		gameMode = "main_game";
 		base.Awake();
 	}

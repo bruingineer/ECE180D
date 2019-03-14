@@ -184,7 +184,7 @@ public abstract class GameState_with_Player : GameState_Base
 
     protected override void Awake()
     {
-        Debug.Log("nice");
+        end_row = 11;
         numLanes = 10;
         playerStartPosition = new Vector3(numLanes / 2, 0);
         InitializeLaneList();
