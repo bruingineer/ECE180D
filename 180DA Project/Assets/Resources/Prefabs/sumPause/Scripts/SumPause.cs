@@ -88,12 +88,16 @@ public class SumPause : MonoBehaviour {
             if (GameState_Base.gameMode == "unscramble_training" || GameState_Base.gameMode == "trivia_training"){
                 Speech.recognizer_started = false;
             }
+            if (GameState_Base.gameMode == "gesture_training")
+                Video_Player.videoPlayer.Pause();
         }
         else {
             // What to do when unpaused
             GameState_Base.gameMusic.UnPause();
             GameState_Base.DisableButtons();
             Time.timeScale = 1; // Resume normal game speed
+            if (GameState_Base.gameMode == "gesture_training")
+                Video_Player.videoPlayer.Play();
         }
     }
 

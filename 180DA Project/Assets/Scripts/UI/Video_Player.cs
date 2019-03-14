@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 public class Video_Player : MonoBehaviour {
 
-	VideoPlayer videoPlayer;
+	public static VideoPlayer videoPlayer;
 	private const string gestureVideoPath = "UI/GestureVideos/";
 	private const string wrong1 = "wrong_1";
 	private const string wrong2 = "wrong_2";
@@ -75,7 +75,7 @@ public class Video_Player : MonoBehaviour {
 			}
 			else
 			{
-				gestureText.text = "NOT THIS";
+				gestureText.text = "DO THIS";
 				gestureText.color = Color.green;
 			}
 	}
@@ -99,5 +99,10 @@ public class Video_Player : MonoBehaviour {
 			}
 			clipDictionary.Add(gesture, clips);
 		}
+	}
+
+	public void PauseVideo()
+	{
+		videoPlayer.Pause();
 	}
 }

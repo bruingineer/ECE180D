@@ -124,7 +124,7 @@ public class StatsProcess : MonoBehaviour
         float total_score = results[6];
         bool died = SelectedPlayer.died;
         int lives_left = SelectedPlayer.current_lives_left;
-        
+
 
         /////////////////HARDCODED test values///////////////
         //g = 0.77f;
@@ -140,12 +140,21 @@ public class StatsProcess : MonoBehaviour
         ////////////////////////////////////////////////////
 
         //Populate Results in End Game scene
-        gesture_acc.text += string.Format("\t{0}% accuracy, {1}s time average" , 
-                                            (100 * g).ToString("0.##"), g_tleft_avg.ToString("0.##"));
-        unscramble_acc.text += string.Format("\t{0}% accuracy, {1}s time average",
-                                        (100 * u).ToString("0.##"), u_tleft_avg.ToString("0.##"));
-        trivia_acc.text += string.Format("\t{0}% accuracy, {1}s time average",
-                                        (100 * t).ToString("0.##"), t_tleft_avg.ToString("0.##"));
+
+        if (g == -1) gesture_acc.text += "\tNA";
+        else
+            gesture_acc.text += string.Format("\t{0}% accuracy, {1}s time average" , 
+                                                (100 * g).ToString("0.##"), g_tleft_avg.ToString("0.##"));
+
+        if (u == -1) unscramble_acc.text += "\tNA";
+        else
+            unscramble_acc.text += string.Format("\t{0}% accuracy, {1}s time average",
+                                            (100 * u).ToString("0.##"), u_tleft_avg.ToString("0.##"));
+
+        if (t == -1) trivia_acc.text += "\tNA";
+        else 
+            trivia_acc.text += string.Format("\t{0}% accuracy, {1}s time average",
+                                            (100 * t).ToString("0.##"), t_tleft_avg.ToString("0.##"));
 
         lives_left_txt.text += lives_left.ToString();
         score_txt.text += total_score.ToString("0.##");
