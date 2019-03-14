@@ -44,7 +44,10 @@ public abstract class Event : MonoBehaviour {
 		timeLeft = GameObject.FindWithTag("timer").GetComponent<Text>();
 
         if (GameState_Base.gameMode == "main_game")
+        {
             score = GameObject.FindWithTag("score").GetComponent<Text>();
+            SelectedPlayer.new_score = true;
+        }
 
         // check to see if the player is in the game, and if so assign the player object to it
         GameObject playerPresent = GameObject.FindWithTag("Player");
@@ -121,7 +124,9 @@ public abstract class Event : MonoBehaviour {
 
         if (SelectedPlayer.new_score && GameState_Base.gameMode == "main_game")
         {
-            score.text = "Score: " + SelectedPlayer.GetResults(true)[0].ToString("#.##");
+            string tot_score = SelectedPlayer.GetResults(true)[0].ToString("#.##");
+            Debug.Log("score: " + tot_score);
+            score.text = "Score: " + tot_score;
             SelectedPlayer.new_score = false;
         }
 	}

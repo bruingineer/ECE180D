@@ -953,6 +953,10 @@ Prefab:
       propertyPath: m_Name
       value: GestureText
       objectReference: {fileID: 0}
+    - target: {fileID: 1685017761668446, guid: 845256913211b44809f85d872213b61d, type: 2}
+      propertyPath: m_TagString
+      value: gestureText
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 845256913211b44809f85d872213b61d, type: 2}
   m_IsPrefabAsset: 0

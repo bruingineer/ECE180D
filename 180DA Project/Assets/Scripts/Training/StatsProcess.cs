@@ -105,7 +105,10 @@ public class StatsProcess : MonoBehaviour
         //Once training query and sugestion is determined,
         //perform query for difficulty change 
         if (training_query_done && !difficulty_query_done)
+        {
             QueryDB("difficulty");
+            difficulty_query_done = true;
+        }
     }
 
 
@@ -384,7 +387,6 @@ public class StatsProcess : MonoBehaviour
                             ChangeDifficulty("lower");
                         else Debug.Log("Difficulty staying the same");
                     }
-                    difficulty_query_done = true;
                 }
             }
         }
