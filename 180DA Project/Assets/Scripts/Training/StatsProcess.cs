@@ -149,17 +149,17 @@ public class StatsProcess : MonoBehaviour
 
         if (g == -1) gesture_acc.text += "\tNA";
         else
-            gesture_acc.text += string.Format("\t{0}% accuracy, {1}s time average" , 
+            gesture_acc.text += string.Format("\t{0}% accuracy, {1}s time left avg" , 
                                                 (100 * g).ToString("0.##"), g_tleft_avg.ToString("0.##"));
 
         if (u == -1) unscramble_acc.text += "\tNA";
         else
-            unscramble_acc.text += string.Format("\t{0}% accuracy, {1}s time average",
+            unscramble_acc.text += string.Format("\t{0}% accuracy, {1}s time left avg",
                                             (100 * u).ToString("0.##"), u_tleft_avg.ToString("0.##"));
 
         if (t == -1) trivia_acc.text += "\tNA";
         else 
-            trivia_acc.text += string.Format("\t{0}% accuracy, {1}s time average",
+            trivia_acc.text += string.Format("\t{0}% accuracy, {1}s time left avg",
                                             (100 * t).ToString("0.##"), t_tleft_avg.ToString("0.##"));
 
         lives_left_txt.text += lives_left.ToString();
