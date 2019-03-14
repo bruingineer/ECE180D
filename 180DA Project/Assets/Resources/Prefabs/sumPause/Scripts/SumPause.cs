@@ -85,12 +85,16 @@ public class SumPause : MonoBehaviour {
             GameState_Base.gameMusic.Pause();
             GameState_Base.SetUpButtons();
             Time.timeScale = 0; // Set game speed to 0
+            if (GameState_Base.gameMode == "gesture_training")
+                Video_Player.videoPlayer.Pause();
         }
         else {
             // What to do when unpaused
             GameState_Base.gameMusic.UnPause();
             GameState_Base.DisableButtons();
             Time.timeScale = 1; // Resume normal game speed
+            if (GameState_Base.gameMode == "gesture_training")
+                Video_Player.videoPlayer.Play();
         }
     }
 
