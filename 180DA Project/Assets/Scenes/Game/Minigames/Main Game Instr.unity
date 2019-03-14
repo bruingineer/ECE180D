@@ -180,7 +180,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "Objective: \n\n\n\nSkills:\n\n\n\n\n\nDifficulty:"
+  m_Text: "Objective: \n\n\n\nTips:\n\n\n\nDifficulty:"
 --- !u!222 &180310265
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -440,8 +440,8 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "Make it to the finish line!\nYou have 3 lives.\n \n\nLaser Dodging\nGesture
-    Performance\nWord Unscrambling\nTrivia \n\n\nEasy - Medium - Hard\n\nMaintain
+  m_Text: "Make it to the finish line!\nYou have 3 lives.\n \n\n- Stand 3-4 ft from
+    the screen\n- Speak directly into BT mic\n\n\nEasy - Medium - Hard\n\nMaintain
     a 300+ pt. average to increase difficulty\n\nStay above a 200 pt. average to avoid
     being sent back to a lower difficulty"
 --- !u!222 &497058590
