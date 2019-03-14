@@ -35,8 +35,8 @@ public class Trivia : Speech {
 
 	protected override void HandleCorrectEvent()
 	{
-		timerStopped = true;
 		StopRecognizer();
+		timerStopped = true;
 		HandleCorrectAction();
 		triviaText.text = "Correct!";
 		Reset();
@@ -64,8 +64,8 @@ public class Trivia : Speech {
 	}
 
 	protected override void HandleIncorrectEvent(){
+		StopRecognizer();
         timerStopped = true;
-        StopRecognizer();
 		Powerup.powerup_count = 0;
         SelectedPlayer.current_trivia_fail++;
         SelectedPlayer.new_score = true;

@@ -16,7 +16,7 @@ public abstract class Speech : Event
     
     
     private int triviaORScrabmle;
-    protected static bool recognizer_started = false;
+    public static bool recognizer_started = false;
 
     protected KeywordRecognizer m_DictationRecognizer;
 
@@ -33,16 +33,13 @@ public abstract class Speech : Event
             Debug.Log("starting rec");
             count++;
             m_DictationRecognizer = new KeywordRecognizer(SpeechList.WordList_);
-
             m_DictationRecognizer.OnPhraseRecognized += DictationRecognizer_DictationResult;
             GotCorrect = false;
         }
     }
 
 
-    protected void StopRecognizer(){
-        //Debug.Log("app quit");
-        
+    protected void StopRecognizer(){        
         if (m_DictationRecognizer == null){
             Debug.Log("now null");
         }
