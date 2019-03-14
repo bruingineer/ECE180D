@@ -5403,8 +5403,8 @@ GameObject:
   - component: {fileID: 1620772596}
   - component: {fileID: 1620772595}
   m_Layer: 5
-  m_Name: WordText
-  m_TagString: word
+  m_Name: GestureText
+  m_TagString: gestureText
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
