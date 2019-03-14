@@ -18,7 +18,7 @@ public class SumPause : MonoBehaviour {
     // Link to button's image
     Image image;
 
-    static bool status = false;
+    public static bool status = false;
     /// <summary>
     /// Sets/Returns current pause state (true for paused, false for normal)
     /// </summary>

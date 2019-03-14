@@ -14,7 +14,7 @@ public abstract class Event : MonoBehaviour {
 	protected Player m_player;
 	protected float timerDuration;
 	protected float repeatRate;
-	protected bool timerStopped;
+	public static bool timerStopped;
 	protected bool eventCorrect;
 	public static float curTime;
 	private bool handledCleanup = false;

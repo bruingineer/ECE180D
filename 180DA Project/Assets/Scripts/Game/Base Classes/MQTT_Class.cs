@@ -152,7 +152,8 @@ public class GestureClient : MQTT_Class {
 	*/
 	protected override void client_MqttMsgPublishReceived(object sender, MqttMsgPublishEventArgs e) 
 	{
-		GestureGame.gestureCorrect = true;
+		if (!SumPause.status)
+			GestureGame.gestureCorrect = true;
 	} 
 }
 
