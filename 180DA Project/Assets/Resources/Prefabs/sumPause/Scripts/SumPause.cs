@@ -85,7 +85,7 @@ public class SumPause : MonoBehaviour {
             GameState_Base.gameMusic.Pause();
             GameState_Base.SetUpButtons();
             Time.timeScale = 0; // Set game speed to 0
-            if (GameState_Base.gameMode == "unscramble_training" || GameState_Base.gameMode == "trivia_training"){
+            if (GameState_Base.gameMode == "unscramble_training" || GameState_Base.gameMode == "trivia_training"git){
                 Speech.recognizer_started = false;
             }
         }
