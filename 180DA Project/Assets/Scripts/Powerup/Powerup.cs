@@ -10,7 +10,7 @@ public class Powerup : MonoBehaviour {
 	static public bool superOn = false;
 
 	void Start(){
-		start = new Vector3(GameState_with_Player.numLanes / 2 - 0.5f, 0.5f);
+		start = new Vector3(GameState_with_Player.numLanes / 2, 0.5f);
 		teleportOn = false;
 		powerup_count = 0;
 	}
@@ -63,12 +63,13 @@ public class Powerup : MonoBehaviour {
 	public void AddTeleport(){
 		int row = UnityEngine.Random.Range(0,10);
 		Vector3 player_pos = GameObject.FindWithTag("Player").transform.position;
-		if (player_pos[1] > 13.5 - 4){
-
+		if (player_pos[1] > 11 - 4){
+			GiveSuper();
+			return;
 		}
 		else{
 			tele_from = new Vector3((float)row , player_pos[1] + 2f);
-			tele_to = new Vector3((float)row , player_pos[1] + 5f);
+			tele_to = new Vector3((float)row , player_pos[1] + 4f);
 		}
 
 
