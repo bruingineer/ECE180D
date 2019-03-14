@@ -17,7 +17,8 @@ public class Player_Multiplayer : Player {
 
 	protected override IEnumerator HandlePlayerHit()
 	{
-
+		Debug.Log("X Position: " + transform.position.x);
+		Debug.Log("Y Position: " + transform.position.y);
 		if (transform.position.y > 0)
 		{
 			
