@@ -17,26 +17,10 @@ public class Player_Multiplayer : Player {
 
 	protected override IEnumerator HandlePlayerHit()
 	{
-		Debug.Log("X Position: " + transform.position.x);
-		Debug.Log("Y Position: " + transform.position.y);
-		if (transform.position.y > 0)
-		{
-			
-			float newX = transform.position.x, newY;
-			if (transform.position.x != Mathf.Floor(newX))
-			{
-				if (facingRight)
-					newX = Mathf.Floor(transform.position.x + 1);
-				else
-					newX = Mathf.Ceil(transform.position.x - 1);
-			}
-
-			newY = Mathf.Ceil(transform.position.y - 1);
+			int newY = (int)transform.position.y - 1;
 			Multiplayer_Controller.multiplayerClient.SendMessage(Multiplayer_Controller.playerMovement, newY.ToString());
-			StartCoroutine(MovePlayerPosition(new Vector2(newX, newY) , movementTimeY));
+			transform.position =  new Vector2(transform.position.x, newY);
 			yield return ChangeColor();
-		}
-		
 	}
 
 	protected override void HandlePlayerY(int newY)
