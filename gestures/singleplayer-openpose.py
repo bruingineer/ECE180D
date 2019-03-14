@@ -86,7 +86,7 @@ def main():
         folder which includes the lib, x64/Release, and python folders.")
     parser.add_argument("--gesture", default=None, help="Target Gesture to search for during testing.")
     parser.add_argument("--localization", default=True, help="If True, this enables the localization functionality.")
-    parser.add_argument("--ip", default=None, help="Set the ip of the Mqtt server.")
+    parser.add_argument("--ip", default="127.0.0.1", help="Set the ip of the Mqtt server.")
 
     args = parser.parse_known_args()
 
