@@ -18,7 +18,7 @@ public class SumPause : MonoBehaviour {
     // Link to button's image
     Image image;
 
-    public static bool status = false;
+    public static bool status;
     /// <summary>
     /// Sets/Returns current pause state (true for paused, false for normal)
     /// </summary>
@@ -47,6 +47,7 @@ public class SumPause : MonoBehaviour {
 
     void Awake () {
         image = GetComponent<Image>();
+        status = false;
     }
 
     void Start () {
