@@ -9,41 +9,39 @@ public class SpeechList : MonoBehaviour
     
     public static IDictionary <string, string> triviaDictionay = new Dictionary<string, string>()
     {
-        {"sacramento", "Capital of California?"},
+        {"cat", "Animal that meows?"},
         {"down", "Opposite of up?"},
         {"exit","Opposite of enter?"},
-        {"london","Capital of England?"},
-        {"lakers", "Lakers or Clippers?"},
-        {"light","Opposite of dark?" },
+        {"London","Capital of England?"},
+        {"Lakers", "Lakers or Clippers?"},
+        {"right","Opposite of left?" },
         {"pizza","Round and has pepperoni?" },
-        {"friday", "Last day of the week?" },
-        {"east", "Opposite of west?" }
+        {"Friday", "Last day of the week?" },
+        {"back", "Opposite of front?" },
+        {"two", " 14 % 6?"},
+        {"ten", "2 + 16 / 2?"}
     };
 
     public static string[] WordList_ = new string[] {
-        "washington",
-        "light",
-        "murder",
-        "wooden",
-        "rose",
-        "right",
-        "pizza",
+        "cat",
         "down",
         "exit",
+        "London",
+        "Lakers",
+        "right",
+        "pizza",
+        "Friday",
+        "back",
+        "two",
+        "ten",
+
+
         "crime",
-        "fame",
-        "apple",
-        "lime",
-        "kid",
         "make",
         "pick",
         "bit",
-        "boat",
-        "look",
-        "outreach",
         "engineer",
         "national",
-        "week",
         "university",
         "crazy",
         "winner",
@@ -52,14 +50,9 @@ public class SpeechList : MonoBehaviour
         "potato",
         "dinner",
         "active",
-        "super",
-        "random",
         "country",
         "dolphin",
-        "between",
-        "snake"
-
-    // "en<uppercase><color=\"blue\">g</color=\"blue\"><uppercase>ineer"
+        "between"
     };
 
     public static int ListSize = WordList_.Count();

@@ -64,6 +64,10 @@ public class WordScramble : Speech {
 		Debug.Log(w);
 		Debug.Log(WDisplay.WordText.text);
 		StartRecognizer();
+		if (m_DictationRecognizer == null){
+			Speech.recognizer_started = false;
+			StartRecognizer();
+		}
 		m_DictationRecognizer.Start();
     }
 

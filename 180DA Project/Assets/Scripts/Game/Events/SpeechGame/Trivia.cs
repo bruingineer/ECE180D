@@ -54,6 +54,10 @@ public class Trivia : Speech {
         Debug.Log(SelectedPlayer.current_difficulty);
 		triviaText.text = ques;
 		StartRecognizer();
+		if (m_DictationRecognizer == null){
+			recognizer_started = false;
+			StartRecognizer();
+		}
 		m_DictationRecognizer.Start();
 	}
 
