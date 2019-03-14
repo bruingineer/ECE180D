@@ -34,6 +34,7 @@ public abstract class GestureGame : Event {
 	public static string leftHandWave = "leftHandWave";
 	public static string rightHandRaise = "rightHandRaise";
 	public static string leftHandRaise = "leftHandRaise";
+	protected string openPoseTopic = "openpose/change";
 	
 	
 	protected List<string> gestures = new List<string>()
@@ -62,7 +63,7 @@ public abstract class GestureGame : Event {
 	private TextMeshProUGUI Msg;
 
 	// Handle communication with OpenPose
-	private GestureClient gestureClient;
+	protected GestureClient gestureClient;
 
 	// Variables
 
@@ -105,6 +106,7 @@ public abstract class GestureGame : Event {
 			SetUpTopics();
 			gestureClient = new GestureClient(topicCorrectGesture);
 			gestureClient.SendMessage(topicGestureSent, stopMessage);
+			ChangeOpenPose();
 			gestureText = GameObject.FindWithTag("gestureText").GetComponent<TextMeshProUGUI>();
 			Msg = GameObject.FindWithTag("msg").GetComponent<TextMeshProUGUI>();
 			base.Awake();
@@ -184,6 +186,11 @@ public abstract class GestureGame : Event {
 		gestureText.text = "";
 	}
 
+	protected virtual void ChangeOpenPose()
+	{
+		gestureClient.SendMessage(openPoseTopic, "single_player");
+	}
+
 }
 
 public class GestureMiniGame : GestureGame {
@@ -206,6 +213,7 @@ public class GestureMiniGame : GestureGame {
 		video_Player = GameObject.Find("Video Player").GetComponent<Video_Player>();
 		GameState_Event_Minigame.numCorrect = gestures.Count;
 		base.Awake();
+
 	}
 
 	protected override void SetUpEvent(string phrase = null)
@@ -225,6 +233,11 @@ public class GestureMultiplayerGame : GestureGame
 	{
 		topicGestureSent = MQTTHeader + '/' + gestureTopicString;
 		topicCorrectGesture = MQTTHeader + '/' + gestureCorrectTopicString;
+	}
+
+	protected override void ChangeOpenPose()
+	{
+		gestureClient.SendMessage(openPoseTopic, "multiplayer");
 	}
 }
 
