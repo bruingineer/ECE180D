@@ -112,27 +112,37 @@ public static class SelectedPlayer{
     public static List<float> GetResults(bool score_only)
     {
         // [g, g_tleft_avg, u, u_tleft_avg, t, t_tleft_avg]
+        float[] weights = new float[6] { 50, 50, 50, 50, 50, 50 };
         List<float> averages = GetAverages();
         List<float> results = new List<float>();
+        
         float total_score = 0;
+        float timer_length;
+
+        if (current_difficulty == "easy") timer_length = 10;
+        else if (current_difficulty == "medium") timer_length = 7;
+        else timer_length = 4;
 
         //Add points for averages
-        for(int i = 0; i < averages.Count; i++)
+        for (int i = 0; i < averages.Count; i++)
         {
-            if (averages[i] == -1) continue;
-            if (i % 2 == 0) total_score += 50 * averages[i]; //accuracy averages
-            else total_score += 5 * averages[i];             //time left averages
+            if (averages[i] == -1) continue;                                //skip if value is NA
+            if (i % 2 == 0) total_score += averages[i] * weights[i];        //accuracy averages
+            else total_score += averages[i] * weights[i] / timer_length;    //time left averages
         }
-        
+
         //add points for survival
         total_score += (float)current_lives_left / 3 * 50;
         if (current_lives_left != 0) total_score += 100;
 
+        //For in-game score
         if (score_only)
         {
             results.Add(total_score);
             return results;
         }
+
+        //For final results including averages
         else
         {
             averages.Add(total_score);
