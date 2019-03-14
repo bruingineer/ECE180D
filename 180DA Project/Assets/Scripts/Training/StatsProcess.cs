@@ -48,6 +48,12 @@ public class GameItem
 
 public class StatsProcess : MonoBehaviour
 {
+
+    private const int N_GAMES_TRAINING = 3;
+    private const int N_GAMES_DIFFICULTY = 3;
+    private const int UPPER_THRESH = 250;
+    private const int LOWER_THRESH = 150;
+
     //MQTT stuff
     private static MqttClient client;
     private const string str_IP = "127.0.0.1";
@@ -135,7 +141,7 @@ public class StatsProcess : MonoBehaviour
         //t_tleft_avg = 8;
         //died = false;
         //lives_left = 1;
-        //total_score = 50 * (g + u + t + g_tleft_avg/10 + u_tleft_avg/10 + t_tleft_avg/10 + lives_left/3);
+        //total_score = 50 * (g + u + t + g_tleft_avg / 10 + u_tleft_avg / 10 + t_tleft_avg / 10 + lives_left / 3);
         //total_score += 100;
         ////////////////////////////////////////////////////
 
@@ -200,7 +206,7 @@ public class StatsProcess : MonoBehaviour
         if (query == "Training")
         {
             str_command = string.Format("SELECT * FROM (SELECT * FROM games WHERE player={0}) sub ", SelectedPlayer.id) +
-                                                "ORDER BY game_id DESC LIMIT 3";
+                                                "ORDER BY game_id DESC LIMIT " + N_GAMES_TRAINING.ToString() ;
         }
 
         //Perform the query for selected player's last five game data for Difficulty Suggesion
@@ -208,7 +214,7 @@ public class StatsProcess : MonoBehaviour
         {
             str_command = string.Format("SELECT * FROM (SELECT * FROM games WHERE player={0} AND difficulty=\"{1}\") sub ",
                                         SelectedPlayer.id, SelectedPlayer.suggested_difficulty) +
-                                        "ORDER BY game_id DESC LIMIT 5";
+                                        "ORDER BY game_id DESC LIMIT " + N_GAMES_DIFFICULTY.ToString();
         }
 
         byte [] command = Encoding.ASCII.GetBytes(str_command);
@@ -256,7 +262,7 @@ public class StatsProcess : MonoBehaviour
 
     void PredictTraining()
     {
-        if (SelectedPlayer.games_played < 3)
+        if (SelectedPlayer.games_played < N_GAMES_TRAINING)
         {
             suggestion = "Keep playing the game to receive smart training tips!";
         }
@@ -383,16 +389,16 @@ public class StatsProcess : MonoBehaviour
                 //Second Query is to determine difficulty eligibility
                 else 
                 {
-                    //Only consider difficulty change when at least 5 games have
+                    //Only consider difficulty change when at least N games have
                     //been played in currently suggested difficulty
-                    if (SelectedPlayer.difficulty_ctr >= 5)
+                    if (SelectedPlayer.difficulty_ctr >= N_GAMES_DIFFICULTY)
                     {
                         Debug.Log("Checking for difficulty change!");
                         //if (n_deaths <= 1 && avg_gesture_acc >= 0.69 && avg_unscramble_acc >= 0.69 && avg_trivia_acc >= 0.69)
-                        if (total_score_avg >= 300)
+                        if (total_score_avg >= UPPER_THRESH)
                             ChangeDifficulty("higher");
                         //else if (n_deaths >= 4 || (avg_gesture_acc <= 0.39 && avg_unscramble_acc <= 0.39 && avg_trivia_acc <= 0.39))
-                        else if (total_score_avg < 200)
+                        else if (total_score_avg < LOWER_THRESH)
                             ChangeDifficulty("lower");
                         else Debug.Log("Difficulty staying the same");
                     }

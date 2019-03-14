@@ -44,4 +44,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Multiplayer/Multiplayer.unity
     guid: f1b037d72be284935985959ad7859fed
+    path: Assets/Scenes/Game/Minigames/Main Game Instr.unity
+    guid: 603cfddb25ee8004aa302390c9532ab8
+  - enabled: 1
+    path: Assets/Scenes/Game/Minigames/Powerup Instr.unity
+    guid: d500e55196213ba49ab31dd9643a3fe1
   m_configObjects: {}
